@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Oqim = require("../models/oqim.model")
 
 const userSchame = mongoose.Schema({
   name: {
@@ -51,15 +52,15 @@ const userSchame = mongoose.Schema({
   }
 });
 
-// userSchame.pre("remove", async function (next) {
-//   try {
-//     const user = this._id;
+userSchame.pre("remove", async function (next) {
+  try {
+    const user = this._id;
 
-//     await Comment.deleteMany({ author: user });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+    await Oqim.deleteMany({ user_id: user });
+  } catch (error) {
+    next(error);
+  }
+});
 
 const User = mongoose.model("user", userSchame);
 module.exports = User;

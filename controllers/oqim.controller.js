@@ -139,7 +139,7 @@ const createOrder = async (req, res) => {
     try {
         const id = req.params.id
         const {client_mobile, client_name, client_address} = req.body
-        const oqim = Oqim.findById(id).populate("product")
+        const oqim = await Oqim.findById(id).populate("product_id")
 
         const total_price = oqim.product.price + oqim.product.for_seller
 

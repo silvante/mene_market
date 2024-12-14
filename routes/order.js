@@ -1,16 +1,15 @@
 const express = require("express")
 const router = express.Router()
-const  {} = require("../controllers/order.controller")
+const  { createOrder, sendOrder, successOrder, cancelOrder } = require("../controllers/order.controller")
 
 // routes here
 
-// const addOrder = async (req, res) => {
-//     try {
-        
-//     } catch (err) {
-//         console.log(err);
-//         res.send(err)
-//     }
-// }
+router.post("/:id", createOrder)
+
+router.put("/:id/send", sendOrder)
+
+router.put("/:id/success", successOrder)
+
+router.put("/:id/cancel", cancelOrder)
 
 module.exports = router
