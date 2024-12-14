@@ -2,6 +2,7 @@ const Oqim = require("../models/oqim.model")
 const Product = require("../models/product.model")
 const { jwtSecret } = require("../routes/extra")
 const jwt = require("jsonwebtoken")
+const Order = require("../models/order.model")
 
 const getOqims = async (req, res) => {
     try {
@@ -124,9 +125,23 @@ const deleteOqim = async (req, res) => {
     }
 }
 
-// const Order = async (req, res) => {
-
-// }
+const Order = async (req, res) => {
+    try {
+        const id = req.params.id
+        const {client_mobile, client_name, client_address} = req.body
+        const oqim = Oqim.findById(id)
+        if (!oqim) {
+            res.send("oqim topilmadi")
+        } else {
+            const new_order = await Order.create({
+                
+            })
+        }
+    } catch (err) {
+        console.log(err);
+        res.send(err)
+    }
+}
 
 module.exports = {
     getOqim,

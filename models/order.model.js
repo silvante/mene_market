@@ -10,7 +10,7 @@ const orderSchema = mongoose.Schema({
         maxlength: 255,
         required: true,
     },
-    client_address: {
+    client_mobile: {
         type: String,
         maxlength: 255,
         required: true,
