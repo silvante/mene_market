@@ -125,17 +125,42 @@ const deleteOqim = async (req, res) => {
     }
 }
 
-const Order = async (req, res) => {
+// generating Order_code
+
+function generateOTP() {
+  let otp = '';
+  for (let i = 0; i < 6; i++) {
+    otp += Math.floor(Math.random() * 10); // Generates a random digit between 0 and 9
+  }
+  return otp;
+}  
+
+const createOrder = async (req, res) => {
     try {
         const id = req.params.id
         const {client_mobile, client_name, client_address} = req.body
-        const oqim = Oqim.findById(id)
+        const oqim = Oqim.findById(id).populate("product")
+
+        const total_price = oqim.product.price + oqim.product.for_seller
+
         if (!oqim) {
             res.send("oqim topilmadi")
         } else {
             const new_order = await Order.create({
-                
+                client_mobile, 
+                client_name,
+                client_address,
+                user_id: oqim.user_id,
+                product_id: oqim.product_id,
+                oqim_id: id,
+                status: "pending",
+                order_code: generateOTP(),
+                total_price
             })
+            if (!new_order) {
+                res.status(404).send("server error!")
+            }
+            res.status(201).send(new_order)
         }
     } catch (err) {
         console.log(err);
@@ -147,5 +172,6 @@ module.exports = {
     getOqim,
     getOqims,
     addOqim,
-    deleteOqim
+    deleteOqim,
+    createOrder
 }
