@@ -8,6 +8,7 @@ const app = express();
 
 let gfs;
 connection();
+app.use(express.json())
 
 const conn = mongoose.connection;
 conn.once("open", function () {
@@ -38,5 +39,25 @@ app.delete("/file/:filename", async (req, res) => {
     }
 });
 
+// requiring routes
+const router = require("./routes/extra")
+const user = require("./routes/user")
+const product = require("./routes/product")
+const category = require("./routes/category")
+const oqim = require("./routes/oqim")
+const order = require("./routes/order")
+
+// using routes
+app.use("/", router)
+app.use("/users", user)
+app.use("/products", product)
+app.use("/categorys", category)
+app.use("/oqim", oqim)
+app.use("/orders", order)
+
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));
+
+app.get("/", async (req, res) =>{
+    res.status(200).json("backend for mene-market uz # written in node js # written by mardonbek khamidov")
+})
