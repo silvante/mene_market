@@ -40,7 +40,7 @@ app.delete("/file/:filename", async (req, res) => {
 });
 
 // requiring routes
-const router = require("./routes/extra")
+const { router } = require("./routes/extra")
 const user = require("./routes/user")
 const product = require("./routes/product")
 const category = require("./routes/category")
