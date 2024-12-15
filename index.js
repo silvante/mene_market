@@ -57,7 +57,7 @@ app.use("/categorys", category)
 app.use("/oqim", oqim)
 app.use("/orders", order)
 app.use("/dbox", dbox)
-app.user("/order", donate)
+app.use("/order", donate)
 
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));
