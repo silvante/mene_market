@@ -16,7 +16,7 @@ const getOqims = async (req, res) => {
                 }
 
                 try {
-                    const user_id = user_doc._id;
+                    const user_id = user_doc.id;
 
                     const oqims = await Oqim.find({ user_id: user_id })
                     if (!oqims) {
@@ -66,7 +66,7 @@ const addOqim = async (req, res) => {
                     const product_id = req.params.id
                     const product = await Product.findById(product_id)
                     const new_oqim = await Oqim.create({
-                        user_id: user_doc._id,
+                        user_id: user_doc.id,
                         product_id: product_id
                     })
                     if (!new_oqim) {
@@ -105,7 +105,7 @@ const deleteOqim = async (req, res) => {
                 try {
                     const oqim_id = req.params.id
                     const oqim = await Oqim.findById(oqim_id)
-                    if (oqim.user_id == user_doc._id) {
+                    if (oqim.user_id == user_doc.id) {
                         await Oqim.findByIdAndDelete(oqim_id)
                         res.status(200).send("deleted")
                     } else {
