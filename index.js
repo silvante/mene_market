@@ -46,6 +46,7 @@ const product = require("./routes/product")
 const category = require("./routes/category")
 const oqim = require("./routes/oqim")
 const order = require("./routes/order")
+const dbox = require("./routes/donatebox")
 
 // using routes
 app.use("/", router)
@@ -54,6 +55,7 @@ app.use("/products", product)
 app.use("/categorys", category)
 app.use("/oqim", oqim)
 app.use("/orders", order)
+app.use("/dbox", dbox)
 
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));
