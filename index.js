@@ -4,7 +4,19 @@ const Grid = require("gridfs-stream");
 const mongoose = require("mongoose");
 const connection = require("./db");
 const express = require("express");
+const rateLimit = require("express-rate-limit")
+const helmet = require("helmet")
 const app = express();
+
+// limitter
+
+const limitter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+});
+
+app.use(limitter);
+app.use(helmet())
 
 let gfs;
 connection();
