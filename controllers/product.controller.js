@@ -83,7 +83,7 @@ const editProduct = async (req, res) => {
                     try {
                         const id = req.params.id
                         const { title, desc, images, tags, price, for_seller, total } = req.body
-                        Product.findByIdAndUpdate(id, {
+                        await Product.findByIdAndUpdate(id, {
                             title, desc, images, tags, price, for_seller, total
                         }).then((up_pr) => {
                             if (!up_pr) {
