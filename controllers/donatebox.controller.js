@@ -109,7 +109,7 @@ const divorceDonate = async (req, res) => {
                     try {
                         const { fund } = req.body
                         const active_box = await Dbox.findOne({ is_active: true })
-                        if (active_box.total_fund < fund ) {
+                        if (active_box.total_fund < fund) {
                             return res.status("fondda mablag yetarli emas")
                         }
                         if (active_box) {
@@ -119,7 +119,7 @@ const divorceDonate = async (req, res) => {
                             })
                             return res.status(200).json({ message: "Mablag' muaffaqiyat yechildi", total_fund: new_fund })
                         } else {
-                            res.status(404).json({message: "Quti active emas"})
+                            res.status(404).json({ message: "Quti active emas" })
                         }
                     } catch (err) {
                         console.log(err);
@@ -138,4 +138,21 @@ const divorceDonate = async (req, res) => {
     }
 }
 
-module.exports = { Activate, Disable, divorceDonate }
+const getDbox = async (req, res) => {
+    try {
+        const active_box = await Dbox.findOne({is_active: true})
+        if (!active_box) {
+            res.status(404).json({message: "quti aktiv emas"})
+        } else {
+            res.status(200).json({
+                message: "ehson qutusi",
+                box: active_box
+            })
+        }
+    } catch (err) {
+        console.log(err);
+        res.send(err)
+    }
+}
+
+module.exports = { Activate, Disable, divorceDonate, getDbox }

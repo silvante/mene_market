@@ -1,6 +1,8 @@
 const express = require("express")
 const router = express.Router()
-const { Activate, Disable, divorceDonate } = require("../controllers/donatebox.controller")
+const { Activate, Disable, divorceDonate, getDbox } = require("../controllers/donatebox.controller")
+
+router.get("/", getDbox)
 
 router.post("/acivate", Activate)
 
