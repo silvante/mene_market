@@ -47,7 +47,8 @@ const category = require("./routes/category")
 const oqim = require("./routes/oqim")
 const order = require("./routes/order")
 const dbox = require("./routes/donatebox")
-const donate = require("./routes/donate")
+const donate = require("./routes/donate");
+const news = require("./routes/news.js");
 
 // using routes
 app.use("/", router)
@@ -58,6 +59,7 @@ app.use("/oqim", oqim)
 app.use("/orders", order)
 app.use("/dbox", dbox)
 app.use("/order", donate)
+app.use("/news", news)
 
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));

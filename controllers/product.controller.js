@@ -91,7 +91,6 @@ const editProduct = async (req, res) => {
                             }
                             res.status(200).json({ message: 'edited!' })
                         })
-                        res.status(200).json(new_product)
                     } catch (err) {
                         console.log(err);
                         res.send(err)
