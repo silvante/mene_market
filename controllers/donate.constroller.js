@@ -20,8 +20,9 @@ const commitDonate = async (req, res) => {
                     const { fund, anonim } = req.body
                     const donate = await Donate.findOne({user_id: user_doc.id})
                     if (donate) {
+                        const new_donate_fund = donate.fund + fund
                         const new_donate = Donate.findByIdAndUpdate(donate._id, {
-                            fund,
+                            fund: new_donate_fund,
                             anonim
                         })
                         const new_fund = box.total_fund + fund
