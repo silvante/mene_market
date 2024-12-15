@@ -4,8 +4,10 @@ const Grid = require("gridfs-stream");
 const mongoose = require("mongoose");
 const connection = require("./db");
 const express = require("express");
-const rateLimit = require("express-rate-limit")
-const helmet = require("helmet")
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const csurf = require("csurf");
+const cors = require("cors");
 const app = express();
 
 // limitter
@@ -15,8 +17,27 @@ const limitter = rateLimit({
     max: 100,
 });
 
+// defend
+
 app.use(limitter);
-app.use(helmet())
+app.use(helmet());
+app.use(csurf());
+
+// cors
+
+const allowedOrigins = [process.env.ORIGIN1, process.env.ORIGIN1];
+
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        }
+    })
+)
 
 let gfs;
 connection();
