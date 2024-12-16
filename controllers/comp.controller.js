@@ -79,7 +79,7 @@ const getCompById = async (req, res) => {
     if (!comp) {
       res.status(404).json({ message: "competition not found" });
     }
-    const orders = Order.find({
+    const orders = await Order.find({
       oqim_id: { $ne: null },
       status: "success",
       product_id: comp.product_id,
@@ -167,7 +167,7 @@ const deleteComp = async (req, res) => {
         try {
           if (user_doc.status == "admin") {
             const id = req.params.id;
-            await Product.findByIdAndDelete(id).then((deleted) =>
+            await Comp.findByIdAndDelete(id).then((deleted) =>
               deleted
                 ? res.status(200).json({ message: "deleted!" })
                 : res.status(404).json({ message: "something went wrong!" })
