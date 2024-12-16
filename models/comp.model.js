@@ -28,6 +28,14 @@ const competitionSchema = mongoose.Schema({
     type: Array,
     required: true,
   },
+  start_date: {
+    type: Date,
+    required: true
+  },
+  finish_date: {
+    type: Date,
+    required: true
+  },
 });
 
 const Comp = mongoose.model("competition", competitionSchema);
