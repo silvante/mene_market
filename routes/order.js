@@ -1,15 +1,20 @@
-const express = require("express")
-const router = express.Router()
-const  { createOrder, sendOrder, successOrder, cancelOrder } = require("../controllers/order.controller")
+const express = require("express");
+const router = express.Router();
+const {
+  createOrder,
+  sendOrder,
+  successOrder,
+  cancelOrder,
+} = require("../controllers/order.controller");
 
 // routes here
 
-router.post("/:id", createOrder)
+router.post("/:id", createOrder);
 
-router.put("/:id/send", sendOrder)
+router.put("/:id/send", sendOrder);
 
-router.put("/:id/success", successOrder)
+router.put("/:id/success", successOrder);
 
-router.put("/:id/cancel", cancelOrder)
+router.put("/:id/cancel", cancelOrder);
 
-module.exports = router
+module.exports = router;

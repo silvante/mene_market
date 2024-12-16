@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Oqim = require("../models/oqim.model")
+const Oqim = require("../models/oqim.model");
 
 const userSchame = mongoose.Schema({
   name: {
@@ -13,7 +13,7 @@ const userSchame = mongoose.Schema({
   },
   mobile: {
     type: Number,
-    required: true
+    required: true,
   },
   avatar: {
     type: String,
@@ -48,8 +48,8 @@ const userSchame = mongoose.Schema({
   },
   status: {
     type: String,
-    default: "seller"
-  }
+    default: "seller",
+  },
 });
 
 userSchame.pre("remove", async function (next) {
