@@ -41,7 +41,7 @@ const getUser = async (req, res) => {
 // add new user
 const addUser = async (req, res) => {
   try {
-    const { name, username, email, bio, password, avatar } = req.body;
+    const { name, username, email, bio, password, avatar, mobile } = req.body;
 
     const existingEmail = await User.find({ email });
     const existingUsername = await User.find({ username });
@@ -61,6 +61,7 @@ const addUser = async (req, res) => {
         bio,
         password: bcryptjs.hashSync(password, cyfer),
         avatar,
+        mobile
       });
       newUser.save().then((result) => {
         sendOTPverification(result, res);
