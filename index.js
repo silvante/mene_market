@@ -112,16 +112,16 @@ const comp = require("./routes/comp.js");
 
 // using routes
 app.use("/", router);
-app.use("api/users", user);
-app.use("api/products", product);
-app.use("api/categorys", category);
-app.use("api/oqim", oqim);
-app.use("api/orders", order);
-app.use("api/dbox", dbox);
-app.use("api/donate", donate);
-app.use("api/news", news);
-app.use("api/blogs", blog);
-app.use("api/competitions", comp);
+app.use("/api/users", user);
+app.use("/api/products", product);
+app.use("/api/categorys", category);
+app.use("/api/oqim", oqim);
+app.use("/api/orders", order);
+app.use("/api/dbox", dbox);
+app.use("/api/donate", donate);
+app.use("/api/news", news);
+app.use("/api/blogs", blog);
+app.use("/api/competitions", comp);
 
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));
