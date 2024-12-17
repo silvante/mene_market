@@ -97,3 +97,122 @@ router.post("/logout", (req, res) => {
 });
 
 module.exports = { router, jwtSecret };
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Authentication
+ *     description: User authentication, login, logout, and profile-related routes.
+ */
+
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: User login
+ *     description: Login to the application with email and password. Returns a JWT token if credentials are correct.
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The email of the user
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 description: The password of the user
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Login successful, JWT token returned
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       400:
+ *         description: Invalid credentials or account not verified
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /auth/profile:
+ *   get:
+ *     summary: Get user profile
+ *     description: Get the profile details of the authenticated user. Requires a valid JWT token.
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: User's unique ID
+ *                 email:
+ *                   type: string
+ *                   description: User's email address
+ *                 username:
+ *                   type: string
+ *                   description: User's username
+ *                 name:
+ *                   type: string
+ *                   description: User's full name
+ *                 bio:
+ *                   type: string
+ *                   description: User's bio
+ *                 avatar:
+ *                   type: string
+ *                   description: URL to user's avatar
+ *                 verificated:
+ *                   type: boolean
+ *                   description: Account verification status
+ *                 check:
+ *                   type: boolean
+ *                   description: Additional check status
+ *                 balance:
+ *                   type: number
+ *                   description: User's current balance
+ *       401:
+ *         description: Invalid token or not authenticated
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Log out the user
+ *     description: Logs out the user by clearing the JWT token from the cookie.
+ *     tags: [Authentication]
+ *     responses:
+ *       200:
+ *         description: Successfully logged out
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */

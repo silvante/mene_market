@@ -118,7 +118,7 @@ app.use("api/categorys", category);
 app.use("api/oqim", oqim);
 app.use("api/orders", order);
 app.use("api/dbox", dbox);
-app.use("api/order", donate);
+app.use("api/donate", donate);
 app.use("api/news", news);
 app.use("api/blogs", blog);
 app.use("api/competitions", comp);
