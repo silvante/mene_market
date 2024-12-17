@@ -41,22 +41,16 @@ const getUser = async (req, res) => {
 // add new user
 const addUser = async (req, res) => {
   try {
-    const { name, username, email, bio, password, avatar } = req.body;
+    const { name, email, bio, password, avatar } = req.body;
 
     const existingEmail = await User.find({ email });
-    const existingUsername = await User.find({ username });
 
     if (existingEmail.length >= 1) {
       res.status(404).send("email is already used");
       return;
-    }
-    if (existingUsername.length >= 1) {
-      res.send("username is already taken");
-      return;
     } else {
       const newUser = await new User({
         name,
-        username,
         email,
         bio,
         password: bcryptjs.hashSync(password, cyfer),

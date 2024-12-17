@@ -36,6 +36,10 @@ const competitionSchema = mongoose.Schema({
     type: Date,
     required: true
   },
+  price: {
+    type: Number,
+    required: true,
+  }
 });
 
 const Comp = mongoose.model("competition", competitionSchema);

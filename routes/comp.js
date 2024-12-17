@@ -5,6 +5,7 @@ const {
   getCompById,
   editComp,
   deleteComp,
+  endComp,
 } = require("../controllers/comp.controller");
 const router = express.Router();
 
@@ -17,6 +18,8 @@ router.get("/:id", getCompById);
 router.put("/:id", editComp);
 
 router.delete("/:id", deleteComp);
+
+router.delete("/:id/end", endComp)
 
 module.exports = router;
 
@@ -68,6 +71,9 @@ module.exports = router;
  *                   type: string
  *                   format: date
  *                   example: "2025-01-01"
+ *                 price:
+ *                   type: Number
+ *                   example: 1000000
  *     responses:
  *       201:
  *         description: Competition created successfully
@@ -109,6 +115,8 @@ module.exports = router;
  *                     type: string
  *                   finish_date:
  *                     type: string
+ *                   finish_date:
+ *                     type: Number
  *       404:
  *         description: No competitions found
  *       500:
@@ -157,6 +165,8 @@ module.exports = router;
  *                       type: string
  *                     finish_date:
  *                       type: string
+ *                     price:
+ *                       type: Number
  *                 available_orders:
  *                   type: array
  *                   items:
@@ -217,6 +227,8 @@ module.exports = router;
  *                   type: string
  *                   format: date
  *                   example: "2025-06-30"
+ *                 price:
+ *                  type: Number
  *     responses:
  *       200:
  *         description: Competition updated successfully
@@ -252,4 +264,58 @@ module.exports = router;
  *         description: Unauthorized (admin privileges required)
  *       500:
  *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/competitions/{id}/end:
+ *   delete:
+ *     summary: End a competition and award the winner
+ *     description: Deletes a competition by ID, finds the user with the highest number of successful orders, updates their balance, and returns competition details.
+ *     tags: [Competitions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the competition to end
+ *         schema:
+ *           type: string
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Bearer token for authentication
+ *     responses:
+ *       200:
+ *         description: Competition successfully ended
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "konkurs ochirildi"
+ *                 winner:
+ *                   type: string
+ *                   example: "userId1"
+ *                 winner_balance:
+ *                   type: number
+ *                   example: 5000
+ *       404:
+ *         description: Unauthorized or no token provided
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: "no token provided"      
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: "An error occurred"
  */
