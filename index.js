@@ -25,7 +25,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://localhost:8080'
+        url: process.env.ORIGIN2
       }
     ]
   },
