@@ -41,9 +41,15 @@ const getUser = async (req, res) => {
 // add new user
 const addUser = async (req, res) => {
   try {
-    const { name, email, bio, password, avatar } = req.body;
+    const { name, email, bio, password, avatar, username } = req.body;
 
     const existingEmail = await User.find({ email });
+    const existingUsername = await User.find({ username });
+
+    if (existingUsername.length >= 1) {
+      res.status(404).send("username is already used");
+      return;
+    }
 
     if (existingEmail.length >= 1) {
       res.status(404).send("email is already used");
@@ -55,6 +61,7 @@ const addUser = async (req, res) => {
         bio,
         password: bcryptjs.hashSync(password, cyfer),
         avatar,
+        username
       });
       newUser.save().then((result) => {
         sendOTPverification(result, res);
