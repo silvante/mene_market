@@ -107,7 +107,7 @@ module.exports = { router, jwtSecret };
 
 /**
  * @swagger
- * /auth/login:
+ * /login:
  *   post:
  *     summary: User login
  *     description: Login to the application with email and password. Returns a JWT token if credentials are correct.
@@ -143,7 +143,7 @@ module.exports = { router, jwtSecret };
 
 /**
  * @swagger
- * /auth/profile:
+ * /profile:
  *   get:
  *     summary: Get user profile
  *     description: Get the profile details of the authenticated user. Requires a valid JWT token.
@@ -195,7 +195,7 @@ module.exports = { router, jwtSecret };
 
 /**
  * @swagger
- * /auth/logout:
+ * /logout:
  *   post:
  *     summary: Log out the user
  *     description: Logs out the user by clearing the JWT token from the cookie.

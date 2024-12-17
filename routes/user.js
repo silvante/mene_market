@@ -195,8 +195,6 @@ module.exports = router;
  *     User:
  *       type: object
  *       properties:
- *         id:
- *           type: string
  *         name:
  *           type: string
  *         username:
@@ -207,9 +205,8 @@ module.exports = router;
  *           type: string
  *         avatar:
  *           type: string
- *         verificated:
- *           type: boolean
- *         balance:
+ *         mobile:
  *           type: number
- *           description: User's account balance
+ *         password:
+ *           type: string
  */
