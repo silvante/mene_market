@@ -11,10 +11,6 @@ const userSchame = mongoose.Schema({
     required: true,
     unique: true,
   },
-  mobile: {
-    type: Number,
-    required: true,
-  },
   avatar: {
     type: String,
   },

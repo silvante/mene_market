@@ -201,12 +201,6 @@ module.exports = router;
  *           type: string
  *         email:
  *           type: string
- *         bio:
- *           type: string
- *         avatar:
- *           type: string
- *         mobile:
- *           type: number
  *         password:
  *           type: string
  */
