@@ -6,9 +6,34 @@ const connection = require("./db");
 const express = require("express");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
-const csurf = require("csurf");
+// const csurf = require("csurf");
 const cors = require("cors");
 const app = express();
+
+// for swagger
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API Documentation of mene market',
+      version: '1.0.0',
+      description: 'specially for mene market in 2024 and 2025'
+    },
+    servers: [
+      {
+        url: 'http://localhost:8080'
+      }
+    ]
+  },
+  apis: ['./routes/*.js'] // Path to API docs
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // limitter
 
@@ -21,7 +46,7 @@ const limitter = rateLimit({
 
 app.use(limitter);
 app.use(helmet());
-app.use(csurf());
+// app.use(csurf());
 
 // cors
 
@@ -87,16 +112,16 @@ const comp = require("./routes/comp.js");
 
 // using routes
 app.use("/", router);
-app.use("/users", user);
-app.use("/products", product);
-app.use("/categorys", category);
-app.use("/oqim", oqim);
-app.use("/orders", order);
-app.use("/dbox", dbox);
-app.use("/order", donate);
-app.use("/news", news);
-app.use("/blogs", blog);
-app.use("/competitions", comp);
+app.use("api/users", user);
+app.use("api/products", product);
+app.use("api/categorys", category);
+app.use("api/oqim", oqim);
+app.use("api/orders", order);
+app.use("api/dbox", dbox);
+app.use("api/order", donate);
+app.use("api/news", news);
+app.use("api/blogs", blog);
+app.use("api/competitions", comp);
 
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));
@@ -105,6 +130,12 @@ app.get("/", async (req, res) => {
   res
     .status(200)
     .json(
-      "backend for mene-market uz # written in node js # written by mardonbek khamidov"
+      {
+        message: "backend for mene-market uz # written in node js # written by mardonbek khamidov",
+        data: {
+          running: `Server running on http://localhost:${port}`,
+          swagger: `Swagger docs at http://localhost:${port}/api-docs`
+        }
+      }
     );
 });
