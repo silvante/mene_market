@@ -109,6 +109,8 @@ const donate = require("./routes/donate");
 const news = require("./routes/news.js");
 const blog = require("./routes/blog.js");
 const comp = require("./routes/comp.js");
+const Category = require("./models/category.model.js");
+const Product = require("./models/product.model.js");
 
 // using routes
 app.use("/", router);
@@ -127,15 +129,41 @@ const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));
 
 app.get("/", async (req, res) => {
-  res
-    .status(200)
-    .json(
-      {
-        message: "backend for mene-market uz # written in node js # written by mardonbek khamidov",
-        data: {
-          running: `Server running on http://localhost:${port}`,
-          swagger: `Swagger docs at http://localhost:${port}/api-docs`
-        }
-      }
-    );
+  try {
+    const categories = Category.find()
+
+    const results = await Promise.all(
+      categories.map(async (c) => {
+        const products = await Product.find({
+          tags: c.title
+        }).limit(20).exec()
+        return {category: c, products: products}
+      })
+    )
+
+    res.status(200).send(results)
+  } catch (err) {
+    console.log(err);
+    res.send(err)
+  }
 });
+
+// Swagger documentation for User routes
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: All categories with 20 products max
+ *     tags: [Home]
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       404:
+ *         description: No users found
+ */
