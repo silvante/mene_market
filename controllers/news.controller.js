@@ -42,12 +42,15 @@ const createNews = async (req, res) => {
 
         if (user_doc.status == "admin") {
           try {
-            const { title, desc, banner, link_to } = req.body;
+            const { title, desc, banner, link_to, start_date, finish_date } =
+              req.body;
             const news = await News.create({
               title,
               desc,
               banner,
               link_to,
+              start_date,
+              finish_date,
             });
             if (!news) {
               res.status(404).json({ message: "something went wrong!" });
@@ -86,12 +89,15 @@ const editNews = async (req, res) => {
         if (user_doc.status == "admin") {
           try {
             const id = req.params.id;
-            const { title, desc, banner, link_to } = req.body;
+            const { title, desc, banner, link_to, start_date, finish_date } =
+              req.body;
             await News.findByIdAndUpdate(id, {
               title,
               desc,
               banner,
               link_to,
+              start_date,
+              finish_date,
             }).then((up_pr) => {
               if (!up_pr) {
                 res.status(404).json({ message: "something went wrong!" });

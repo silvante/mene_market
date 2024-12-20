@@ -19,6 +19,14 @@ const newsShema = mongoose.Schema({
     type: String,
     required: true,
   },
+  start_date: {
+    type: Date,
+    default: Date.now,
+  },
+  finish_date: {
+    type: Date,
+    required: true,
+  },
 });
 
 const News = mongoose.model("news", newsShema);
