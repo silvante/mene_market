@@ -9,7 +9,7 @@ const {
 } = require("../controllers/comp.controller");
 const router = express.Router();
 
-router.post(":id", createComp);
+router.post("/:id", createComp);
 
 router.get("/", getComps);
 
