@@ -40,7 +40,7 @@ const addProduct = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const { title, desc, images, tags, price, for_seller, total } =
               req.body;
@@ -87,7 +87,7 @@ const editProduct = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
             const { title, desc, images, tags, price, for_seller, total } =
@@ -136,7 +136,7 @@ const deleteProduct = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
             await Product.findByIdAndDelete(id).then((deleted) =>

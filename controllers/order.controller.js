@@ -235,4 +235,4 @@ const successOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, sendOrder, cancelOrder, successOrder };
+module.exports = { createOrder, sendOrder, cancelOrder, successOrder, checkOrder };

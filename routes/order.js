@@ -11,6 +11,8 @@ const {
 
 router.post("/:id", createOrder);
 
+router.put("/:id/check", sendOrder);
+
 router.put("/:id/send", sendOrder);
 
 router.put("/:id/success", successOrder);
@@ -59,9 +61,31 @@ module.exports = router;
 
 /**
  * @swagger
+ * /api/orders/{id}/check:
+ *   put:
+ *     summary: Change the status of an order to "checked", statuses [operator]
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The order ID
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Order status updated to "sent"
+ *       404:
+ *         description: Order not found or unauthorized
+ */
+
+/**
+ * @swagger
  * /api/orders/{id}/send:
  *   put:
- *     summary: Change the status of an order to "sent"
+ *     summary: Change the status of an order to "sent", statuses [admin], {delivery_id} required
  *     tags: [Orders]
  *     parameters:
  *       - in: path
@@ -83,7 +107,7 @@ module.exports = router;
  * @swagger
  * /api/orders/{id}/cancel:
  *   put:
- *     summary: Change the status of an order to "canceled"
+ *     summary: Change the status of an order to "canceled", statuses [admin, operator, delivery]
  *     tags: [Orders]
  *     parameters:
  *       - in: path
@@ -105,7 +129,7 @@ module.exports = router;
  * @swagger
  * /api/orders/{id}/success:
  *   put:
- *     summary: Change the status of an order to "success"
+ *     summary: Change the status of an order to "success", statuses [delivery]
  *     tags: [Orders]
  *     parameters:
  *       - in: path
