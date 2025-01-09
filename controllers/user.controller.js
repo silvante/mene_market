@@ -146,7 +146,20 @@ const deleteUser = async (req, res) => {
 
         try {
           if ( user_doc.status == "admin" || user_doc.status == "owner") {
-            const deletedUser = await User.findByIdAndDelete(removingUserId);
+            const the_user = await User.findById(removingUserId)
+            // owner can not delete himself
+            if (the_user.status == "owner" && user_doc.id == the_user._id) {
+              return res.status(401).json({message: "owner can not delete himself"})
+            }
+            // any other admins can not delete owner
+            if (the_user.status == "owner") {
+              return res.status(402).json({message: "deleting user is owner, owner can not be deleted"})
+            }
+            // admin can not delete himself but owner can
+            if (the_user.status == "admin" && the_user._id == user_doc.id) {
+              return res.status(401).json({message: "admin can not delete himself"})
+            }
+            const deletedUser = await User.findByIdAndDelete(the_user._id);
             if (!deletedUser) {
               res.status(404).send("user is not defined...");
             }
