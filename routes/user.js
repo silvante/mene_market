@@ -19,6 +19,9 @@ router.get("/:id", getUser);
 // create user
 router.post("/", addUser);
 
+// only owner can create workers
+router.post("/worker", addUser);
+
 // edit user by id
 router.put("/:id", editUser);
 
@@ -80,6 +83,25 @@ module.exports = router;
  * /api/users:
  *   post:
  *     summary: Create a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       201:
+ *         description: User created
+ *       404:
+ *         description: Email or username already in use
+ */
+
+/**
+ * @swagger
+ * /api/users/worker:
+ *   post:
+ *     summary: Create a new worker, only owner can
  *     tags: [Users]
  *     requestBody:
  *       required: true

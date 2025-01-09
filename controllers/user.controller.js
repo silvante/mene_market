@@ -77,31 +77,53 @@ const addUser = async (req, res) => {
 // mothod: put
 // edit user by id
 const editUser = async (req, res) => {
-  const id = res.body.id;
   try {
-    const {
-      name,
-      password,
-      verificated,
-      username,
-      avatar,
-      bio,
-      email,
-      check,
-      balance,
-    } = req.body;
-    const editedUser = await User.findByIdAndUpdate(id, {
-      name,
-      password: bcryptjs.hashSync(password, cyfer),
-      verificated,
-      username,
-      avatar,
-      bio,
-      email,
-      check,
-      balance,
-    });
-    return res.status(202).send(editedUser);
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        try {
+          const id = req.params.id
+          if (id == user_doc.id || user_doc.status == "admin" || user_doc.status == "owner") {
+            const {
+              name,
+              password,
+              verificated,
+              username,
+              avatar,
+              bio,
+              email,
+              check,
+              balance,
+            } = req.body;
+            const editedUser = await User.findByIdAndUpdate(id, {
+              name,
+              password: bcryptjs.hashSync(password, cyfer),
+              verificated,
+              username,
+              avatar,
+              bio,
+              email,
+              check,
+              balance,
+            });
+            return res.status(202).send(editedUser);
+          } else {
+            res.status(404).json({message: "you made a mistake here sir"})
+          }
+        } catch (err) {
+          console.log(err);
+          res.send(err);
+        }
+      });
+    } else {
+      res.status(404).send("no token provided");
+    }
   } catch (err) {
     console.log(err);
     res.send(err);
@@ -113,11 +135,33 @@ const editUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const removingUserId = req.params.id;
   try {
-    const deletedUser = await User.findByIdAndDelete(removingUserId);
-    if (!deletedUser) {
-      res.status(404).send("user is not defined...");
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        try {
+          if ( user_doc.status == "admin" || user_doc.status == "owner") {
+            const deletedUser = await User.findByIdAndDelete(removingUserId);
+            if (!deletedUser) {
+              res.status(404).send("user is not defined...");
+            }
+            return res.status(203).send(deleteUser);
+          } else {
+            res.status(404).json({message: "you made a mistake here sir"})
+          }
+        } catch (err) {
+          console.log(err);
+          res.send(err);
+        }
+      });
+    } else {
+      res.status(404).send("no token provided");
     }
-    return res.status(203).send(deleteUser);
   } catch (err) {
     console.log(err);
     res.send(err);
@@ -244,6 +288,63 @@ const resendOTP = async (req, res) => {
   }
 };
 
+const createWorkerAccount = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        try {
+          const id = req.params.id
+          if (user_doc.status == "owner") {
+            const {
+              name,
+              password,
+              verificated,
+              username,
+              avatar,
+              bio,
+              email,
+              check,
+              balance,
+              status
+            } = req.body;
+            const editedUser = await User.findByIdAndUpdate(id, {
+              name,
+              password: bcryptjs.hashSync(password, cyfer),
+              verificated,
+              username,
+              avatar,
+              bio,
+              email,
+              check,
+              balance,
+              verificated: true,
+              status
+            });
+            return res.status(202).send(editedUser);
+          } else {
+            res.status(404).json({message: "you made a mistake here sir"})
+          }
+        } catch (err) {
+          console.log(err);
+          res.send(err);
+        }
+      });
+    } else {
+      res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(err)
+  }
+}
+
 module.exports = {
   getUser,
   getUsers,
@@ -253,4 +354,5 @@ module.exports = {
   sendOTPverification,
   verifyOTP,
   resendOTP,
+  createWorkerAccount
 };
