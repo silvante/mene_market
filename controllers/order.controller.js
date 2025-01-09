@@ -134,7 +134,7 @@ const cancelOrder = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin" || user_doc.status == "owner" || user_doc.status == "operator" || user_doc.status == "delivery" ) {
+        if (user_doc.status == "admin" || user_doc.status == "owner" || user_doc.status == "operator" || user_doc.status == "delivery") {
           try {
             const id = req.params.id;
             const updated = await Order.findByIdAndUpdate(
@@ -235,4 +235,63 @@ const successOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, sendOrder, cancelOrder, successOrder, checkOrder };
+const getOrders = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status == "operator") {
+          try {
+            const orders = Order.find({status: "pending"})
+            if (!orders) {
+              res.status(404).send("server error")
+            }
+            res.status(200).send(orders)
+          } catch (err) {
+            console.log(err);
+            res.send(err)
+          }            
+        } else if (user_doc.status == "admin") {
+          try {
+            const orders = Order.find({status: "checked"})
+            if (!orders) {
+              res.status(404).send("server error")
+            }
+            res.status(200).send(orders)
+          } catch (err) {
+            console.log(err);
+            res.send(err)
+          }     
+        } else if (user_doc.status == "delivery") {
+          try {
+            const orders = Order.find({status: "sent"})
+            if (!orders) {
+              res.status(404).send("server error")
+            }
+            res.status(200).send(orders)
+          } catch (err) {
+            console.log(err);
+            res.send(err)
+          }     
+        } else {
+          res
+            .status(404)
+            .send("bu metoddan foidalanish uchun admin bolishingiz kerak");
+        }
+      });
+    } else {
+      res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(err)
+  }
+}
+
+module.exports = { createOrder, sendOrder, cancelOrder, successOrder, checkOrder, getOrders };

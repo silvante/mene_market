@@ -5,6 +5,7 @@ const {
   sendOrder,
   successOrder,
   cancelOrder,
+  getOrders,
 } = require("../controllers/order.controller");
 
 // routes here
@@ -18,6 +19,8 @@ router.put("/:id/send", sendOrder);
 router.put("/:id/success", successOrder);
 
 router.put("/:id/cancel", cancelOrder);
+
+router.put("/", getOrders)
 
 module.exports = router;
 
@@ -130,6 +133,28 @@ module.exports = router;
  * /api/orders/{id}/success:
  *   put:
  *     summary: Change the status of an order to "success", statuses [delivery]
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The order ID
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Order status updated to "success" and user's balance adjusted
+ *       404:
+ *         description: Order not found or unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/orders/:
+ *   put:
+ *     summary: gets and filters orders by your status
  *     tags: [Orders]
  *     parameters:
  *       - in: path
