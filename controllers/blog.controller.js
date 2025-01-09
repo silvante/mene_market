@@ -40,7 +40,7 @@ const createBlog = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const { title, desc, banner, link_to } = req.body;
             const blog = await Blog.create({
@@ -83,7 +83,7 @@ const editBlog = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
             const { title, desc, banner, link_to } = req.body;
@@ -128,7 +128,7 @@ const deleteBlog = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
             await Blog.findByIdAndDelete(id).then((deleted) =>

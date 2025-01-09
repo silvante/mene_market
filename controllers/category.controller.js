@@ -1,14 +1,15 @@
 const Category = require("../models/category.model");
+const Product = require("../models/product.model");
 const { jwtSecret } = require("../routes/extra");
 const jwt = require("jsonwebtoken");
 
-const getCategorys = async (req, res) => {
+const getCategories = async (req, res) => {
   try {
-    const Categorys = await Category.find();
-    if (!Categorys) {
-      res.status(404).send("we have no Categorys yet...");
+    const categories = await Category.find();
+    if (!categories) {
+      res.status(404).send("we have no categories yet...");
     }
-    return res.status(200).send(Categorys);
+    return res.status(200).send(categories);
   } catch (err) {
     console.log(err);
     res.send(err);
@@ -17,13 +18,15 @@ const getCategorys = async (req, res) => {
 
 const getCategory = async (req, res) => {
   try {
-    const Category = await Category.findById(req.params.id);
+    const category = await Category.findById(req.params.id);
 
     if (!Category) {
       return res.status(404).json({ message: "Category not found" });
     }
 
-    res.status(200).json(Category);
+    const products = await Product.find({tags: category.title})
+
+    res.status(200).json({category: category, products: products });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
@@ -40,7 +43,7 @@ const addCategory = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const { title } = req.body;
             const new_Category = await Category.create({
@@ -80,7 +83,7 @@ const editCategory = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
             const { title } = req.body;
@@ -122,7 +125,7 @@ const deleteCategory = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
             await Category.findByIdAndDelete(id).then((deleted) =>
@@ -150,7 +153,7 @@ const deleteCategory = async (req, res) => {
 };
 
 module.exports = {
-  getCategorys,
+  getCategories,
   getCategory,
   addCategory,
   editCategory,

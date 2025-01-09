@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getCategorys,
+  getCategories,
   getCategory,
   addCategory,
   editCategory,
   deleteCategory,
 } = require("../controllers/category.controller");
 
-router.get("/", getCategorys);
+router.get("/", getCategories);
 
 router.get("/:id", getCategory);
 
