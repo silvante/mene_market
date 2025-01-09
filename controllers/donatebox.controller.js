@@ -13,7 +13,7 @@ const Activate = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "owner") {
           try {
             const disabled_box = await Dbox.findOne({ is_active: false });
             if (disabled_box) {
@@ -63,7 +63,7 @@ const Disable = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "owner") {
           try {
             const disabled_box = await Dbox.findOne({ is_active: false });
             if (disabled_box) {
@@ -115,7 +115,7 @@ const divorceDonate = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "owner") {
           try {
             const { fund } = req.body;
             const active_box = await Dbox.findOne({ is_active: true });

@@ -16,7 +16,7 @@ const createComp = async (req, res) => {
         }
 
         try {
-          if (user_doc.status == "admin") {
+          if (user_doc.status == "owner") {
             const {
               title,
               desc,
@@ -129,7 +129,7 @@ const editComp = async (req, res) => {
         }
 
         try {
-          if (user_doc.status == "admin") {
+          if (user_doc.status == "owner") {
             const {
               title,
               desc,
@@ -187,7 +187,7 @@ const deleteComp = async (req, res) => {
         }
 
         try {
-          if (user_doc.status == "admin") {
+          if (user_doc.status == "owner") {
             const id = req.params.id;
             await Comp.findByIdAndDelete(id).then((deleted) =>
               deleted
@@ -225,7 +225,7 @@ const endComp = async (req, res) => {
         }
 
         try {
-          if (user_doc.status == "admin") {
+          if (user_doc.status == "owner") {
             const id = req.params.id;
             const comp = await Comp.findById(id);
             const orders = await Order.find({
