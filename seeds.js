@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const User = require("./models/user.model")
-const cyfer = bcryptjs.genSaltSync(8);
 const bcryptjs = require("bcryptjs");
+const cyfer = bcryptjs.genSaltSync(8);
 
 
 const seedUsers = async () => {
