@@ -105,7 +105,7 @@ const deleteOqim = async (req, res) => {
         try {
           const oqim_id = req.params.id;
           const oqim = await Oqim.findById(oqim_id);
-          if (oqim.user_id == user_doc.id) {
+          if (oqim.user_id == user_doc.id || user_doc.status == "admin" || user_doc.status == "owner") {
             await Oqim.findByIdAndDelete(oqim_id);
             res.status(200).send("deleted");
           } else {

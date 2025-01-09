@@ -40,7 +40,7 @@ const createNews = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const { title, desc, banner, link_to, start_date, finish_date } =
               req.body;
@@ -86,7 +86,7 @@ const editNews = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
             const { title, desc, banner, link_to, start_date, finish_date } =
@@ -134,7 +134,7 @@ const deleteNews = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
             await News.findByIdAndDelete(id).then((deleted) =>

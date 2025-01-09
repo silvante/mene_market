@@ -32,6 +32,10 @@ const orderSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
+  delivery_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+  },
   status: {
     type: String,
     required: true,

@@ -41,6 +41,46 @@ const createOrder = async (req, res) => {
   }
 };
 
+const checkOrder = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status == "delivery") {
+          try {
+            const id = req.params.id;
+            const updated = await Order.findByIdAndUpdate(id, {
+              status: "checked",
+            });
+            if (!updated) {
+              res.status(404).send("something went wrong, try again");
+            }
+            res.status(200).json({ message: "status changed to checked" });
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res
+            .status(404)
+            .send("bu metoddan foidalanish uchun admin bolishingiz kerak");
+        }
+      });
+    } else {
+      res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(err);
+  }
+};
+
 const sendOrder = async (req, res) => {
   try {
     const auth_headers = req.headers.authorization;
