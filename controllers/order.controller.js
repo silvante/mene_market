@@ -52,7 +52,7 @@ const checkOrder = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "delivery") {
+        if (user_doc.status == "operator") {
           try {
             const id = req.params.id;
             const updated = await Order.findByIdAndUpdate(id, {
@@ -95,8 +95,10 @@ const sendOrder = async (req, res) => {
         if (user_doc.status == "admin") {
           try {
             const id = req.params.id;
+            const { delivery_id } = req.body;
             const updated = await Order.findByIdAndUpdate(id, {
               status: "sent",
+              delivery_id
             });
             if (!updated) {
               res.status(404).send("something went wrong, try again");
@@ -132,7 +134,7 @@ const cancelOrder = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner" || user_doc.status == "operator" || user_doc.status == "delivery" ) {
           try {
             const id = req.params.id;
             const updated = await Order.findByIdAndUpdate(
@@ -188,7 +190,7 @@ const successOrder = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "delivery") {
           try {
             const id = req.params.id;
             const updated = await Order.findByIdAndUpdate(

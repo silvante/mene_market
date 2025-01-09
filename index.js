@@ -173,3 +173,4 @@ app.get("/", async (req, res) => {
 // admins
 // owner
 // delivery
+// operator
