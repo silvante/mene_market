@@ -212,7 +212,7 @@ const sendOTPverification = async ({ _id, email }, res) => {
     const mailOptions = {
       from: process.env.AUTH_EMAIL,
       to: email,
-      subject: "Emailni tekshirib oling - Dily",
+      subject: "Emailni tekshirib oling - Mene market",
       html: `<p>Sizning kodingiz -- <b>${otp}</b> -- uni saytga kirgizing va emailni verificatsiya qilib oling va uni hech kimga aytmang </p>`,
     };
 
