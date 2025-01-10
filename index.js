@@ -50,7 +50,7 @@ app.use(helmet());
 
 // cors
 
-const allowedOrigins = [process.env.ORIGIN1, process.env.ORIGIN1];
+const allowedOrigins = [process.env.ORIGIN1, process.env.ORIGIN2];
 
 app.use(
   cors({
