@@ -1,3 +1,4 @@
+require("dotenv").config()
 const mongoose = require("mongoose")
 const User = require("./models/user.model")
 const bcryptjs = require("bcryptjs");
@@ -9,7 +10,7 @@ const seedUsers = async () => {
         await User.deleteMany()
         const users = [
             { name: "Owner of Market", username: "owner", email: "owner@mmarket.com", password: bcryptjs.hashSync(process.env.OWNER_PASSWORD, cyfer), verificated: true },
-            { name: "Assembler", username: "assebler", email: "asm@we.com", password: bcryptjs.hashSync(process.env.OWNER_PASSWORD, cyfer), verificated: true }
+            { name: "Assembler", username: "assembler", email: "asm@we.com", password: bcryptjs.hashSync(process.env.OWNER_PASSWORD, cyfer), verificated: true }
         ]
         await User.insertMany(users)
         console.log("Seeded users successfully!");

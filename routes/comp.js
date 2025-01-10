@@ -115,8 +115,6 @@ module.exports = router;
  *                     type: string
  *                   finish_date:
  *                     type: string
- *                   finish_date:
- *                     type: Number
  *       404:
  *         description: No competitions found
  *       500:
