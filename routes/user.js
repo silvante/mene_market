@@ -170,7 +170,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/users/verify-otp:
+ * /api/users/verifyOTP:
  *   post:
  *     summary: Verify OTP
  *     tags: [Authentication]
@@ -194,7 +194,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/users/resend-otp:
+ * /api/users/resendOTP:
  *   post:
  *     summary: Resend OTP
  *     tags: [Authentication]
