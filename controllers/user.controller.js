@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const crypto = require("crypto")
 const bcryptjs = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const OTP = require("../models/otp.model");
@@ -37,20 +38,34 @@ const getUser = async (req, res) => {
   }
 };
 
+// unique username generator
+
+const generateUniqueUsername = async (name) => {
+  let baseUsername = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  let username = baseUsername;
+  let isUnique = false;
+
+  while (!isUnique) {
+    const existingUser = await User.findOne({ username });
+    if (!existingUser) {
+      isUnique = true;
+    } else {
+      const randomSuffix = crypto.randomInt(1000, 9999);
+      username = `${baseUsername}${randomSuffix}`;
+    }
+  }
+  return username;
+};
+
 // mothod: post
 // add new user
 const addUser = async (req, res) => {
   try {
-    const { name, email, bio, password, avatar, username } = req.body;
+    const { name, email, bio, password, avatar } = req.body;
 
     const existingEmail = await User.find({ email });
-    const existingUsername = await User.find({ username });
 
-    if (existingUsername.length >= 1) {
-      res.status(404).send("username is already used");
-      return;
-    }
-
+    const username = await generateUniqueUsername(name);
     if (existingEmail.length >= 1) {
       res.status(404).send("email is already used");
       return;

@@ -227,8 +227,6 @@ module.exports = router;
  *           type: string
  *         email:
  *           type: string
- *         username:
- *           type: string
  *         password:
  *           type: string
  */
