@@ -1,6 +1,6 @@
-require("dotenv").config()
-const mongoose = require("mongoose")
-const User = require("./models/user.model")
+require("dotenv").config();
+const mongoose = require("mongoose");
+const User = require("./models/user.model");
 const bcryptjs = require("bcryptjs");
 const cyfer = bcryptjs.genSaltSync(8);
 
@@ -8,7 +8,9 @@ const cyfer = bcryptjs.genSaltSync(8);
 const seedUsers = async () => {
     try {
         const owner = await User.findOne({status: "owner"})
-        if (owner) {
+        if (!owner) {
+            console.log("Owners already exist!");
+        } else {
             await User.deleteMany()
             const users = [
                 { name: "Owner of Market", username: "owner", email: "owner@mmarket.com", password: bcryptjs.hashSync(process.env.OWNER_PASSWORD, cyfer), verificated: true, status: "owner" },
@@ -16,8 +18,6 @@ const seedUsers = async () => {
             ]
             await User.insertMany(users)
             console.log("Seeded users successfully!");
-        } else {
-            console.log("Owners already found!");
         }
     } catch (err) {
         console.log(`user seeding error ${err}`);
