@@ -38,7 +38,7 @@ const orderSchema = mongoose.Schema({
   },
   status: {
     type: String,
-    required: true,
+    default: "pending",
   },
   total_price: {
     type: Number,

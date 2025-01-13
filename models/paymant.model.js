@@ -16,6 +16,15 @@ const paymentSchema = mongoose.Schema({
     payment: {
         required: true,
         type: Number
+    },
+    status: {
+        type: String,
+        default: "pending",
+    },
+    sending: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "user"
     }
 })
 
