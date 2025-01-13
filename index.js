@@ -9,6 +9,9 @@ const helmet = require("helmet");
 // const csurf = require("csurf");
 const cors = require("cors");
 const app = express();
+const Category = require("./models/category.model.js");
+const Product = require("./models/product.model.js");
+
 
 // for swagger
 
@@ -109,8 +112,7 @@ const donate = require("./routes/donate");
 const news = require("./routes/news.js");
 const blog = require("./routes/blog.js");
 const comp = require("./routes/comp.js");
-const Category = require("./models/category.model.js");
-const Product = require("./models/product.model.js");
+const payment = require("./routes/payment.js")
 
 // using routes
 app.use("/", router);
@@ -124,6 +126,7 @@ app.use("/api/donate", donate);
 app.use("/api/news", news);
 app.use("/api/blogs", blog);
 app.use("/api/competitions", comp);
+app.use("/app/payments", payment)
 
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));
