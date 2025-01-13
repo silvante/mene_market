@@ -56,4 +56,66 @@ const createPayment = async (req, res) => {
     }
 }
 
+const getMyPayments = async (req, res) => {
+    try {
+        const auth_headers = req.headers.authorization;
+        if (auth_headers && auth_headers.startsWith("Bearer ")) {
+            const token = auth_headers.split("Bearer ")[1];
+            jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+                if (err) {
+                    throw err;
+                }
+
+                try {
+                    const payments = await Payment.find({sending: user_doc.id})
+                    if (!payments) {
+                        res.status(400).send("server error")
+                    }
+                    res.status(200).send(payments)
+                } catch (err) {
+                    console.log(err);
+                    res.send(err);
+                }
+            });
+        } else {
+            res.status(404).send("no token provided");
+        }
+    } catch (err) {
+        console.log(err);
+        res.send(err)
+    }
+}
+
+const getPaymantsAdmin = async (req, res) => {
+    try {
+        const auth_headers = req.headers.authorization;
+        if (auth_headers && auth_headers.startsWith("Bearer ")) {
+            const token = auth_headers.split("Bearer ")[1];
+            jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+                if (err) {
+                    throw err;
+                }
+
+                try {
+                    if (user_doc.status == "admin" || user_doc.status == "owner") {
+                        const payments = await payment.find().populate("sending")
+                        if (!payments) {
+                            res.status(400).send("server error")
+                        }
+                        res.status(200).send(payments)
+                    }
+                } catch (err) {
+                    console.log(err);
+                    res.send(err);
+                }
+            });
+        } else {
+            res.status(404).send("no token provided");
+        }
+    } catch (err) {
+        console.log(err);
+        res.send(err)
+    }
+}
+
 module.exports = {}
