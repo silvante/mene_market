@@ -8,7 +8,7 @@ const cyfer = bcryptjs.genSaltSync(8);
 const seedUsers = async () => {
     try {
         const owner = await User.findOne({status: "owner"})
-        if (!owner) {
+        if (owner) {
             console.log("Owners already exist!");
         } else {
             await User.deleteMany()
