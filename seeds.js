@@ -13,8 +13,7 @@ const seedUsers = async () => {
         } else {
             await User.deleteMany()
             const users = [
-                { name: "Owner of Market", username: "owner", email: "owner@mmarket.com", password: bcryptjs.hashSync(process.env.OWNER_PASSWORD, cyfer), verificated: true, status: "owner" },
-                { name: "Assembler", username: "assembler", email: "newassembler@hey.com", password: bcryptjs.hashSync(process.env.OWNER_PASSWORD, cyfer), verificated: true, status: "owner" }
+                { name: "Owner of Market", username: "owner", email: "owner@mmarket.com", password: bcryptjs.hashSync(process.env.OWNER_PASSWORD, cyfer), verificated: true, status: "owner" }
             ]
             await User.insertMany(users)
             console.log("Seeded users successfully!");
