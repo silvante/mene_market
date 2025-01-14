@@ -98,11 +98,95 @@ const getPaymantsAdmin = async (req, res) => {
 
                 try {
                     if (user_doc.status == "admin" || user_doc.status == "owner") {
-                        const payments = await payment.find().populate("sending")
+                        const payments = await Payment.find().populate("sending")
                         if (!payments) {
                             res.status(400).send("server error")
                         }
                         res.status(200).send(payments)
+                    }
+                } catch (err) {
+                    console.log(err);
+                    res.send(err);
+                }
+            });
+        } else {
+            res.status(404).send("no token provided");
+        }
+    } catch (err) {
+        console.log(err);
+        res.send(err)
+    }
+}
+
+const seccessPayment = async (req, res) => {
+    try {
+        const auth_headers = req.headers.authorization;
+        if (auth_headers && auth_headers.startsWith("Bearer ")) {
+            const token = auth_headers.split("Bearer ")[1];
+            jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+                if (err) {
+                    throw err;
+                }
+
+                try {
+                    const id = req.params.id
+                    if (user_doc.status == "admin" || user_doc.status == "owner") {
+                        const the_payment = await Payment.findByIdAndUpdate(id, {
+                            status: "success"
+                        })
+                        if (!the_payment) {
+                            res.status(400).send("Payment not found of server error")
+                        }
+                        res.status(200).json({
+                            success: true,
+                            message: "Tolov muaffaqiyatli yopildi",
+                            payment_data: the_payment
+                        })
+                    }
+                } catch (err) {
+                    console.log(err);
+                    res.send(err);
+                }
+            });
+        } else {
+            res.status(404).send("no token provided");
+        }
+    } catch (err) {
+        console.log(err);
+        res.send(err)
+    }
+}
+
+const RejectPayment = async (req, res) => {
+    try {
+        const auth_headers = req.headers.authorization;
+        if (auth_headers && auth_headers.startsWith("Bearer ")) {
+            const token = auth_headers.split("Bearer ")[1];
+            jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+                if (err) {
+                    throw err;
+                }
+
+                try {
+                    const id = req.params.id
+                    if (user_doc.status == "admin" || user_doc.status == "owner") {
+                        const the_payment = await Payment.findByIdAndUpdate(id, {
+                            status: "rejected"
+                        })
+                        const the_user = await User.findById(the_payment.sending)
+                        const new_balance = the_user.balance + the_payment.payment
+                        await User.findByIdAndUpdate(the_user._id, {
+                            balance: new_balance
+                        })
+                        if (!the_payment) {
+                            res.status(400).send("Payment not found of server error")
+                        }
+                        res.status(200).json({
+                            success: true,
+                            message: "Tolov rad etildi",
+                            payment_data: the_payment,
+                            the_users_balance: new_balance
+                        })
                     }
                 } catch (err) {
                     console.log(err);
