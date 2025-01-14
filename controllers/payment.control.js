@@ -118,7 +118,7 @@ const getPaymantsAdmin = async (req, res) => {
     }
 }
 
-const seccessPayment = async (req, res) => {
+const successPayment = async (req, res) => {
     try {
         const auth_headers = req.headers.authorization;
         if (auth_headers && auth_headers.startsWith("Bearer ")) {
@@ -202,4 +202,4 @@ const RejectPayment = async (req, res) => {
     }
 }
 
-module.exports = {}
+module.exports = {createPayment, getMyPayments, getPaymantsAdmin, successPayment, RejectPayment}
