@@ -65,6 +65,7 @@ router.get("/profile", async (req, res) => {
             verificated,
             check,
             balance,
+            status,
           } = user;
           res.json({
             _id,
@@ -76,6 +77,7 @@ router.get("/profile", async (req, res) => {
             verificated,
             check,
             balance,
+            status,
           });
         } catch (error) {
           console.log(error);
