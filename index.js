@@ -101,6 +101,7 @@ app.delete("/file/:filename", async (req, res) => {
 });
 
 // requiring routes
+
 const { router } = require("./routes/extra");
 const user = require("./routes/user");
 const product = require("./routes/product");
@@ -112,9 +113,11 @@ const donate = require("./routes/donate");
 const news = require("./routes/news.js");
 const blog = require("./routes/blog.js");
 const comp = require("./routes/comp.js");
-const payment = require("./routes/payment.js")
+const payment = require("./routes/payment.js");
+const comment = require("./routes/comment.js");
 
 // using routes
+
 app.use("/", router);
 app.use("/api/users", user);
 app.use("/api/products", product);
@@ -126,7 +129,8 @@ app.use("/api/donate", donate);
 app.use("/api/news", news);
 app.use("/api/blogs", blog);
 app.use("/api/competitions", comp);
-app.use("/app/payments", payment)
+app.use("/app/payments", payment);
+app.use("/api/comments", comment);
 
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));

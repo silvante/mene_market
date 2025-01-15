@@ -28,10 +28,10 @@ const getComment = async (req, res) => {
 
 const sendComment = async (req, res) => {
   try {
-    const id = req.params.id
+    const product_id = req.params.id
     const { comment, commentor, rating, gender } = req.body;
     const newComment = await Comment.create({
-      to: id,
+      to: product_id,
       comment,
       commentor,
       rating,
