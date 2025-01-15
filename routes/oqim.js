@@ -73,7 +73,7 @@ module.exports = router;
  *     tags: [Oqims]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: product_id
  *         required: true
  *         schema:
  *           type: string
