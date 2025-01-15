@@ -9,6 +9,14 @@ const oqimSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "product",
   },
+  name: {
+    type: String,
+    required: true,
+  },
+  created_at: {
+    type: Data,
+    default: Date.now,
+  }
 });
 
 const Oqim = mongoose.model("oqim", oqimSchema);

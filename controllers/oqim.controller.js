@@ -40,7 +40,7 @@ const getOqims = async (req, res) => {
 const getOqim = async (req, res) => {
   const id = req.params.id;
   try {
-    const oqim = await Oqim.findById(id);
+    const oqim = await Oqim.findById(id).populate("product_id").populate("user_id");
     if (!oqim) {
       res.status(404).send("server error");
     }
@@ -65,6 +65,7 @@ const addOqim = async (req, res) => {
         try {
           const product_id = req.params.product_id;
           const product = await Product.findById(product_id);
+          const { name } = req.body;
           const new_oqim = await Oqim.create({
             user_id: user_doc.id,
             product_id: product_id,
@@ -76,6 +77,7 @@ const addOqim = async (req, res) => {
             message: "oqim yaratildi",
             id: new_oqim.id,
             product: product,
+            name,
           });
         } catch (err) {
           console.log(err);
