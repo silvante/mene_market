@@ -63,7 +63,7 @@ const addOqim = async (req, res) => {
         }
 
         try {
-          const product_id = req.params.id;
+          const product_id = req.params.product_id;
           const product = await Product.findById(product_id);
           const new_oqim = await Oqim.create({
             user_id: user_doc.id,
@@ -72,7 +72,7 @@ const addOqim = async (req, res) => {
           if (!new_oqim) {
             res.status(404).send("server error");
           }
-          res.status(404).json({
+          res.status(200).json({
             message: "oqim yaratildi",
             id: new_oqim.id,
             product: product,
