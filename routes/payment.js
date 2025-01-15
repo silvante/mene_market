@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { getMyPayments, getPaymantsAdmin, successPayment, RejectPayment, createPayment } = require("../controllers/payment.control")
+const { getMyPayments, getPaymantsAdmin, successPayment, RejectPayment, createPayment } = require("../controllers/payment.controller")
 
 router.get("/", getMyPayments)
 
