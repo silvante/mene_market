@@ -22,7 +22,7 @@ module.exports = router;
 // Swagger documentation for Oqim routes
 /**
  * @swagger
- * /api/oqims:
+ * /api/oqim:
  *   get:
  *     summary: Get all "oqims" for the authenticated user
  *     tags: [Oqims]
@@ -43,7 +43,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/oqims/{id}:
+ * /api/oqim/{id}:
  *   get:
  *     summary: Get a specific "oqim" by its ID
  *     tags: [Oqims]
@@ -67,7 +67,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/oqims/{product_id}:
+ * /api/oqim/{product_id}:
  *   post:
  *     summary: Add a new "oqim" for the authenticated user
  *     tags: [Oqims]
@@ -100,7 +100,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/oqims/{id}:
+ * /api/oqim/{id}:
  *   delete:
  *     summary: Delete a specific "oqim"
  *     tags: [Oqims]
@@ -122,7 +122,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/oqims/{id}/order:
+ * /api/oqim/{id}/order:
  *   post:
  *     summary: Create an order for a specific "oqim"
  *     tags: [Oqims]
