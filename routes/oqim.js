@@ -12,7 +12,7 @@ router.get("/", getOqims);
 
 router.get("/:id", getOqim);
 
-router.post("/", addOqim);
+router.post("/:product_id", addOqim);
 
 router.delete("/:id", deleteOqim);
 
@@ -67,7 +67,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/oqims:
+ * /api/oqims/{product_id}:
  *   post:
  *     summary: Add a new "oqim" for the authenticated user
  *     tags: [Oqims]
