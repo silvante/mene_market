@@ -18,7 +18,7 @@ const getOqims = async (req, res) => {
         try {
           const user_id = user_doc.id;
 
-          const oqims = await Oqim.find({ user_id: user_id });
+          const oqims = await Oqim.find({ user_id: user_id }).populate("product_id").populate("user_id");
           if (!oqims) {
             res.status(404).send("server error");
           }
