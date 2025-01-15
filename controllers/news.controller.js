@@ -4,7 +4,7 @@ const { jwtSecret } = require("../routes/extra");
 
 const getNews = async (req, res) => {
   try {
-    const news = News.find();
+    const news = await News.find();
     if (!news) {
       res.status(404).json({ message: "server error or we have no news" });
     }
@@ -18,7 +18,7 @@ const getNews = async (req, res) => {
 const getNewsById = async (req, res) => {
   try {
     const id = req.params.id;
-    const news = News.findById(id);
+    const news = await News.findById(id);
     if (!news) {
       res.status(404).json({ message: "new is not defined" });
     }

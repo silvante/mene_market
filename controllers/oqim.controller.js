@@ -18,7 +18,7 @@ const getOqims = async (req, res) => {
         try {
           const user_id = user_doc.id;
 
-          const oqims = await Oqim.find({ user_id: user_id }).populate("product_id").populate("user_id");
+          const oqims = await Oqim.find({ user_id: user_id }).populate("product").populate("user");
           if (!oqims) {
             res.status(404).send("server error");
           }
@@ -40,7 +40,7 @@ const getOqims = async (req, res) => {
 const getOqim = async (req, res) => {
   const id = req.params.id;
   try {
-    const oqim = await Oqim.findById(id).populate("product_id").populate("user_id");
+    const oqim = await Oqim.findById(id).populate("product").populate("user");
     if (!oqim) {
       res.status(404).send("server error");
     }
@@ -64,11 +64,11 @@ const addOqim = async (req, res) => {
 
         try {
           const product_id = req.params.product_id;
-          const product = await Product.findById(product_id);
+          const product = await Product.findById({product: product_id});
           const { name } = req.body;
           const new_oqim = await Oqim.create({
-            user_id: user_doc.id,
-            product_id: product_id,
+            user: user_doc.id,
+            product: product_id,
           });
           if (!new_oqim) {
             res.status(404).send("server error");
@@ -141,7 +141,7 @@ const createOrder = async (req, res) => {
   try {
     const id = req.params.id;
     const { client_mobile, client_name, client_address } = req.body;
-    const oqim = await Oqim.findById(id).populate("product_id");
+    const oqim = await Oqim.findById(id).populate("product");
 
     const total_price = oqim.product.price + oqim.product.for_seller;
 
@@ -153,7 +153,7 @@ const createOrder = async (req, res) => {
         client_name,
         client_address,
         user_id: oqim.user_id,
-        product_id: oqim.product_id,
+        product_id: oqim.product,
         oqim_id: id,
         status: "pending",
         order_code: generateOTP(),

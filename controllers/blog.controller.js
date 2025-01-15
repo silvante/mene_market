@@ -4,11 +4,11 @@ const { jwtSecret } = require("../routes/extra");
 
 const getBlogs = async (req, res) => {
   try {
-    const blogs = Blog.find();
-    if (!news) {
+    const blogs = await Blog.find();
+    if (!blogs) {
       res.status(404).json({ message: "server error or we have no blogs" });
     }
-    res.status(200).send(news);
+    res.status(200).send(blogs);
   } catch (err) {
     console.log(err);
     res.send(err);
@@ -18,7 +18,7 @@ const getBlogs = async (req, res) => {
 const getBlogById = async (req, res) => {
   try {
     const id = req.params.id;
-    const blog = Blog.findById(id);
+    const blog = await Blog.findById(id);
     if (!blog) {
       res.status(404).json({ message: "blog is not defined" });
     }

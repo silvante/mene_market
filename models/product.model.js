@@ -30,6 +30,9 @@ const productSchema = mongoose.Schema({
     type: Date,
     default: Date.now, // Automatically sets the current date when the document is created
   },
+  type: {
+    type: String
+  }
 });
 
 const Product = mongoose.model("product", productSchema);

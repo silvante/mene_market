@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const oqimSchema = mongoose.Schema({
-  user_id: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
-  product_id: {
+  product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "product",
   },
