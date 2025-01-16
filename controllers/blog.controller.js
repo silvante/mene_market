@@ -42,12 +42,11 @@ const createBlog = async (req, res) => {
 
         if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
-            const { title, desc, banner, link_to } = req.body;
+            const { title, desc, banner } = req.body;
             const blog = await Blog.create({
               title,
               desc,
               banner,
-              link_to,
             });
             if (!blog) {
               res.status(404).json({ message: "something went wrong!" });
@@ -86,12 +85,11 @@ const editBlog = async (req, res) => {
         if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
-            const { title, desc, banner, link_to } = req.body;
+            const { title, desc, banner } = req.body;
             await Blog.findByIdAndUpdate(id, {
               title,
               desc,
               banner,
-              link_to,
             }).then((up_pr) => {
               if (!up_pr) {
                 res.status(404).json({ message: "something went wrong!" });

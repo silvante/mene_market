@@ -129,7 +129,7 @@ app.use("/api/donate", donate);
 app.use("/api/news", news);
 app.use("/api/blogs", blog);
 app.use("/api/competitions", comp);
-app.use("/app/payments", payment);
+app.use("/api/payments", payment);
 app.use("/api/comments", comment);
 
 const port = process.env.PORT || 8080;

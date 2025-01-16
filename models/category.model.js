@@ -9,6 +9,10 @@ const categorySchema = mongoose.Schema({
     type: Date,
     default: Date.now, // Automatically sets the current date when the document is created
   },
+  created_at: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 const Category = mongoose.model("category", categorySchema);

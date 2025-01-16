@@ -150,6 +150,4 @@ module.exports = router;
  *           type: string
  *         banner:
  *           type: string
- *         link_to:
- *           type: string
  */

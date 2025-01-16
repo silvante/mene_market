@@ -15,10 +15,10 @@ const blogShema = mongoose.Schema({
     maxlength: 1040,
     required: true,
   },
-  link_to: {
-    type: String,
-    required: true,
-  },
+  created_at: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 const Blog = mongoose.model("blog", blogShema);

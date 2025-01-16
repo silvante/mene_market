@@ -150,14 +150,4 @@ module.exports = router;
  *           type: string
  *         banner:
  *           type: string
- *         link_to:
- *           type: string
- *         start_date:
- *           type: string
- *           format: date
- *           example: "2025-06-01"
- *         finish_date:
- *           type: string
- *           format: date
- *           example: "2025-06-01"
  */

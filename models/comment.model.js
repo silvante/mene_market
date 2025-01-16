@@ -22,6 +22,10 @@ const commentSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "product",
   },
+  created_at: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 const Comment = mongoose.model("comment", commentSchema);

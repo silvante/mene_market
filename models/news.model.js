@@ -15,18 +15,10 @@ const newsShema = mongoose.Schema({
     maxlength: 1040,
     required: true,
   },
-  link_to: {
-    type: String,
-    required: true,
-  },
-  start_date: {
+  created_at: {
     type: Date,
-    default: Date.now,
-  },
-  finish_date: {
-    type: Date,
-    required: true,
-  },
+    default: Date.now
+  }
 });
 
 const News = mongoose.model("news", newsShema);
