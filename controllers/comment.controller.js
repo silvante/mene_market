@@ -13,6 +13,20 @@ const getComments = async (req, res) => {
   }
 };
 
+const getProductsComments = async (req, res) => {
+  try {
+    const product_id = req.params.product_id
+    const comments = await Comment.find({to: product_id})
+    if (!comments) {
+      res.status(404).send("server error or this product has no comments")
+    }
+    res.status(200).send(comments)
+  } catch (err) {
+    res.send(err);
+    console.log(err);
+  }
+}
+
 const getComment = async (req, res) => {
   const commentId = req.params.id;
   try {
@@ -81,4 +95,5 @@ module.exports = {
   sendComment,
   editComment,
   deleteComment,
+  getProductsComments
 };

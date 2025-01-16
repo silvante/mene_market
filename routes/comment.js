@@ -6,10 +6,12 @@ const {
   sendComment,
   editComment,
   deleteComment,
+  getProductsComments,
 } = require("../controllers/comment.controller");
 
 router.get("/", getComments);
 router.get("/:id", getComment);
+router.get("/product/:product_id", getProductsComments)
 router.post("/:product_id", sendComment);
 router.put("/:id", editComment);
 router.delete("/:id", deleteComment);
@@ -49,6 +51,27 @@ module.exports = router;
  *         name: id
  *         required: true
  *         description: ID of the comment to retrieve
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Comment retrieved successfully
+ *       404:
+ *         description: Comment not found
+ */
+
+/**
+ * @swagger
+ * /api/comments/product/{product_id}:
+ *   get:
+ *     summary: Get a comments specific product
+ *     description: Get a comments specific product by its ID.
+ *     tags: [Comments]
+ *     parameters:
+ *       - in: path
+ *         name: product_id
+ *         required: true
+ *         description: ID of the product to retrieve
  *         schema:
  *           type: string
  *     responses:
