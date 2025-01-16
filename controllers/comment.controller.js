@@ -28,7 +28,7 @@ const getComment = async (req, res) => {
 
 const sendComment = async (req, res) => {
   try {
-    const product_id = req.params.id
+    const product_id = req.params.product_id
     const { comment, commentor, rating, gender } = req.body;
     const newComment = await Comment.create({
       to: product_id,

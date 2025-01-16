@@ -65,6 +65,13 @@ module.exports = router;
  *     summary: Create a new comment for a product
  *     description: Add a comment to a specific product.
  *     tags: [Comments]
+ *     parameters:
+ *       - in: path
+ *         name: product_id
+ *         required: true
+ *         description: ID of the Product to Comment
+ *         schema:
+ *           type: string
  *     requestBody:
  *       required: true
  *       content:
