@@ -14,7 +14,7 @@ const oqimSchema = mongoose.Schema({
     required: true,
   },
   created_at: {
-    type: Data,
+    type: Date,
     default: Date.now,
   }
 });
