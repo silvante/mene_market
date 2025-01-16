@@ -8,7 +8,7 @@ const {
 } = require("../controllers/news.controller");
 const router = express.Router();
 
-router.get("", getNews);
+router.get("/", getNews);
 
 router.get("/:id", getNewsById);
 
