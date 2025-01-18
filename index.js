@@ -11,7 +11,8 @@ const cors = require("cors");
 const app = express();
 const Category = require("./models/category.model.js");
 const Product = require("./models/product.model.js");
-
+const cluster = require('cluster');
+const os = require('os');
 
 // for swagger
 
@@ -43,6 +44,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 const limitter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
+  message: "Too many requests. why to not take a brake for 15 minutes ?",
 });
 
 // defend
@@ -132,28 +134,28 @@ app.use("/api/competitions", comp);
 app.use("/api/payments", payment);
 app.use("/api/comments", comment);
 
-const port = process.env.PORT || 8080;
-app.listen(port, console.log(`Listening on port ${port}...`));
+const PORT = process.env.PORT || 8080;
+// app.listen(port, console.log(`Listening on port ${port}...`));
 
-app.get("/", async (req, res) => {
-  try {
-    const categories = Category.find()
+// app.get("/", async (req, res) => {
+//   try {
+//     const categories = Category.find()
 
-    const results = await Promise.all(
-      categories.map(async (c) => {
-        const products = await Product.find({
-          tags: c.title
-        }).limit(20).exec()
-        return {category: c, products: products}
-      })
-    )
+//     const results = await Promise.all(
+//       categories.map(async (c) => {
+//         const products = await Product.find({
+//           tags: c.title
+//         }).limit(20).exec()
+//         return {category: c, products: products}
+//       })
+//     )
 
-    res.status(200).send(results)
-  } catch (err) {
-    console.log(err);
-    res.send(err)
-  }
-});
+//     res.status(200).send(results)
+//   } catch (err) {
+//     console.log(err);
+//     res.send(err)
+//   }
+// });
 
 // Swagger documentation for User routes
 /**
@@ -182,3 +184,29 @@ app.get("/", async (req, res) => {
 // owner
 // delivery
 // operator
+
+if (cluster.isMaster) {
+  const numCPUs = os.cpus().length;
+
+  console.log(`Master process ${process.pid} is running`);
+
+  // Fork workers
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  // Restart workers if they die
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} died. Restarting...`);
+    cluster.fork();
+  });
+} else {
+  // Worker processes handle HTTP requests
+  app.get('/', (req, res) => {
+    res.send(`Handled by worker ${process.pid}`);
+  });
+
+  app.listen(PORT, () => {
+    console.log(`Worker ${process.pid} running on port ${PORT}`);
+  });
+}
