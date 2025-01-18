@@ -39,6 +39,8 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+app.set('trust proxy', 1);
+
 // limitter
 
 const limitter = rateLimit({
