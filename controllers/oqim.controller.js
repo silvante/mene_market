@@ -18,7 +18,7 @@ const getOqims = async (req, res) => {
         try {
           const user_id = user_doc.id;
 
-          const oqims = await Oqim.find({ user_id: user_id }).populate("product").populate("user");
+          const oqims = await Oqim.find({ user: user_id }).populate("product").populate("user");
           if (!oqims) {
             res.status(404).send("server error");
           }
@@ -108,7 +108,7 @@ const deleteOqim = async (req, res) => {
         try {
           const oqim_id = req.params.id;
           const oqim = await Oqim.findById(oqim_id);
-          if (oqim.user_id == user_doc.id || user_doc.status == "admin" || user_doc.status == "owner") {
+          if (oqim.user == user_doc.id || user_doc.status == "admin" || user_doc.status == "owner") {
             await Oqim.findByIdAndDelete(oqim_id);
             res.status(200).send("deleted");
           } else {
