@@ -64,11 +64,12 @@ const addOqim = async (req, res) => {
 
         try {
           const product_id = req.params.product_id;
-          const product = await Product.findById({product: product_id});
+          const product = await Product.findById(product_id);
           const { name } = req.body;
           const new_oqim = await Oqim.create({
             user: user_doc.id,
             product: product_id,
+            name: name,
           });
           if (!new_oqim) {
             res.status(404).send("server error");
