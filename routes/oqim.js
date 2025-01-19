@@ -80,6 +80,16 @@ module.exports = router;
  *         description: The ID of the product to add to "oqim"
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Oqim nomi"
  *     responses:
  *       200:
  *         description: "Oqim added successfully"
