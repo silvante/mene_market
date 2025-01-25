@@ -10,7 +10,6 @@ router.get("/", getDonate);
 router.post("/:id", commitDonate);
 
 module.exports = router;
-
 /**
  * @swagger
  * /api/donate/{id}:
@@ -23,6 +22,21 @@ module.exports = router;
  *         name: id
  *         required: true
  *         description: The ID of the donation box.
+ *         schema:
+ *           type: string
+ *         properties:
+ *           fund:
+ *             type: number
+ *           description: Donation amount.
+ *           example: 50
+ *           anonim:
+ *             type: boolean
+ *             description: Whether the donation was anonymous.
+ *             example: true
+ *           box_id:
+ *             type: string
+ *             description: ID of the donation box.
+ *             example: "645c77eaf28a2b1a7c8e1234"
  *       - in: body
  *         name: donation
  *         description: Donation details.
@@ -32,19 +46,14 @@ module.exports = router;
  *             schema:
  *               type: object
  *               properties:
- *                     properties:
- *                       fund:
- *                         type: number
- *                       description: Donation amount.
- *                       example: 50
- *                       anonim:
- *                         type: boolean
- *                         description: Whether the donation was anonymous.
- *                         example: true
- *                       box_id:
- *                         type: string
- *                         description: ID of the donation box.
- *                         example: "645c77eaf28a2b1a7c8e1234"
+ *                 fund:
+ *                   type: number
+ *                   description: The amount of money being donated.
+ *                   example: 50
+ *                 anonim:
+ *                   type: boolean
+ *                   description: Whether the donation is anonymous.
+ *                   example: false
  *     responses:
  *       200:
  *         description: Donation successful
@@ -71,6 +80,48 @@ module.exports = router;
  *                   description: User's remaining balance after donation.
  *       404:
  *         description: Insufficient funds or donation box not found
+ *       500:
+ *         description: Server error
+ */
+/**
+ * @swagger
+ * /api/donate:
+ *   get:
+ *     summary: Get user's donation information
+ *     description: Retrieve the donation details for the logged-in user.
+ *     tags: [Donate]
+ *     responses:
+ *       200:
+ *         description: Donation details retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 total_fund:
+ *                   type: number
+ *                   description: The total funds donated by the user.
+ *                   example: 100
+ *                 donations:
+ *                   type: array
+ *                   description: List of user's donations.
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       fund:
+ *                         type: number
+ *                       description: Donation amount.
+ *                       example: 50
+ *                       anonim:
+ *                         type: boolean
+ *                         description: Whether the donation was anonymous.
+ *                         example: true
+ *                       box_id:
+ *                         type: string
+ *                         description: ID of the donation box.
+ *                         example: "645c77eaf28a2b1a7c8e1234"
+ *       404:
+ *         description: No donations found for the user
  *       500:
  *         description: Server error
  */
