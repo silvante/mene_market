@@ -1,31 +1,46 @@
-const multer = require("multer");
-const GridFsStorage = require("multer-gridfs-storage");
+// storage.js
+const mongoose = require('mongoose');
+const GridFsStorage = require('multer-gridfs-storage');
+const multer = require('multer');
 
-const storage = new GridFsStorage({
-    url: process.env.DB,
+const mongoURI = process.env.DB;
+
+// Initialize database connection
+const connection = mongoose.createConnection(mongoURI);
+
+// Initialize GridFS storage
+let upload;
+
+connection.once('open', () => {
+  console.log('MongoDB connected');
+
+  const storage = new GridFsStorage({
+    url: mongoURI,
     file: (req, file) => {
-        const match = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
-
-        if (match.indexOf(file.mimetype) === -1) {
-            const filename = `${Date.now()}-any-name-${file.originalname}`;
-            return filename;
-        }
-
-        return {
-            bucketName: "photo",
-            filename: `${Date.now()}-any-name-${file.originalname}`,
-        };
+      return {
+        filename: "mene_market_" + file.originalname + `_${Date.now}`,
+      };
     },
+  });
+
+  upload = multer({ storage });
 });
 
-// Log successful connection
-storage.on("connection", (db) => {
-    console.log("Connected to MongoDB successfully!");
-});
+// Export `upload` as a promise, ensuring it's initialized after the connection is open
+const getUploadMiddleware = async () => {
+  return new Promise((resolve, reject) => {
+    connection.once('open', () => {
+      if (!upload) {
+        reject(new Error('Failed to initialize GridFS storage'));
+      } else {
+        resolve(upload);
+      }
+    });
 
-// Handle connection errors
-storage.on("error", (err) => {
-    console.error("Error connecting to MongoDB:", err);
-});
+    connection.on('error', (err) => {
+      reject(err);
+    });
+  });
+};
 
-module.exports = multer({ storage });
+module.exports = getUploadMiddleware;

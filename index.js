@@ -14,6 +14,8 @@ const Product = require("./models/product.model.js");
 const cluster = require('cluster');
 const os = require('os');
 
+app.use(express.json());
+
 // for swagger
 
 const swaggerUi = require('swagger-ui-express');
@@ -73,7 +75,6 @@ app.use(
 
 let gfs;
 connection();
-app.use(express.json());
 
 const conn = mongoose.connection;
 conn.once("open", function () {
@@ -148,7 +149,7 @@ const PORT = process.env.PORT || 8080;
 //         const products = await Product.find({
 //           tags: c.title
 //         }).limit(20).exec()
-//         return {category: c, products: products}
+//         return { category: c, products: products }
 //       })
 //     )
 

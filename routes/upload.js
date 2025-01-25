@@ -1,12 +1,21 @@
-const upload = require("../middleware/upload");
+const getUploadMiddleware = require("../middleware/upload");
 const express = require("express");
 const router = express.Router();
 
-router.post("/upload", upload.single("file"), async (req, res) => {
-    if (req.file === undefined) return res.send("you must select a file.");
-    const imgUrl = `${process.env.ORIGIN2}/file/${req.file.filename}`;
-    return res.send(imgUrl);
-});
+router.post('/upload', async (req, res) => {
+    try {
+      const upload = await getUploadMiddleware();
+      upload.single('file')(req, res, (err) => {
+        if (err) {
+          return res.status(500).send(err.message);
+        }
+        res.json({ file: req.file });
+      });
+    } catch (err) {
+      res.status(500).send(`Error initializing upload: ${err.message}`);
+    }
+  });
+  
 
 module.exports = router;
 
