@@ -125,7 +125,7 @@ const comment = require("./routes/comment.js");
 app.use("/", router);
 app.use("/api/users", user);
 app.use("/api/products", product);
-app.use("/api/categorys", category);
+app.use("/api/categories", category);
 app.use("/api/oqim", oqim);
 app.use("/api/orders", order);
 app.use("/api/dbox", dbox);

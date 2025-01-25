@@ -18,8 +18,6 @@ module.exports = router;
  *     summary: Commit a donation to a box
  *     description: Donate an amount of money to a specific donation box.
  *     tags: [Donate]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -55,6 +53,13 @@ module.exports = router;
  *                 your_donate:
  *                   type: object
  *                   description: Details of the user's donation.
+ *                   properties:
+ *                     fund:
+ *                       type: number
+ *                       description: Amount donated.
+ *                     anonim:
+ *                       type: boolean
+ *                       description: Donation anonymity status.
  *                 dbox:
  *                   type: number
  *                   description: Total funds in the donation box after donation.
@@ -68,13 +73,11 @@ module.exports = router;
  */
 /**
  * @swagger
- * api/donate:
+ * /api/donate:
  *   get:
  *     summary: Get user's donation information
  *     description: Retrieve the donation details for the logged-in user.
  *     tags: [Donate]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Donation details retrieved successfully
@@ -83,10 +86,28 @@ module.exports = router;
  *             schema:
  *               type: object
  *               properties:
- *                 fund:
+ *                 total_fund:
  *                   type: number
  *                   description: The total funds donated by the user.
  *                   example: 100
+ *                 donations:
+ *                   type: array
+ *                   description: List of user's donations.
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       fund:
+ *                         type: number
+ *                       description: Donation amount.
+ *                       example: 50
+ *                       anonim:
+ *                         type: boolean
+ *                         description: Whether the donation was anonymous.
+ *                         example: true
+ *                       box_id:
+ *                         type: string
+ *                         description: ID of the donation box.
+ *                         example: "645c77eaf28a2b1a7c8e1234"
  *       404:
  *         description: No donations found for the user
  *       500:
