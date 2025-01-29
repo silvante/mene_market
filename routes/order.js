@@ -20,7 +20,7 @@ router.put("/:id/success", successOrder);
 
 router.put("/:id/cancel", cancelOrder);
 
-router.put("/", getOrders)
+router.get("/", getOrders)
 
 module.exports = router;
 
@@ -153,16 +153,9 @@ module.exports = router;
 /**
  * @swagger
  * /api/orders/:
- *   put:
+ *   get:
  *     summary: gets and filters orders by your status
  *     tags: [Orders]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The order ID
  *     security:
  *       - bearerAuth: []
  *     responses:

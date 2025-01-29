@@ -279,6 +279,17 @@ const getOrders = async (req, res) => {
             console.log(err);
             res.send(err)
           }     
+        } else if (user_doc.status == "owner") {
+          try {
+            const orders = Order.find()
+            if (!orders) {
+              res.status(404).send("server error")
+            }
+            res.status(200).send(orders)
+          } catch (err) {
+            console.log(err);
+            res.send(err)
+          }     
         } else {
           res
             .status(404)
