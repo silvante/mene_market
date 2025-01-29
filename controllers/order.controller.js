@@ -248,7 +248,7 @@ const getOrders = async (req, res) => {
 
         if (user_doc.status == "operator") {
           try {
-            const orders = Order.find({status: "pending"})
+            const orders = await Order.find({status: "pending"})
             if (!orders) {
               res.status(404).send("server error")
             }
@@ -259,7 +259,7 @@ const getOrders = async (req, res) => {
           }            
         } else if (user_doc.status == "admin") {
           try {
-            const orders = Order.find({status: "checked"})
+            const orders = await Order.find({status: "checked"})
             if (!orders) {
               res.status(404).send("server error")
             }
@@ -270,7 +270,7 @@ const getOrders = async (req, res) => {
           }     
         } else if (user_doc.status == "delivery") {
           try {
-            const orders = Order.find({status: "sent"})
+            const orders = await Order.find({status: "sent"})
             if (!orders) {
               res.status(404).send("server error")
             }
@@ -281,7 +281,7 @@ const getOrders = async (req, res) => {
           }     
         } else if (user_doc.status == "owner") {
           try {
-            const orders = Order.find()
+            const orders = await Order.find()
             if (!orders) {
               res.status(404).send("server error")
             }
