@@ -138,7 +138,7 @@ app.use("/api/payments", payment);
 app.use("/api/comments", comment);
 
 const PORT = process.env.PORT || 8080;
-app.listen(port, console.log(`Listening on port ${port}...`));
+app.listen(PORT, console.log(`Listening on port ${PORT}...`));
 
 app.get("/", async (req, res) => {
   try {
