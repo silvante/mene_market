@@ -138,27 +138,16 @@ app.use("/api/payments", payment);
 app.use("/api/comments", comment);
 
 const PORT = process.env.PORT || 8080;
-// app.listen(port, console.log(`Listening on port ${port}...`));
+app.listen(port, console.log(`Listening on port ${port}...`));
 
-// app.get("/", async (req, res) => {
-//   try {
-//     const categories = Category.find()
-
-//     const results = await Promise.all(
-//       categories.map(async (c) => {
-//         const products = await Product.find({
-//           tags: c.title
-//         }).limit(20).exec()
-//         return { category: c, products: products }
-//       })
-//     )
-
-//     res.status(200).send(results)
-//   } catch (err) {
-//     console.log(err);
-//     res.send(err)
-//   }
-// });
+app.get("/", async (req, res) => {
+  try {
+    res.status(200).send("mene_market")
+  } catch (err) {
+    console.log(err);
+    res.send(err)
+  }
+});
 
 // Swagger documentation for User routes
 /**
@@ -190,28 +179,28 @@ const PORT = process.env.PORT || 8080;
 // delivery
 // operator
 
-if (cluster.isMaster) {
-  const numCPUs = os.cpus().length;
+// if (cluster.isMaster) {
+//   const numCPUs = os.cpus().length;
 
-  console.log(`Master process ${process.pid} is running`);
+//   console.log(`Master process ${process.pid} is running`);
 
-  // Fork workers
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+//   // Fork workers
+//   for (let i = 0; i < numCPUs; i++) {
+//     cluster.fork();
+//   }
 
-  // Restart workers if they die
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} died. Restarting...`);
-    cluster.fork();
-  });
-} else {
-  // Worker processes handle HTTP requests
-  app.get('/', (req, res) => {
-    res.send(`Handled by worker ${process.pid}`);
-  });
+//   // Restart workers if they die
+//   cluster.on('exit', (worker, code, signal) => {
+//     console.log(`Worker ${worker.process.pid} died. Restarting...`);
+//     cluster.fork();
+//   });
+// } else {
+//   // Worker processes handle HTTP requests
+//   app.get('/', (req, res) => {
+//     res.send(`Handled by worker ${process.pid}`);
+//   });
 
-  app.listen(PORT, () => {
-    console.log(`Worker ${process.pid} running on port ${PORT}`);
-  });
-}
+//   app.listen(PORT, () => {
+//     console.log(`Worker ${process.pid} running on port ${PORT}`);
+//   });
+// }
