@@ -178,7 +178,7 @@ const deleteUser = async (req, res) => {
             if (!deletedUser) {
               res.status(404).send("user is not defined...");
             }
-            return res.status(203).send(deleteUser);
+            return res.status(203).send("deleted successfully");
           } else {
             res.status(404).json({message: "you made a mistake here sir"})
           }
