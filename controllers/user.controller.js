@@ -3,6 +3,9 @@ const crypto = require("crypto")
 const bcryptjs = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const OTP = require("../models/otp.model");
+const jwt = require("jsonwebtoken")
+
+const  { jwtSecret } = require("../routes/extra")
 
 const cyfer = bcryptjs.genSaltSync(8);
 
