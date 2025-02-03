@@ -338,25 +338,21 @@ const createWorkerAccount = async (req, res) => {
             const {
               name,
               password,
-              verificated,
               username,
               avatar,
               bio,
               email,
               check,
-              balance,
               status
             } = req.body;
             const editedUser = await User.findByIdAndUpdate(id, {
               name,
               password: bcryptjs.hashSync(password, cyfer),
-              verificated,
               username,
               avatar,
               bio,
               email,
               check,
-              balance,
               verificated: true,
               status
             });

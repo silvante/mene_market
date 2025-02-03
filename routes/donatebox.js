@@ -9,11 +9,11 @@ const {
 
 router.get("/", getDbox);
 
-router.post("/acivate", Activate);
+router.post("/activate", Activate);
 
 router.post("/disable", Disable);
 
-router.put("/divorse", divorceDonate);
+router.put("/divorce", divorceDonate);
 
 module.exports = router;
 
