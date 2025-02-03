@@ -29,6 +29,22 @@ router.post("/upload", upload.array("files", 10), async (req, res) =>{
   }
 })
 
+router.get("/all", async (req, res) =>{
+  const parameters = {Bucket: process.env.DO_SPACES_BUCKET}
+
+  try {
+    const data = await s3.listObjectsV2(parameters).promise();
+    const files = data.Contents.map((file) => ({
+      key: file.Key,
+      url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${file.Key}`
+    }))
+    res.status(200).json(files)
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({message: "error while fetching", error: error})
+  }
+})
+
 router.delete("/delete/:file_key", async (req, res) =>{
   const file_key = req.params.file_key
 
@@ -38,7 +54,8 @@ router.delete("/delete/:file_key", async (req, res) =>{
   }
 
   try {
-    
+    await s3.deleteObject(parameters).promise()
+    res.status(200).json({message: "deleted successfully"})
   } catch (error) {
     console.log(error);
     res.status(400).json({message: "error while deleting", error: error})
@@ -52,9 +69,9 @@ module.exports = router;
 
 /**
  * @swagger
- * /file/upload:
+ * /files/upload:
  *   post:
- *     summary: Upload a file to the server
+ *     summary: Upload files to the server
  *     tags: [Media]
  *     requestBody:
  *       required: true
@@ -84,17 +101,17 @@ module.exports = router;
 
 /**
  * @swagger
- * /file/{filename}:
- *   get:
- *     summary: Retrieve a file by filename
+ * /files/{file_key}:
+ *   delete:
+ *     summary: deletes file by key
  *     tags: [Media]
  *     parameters:
  *       - in: path
- *         name: filename
+ *         name: file_key
  *         required: true
  *         schema:
  *           type: string
- *         description: The filename of the file to retrieve
+ *         description: The file_key of the file to delete
  *     responses:
  *       200:
  *         description: "File retrieved successfully"
@@ -109,17 +126,10 @@ module.exports = router;
 
 /**
  * @swagger
- * /file/{filename}:
- *   delete:
- *     summary: Delete a file by filename
+ * /files/all:
+ *   get:
+ *     summary: gets list of files
  *     tags: [Media]
- *     parameters:
- *       - in: path
- *         name: filename
- *         required: true
- *         schema:
- *           type: string
- *         description: The filename of the file to delete
  *     responses:
  *       200:
  *         description: "File deleted successfully"
