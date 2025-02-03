@@ -1,21 +1,29 @@
-const getUploadMiddleware = require("../middleware/upload");
 const express = require("express");
 const router = express.Router();
+const s3 = require("../middleware/s3")
+const upload = require("../middleware/upload")
 
-router.post('/upload', async (req, res) => {
-    try {
-      const upload = await getUploadMiddleware();
-      upload.single('file')(req, res, (err) => {
-        if (err) {
-          return res.status(500).send(err.message);
-        }
-        res.json({ file: req.file });
-      });
-    } catch (err) {
-      res.status(500).send(`Error initializing upload: ${err.message}`);
-    }
-  });
-  
+router.post("/upload", upload.array("files", 10), async (req, res) =>{
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({message: "no files uploaded"})
+  }
+
+  try {
+    const upload_promises = req.files.map((file) => {
+      const parameters = {
+        Bucket: process.env.DO_SPACES_BUCKET,
+        key: `products/${Date.now()}-meneMarket-${file.originalname}`,
+        body: file.buffer,
+        ACL: "public-read",
+        contentType: file.file.mimetype
+      }
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({message: "error while uploading", error: error})
+  }
+})
+
 
 module.exports = router;
 
