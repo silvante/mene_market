@@ -15,12 +15,33 @@ router.post("/upload", upload.array("files", 10), async (req, res) =>{
         key: `products/${Date.now()}-meneMarket-${file.originalname}`,
         body: file.buffer,
         ACL: "public-read",
-        contentType: file.file.mimetype
-      }
-    })
+        contentType: file.file.mimetype,
+      };
+      return s3.upload(parameters).promise()
+    });
+
+    const upload_results = await Promise.all(upload_promises)
+
+    return res.status(200).json({files: upload_results.map((file) => file.location)})
   } catch (error) {
     console.log(error);
     res.status(400).json({message: "error while uploading", error: error})
+  }
+})
+
+router.delete("/delete/:file_key", async (req, res) =>{
+  const file_key = req.params.file_key
+
+  const parameters = {
+    Bucket: process.env.DO_SPACES_BUCKET,
+    key: `product/${file_key}`
+  }
+
+  try {
+    
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({message: "error while deleting", error: error})
   }
 })
 

@@ -1,7 +1,4 @@
 require("dotenv").config();
-const upload = require("./routes/upload");
-const Grid = require("gridfs-stream");
-const mongoose = require("mongoose");
 const connection = require("./db");
 const express = require("express");
 const rateLimit = require("express-rate-limit");
@@ -9,8 +6,6 @@ const helmet = require("helmet");
 // const csurf = require("csurf");
 const cors = require("cors");
 const app = express();
-const Category = require("./models/category.model.js");
-const Product = require("./models/product.model.js");
 const cluster = require('cluster');
 const os = require('os');
 
@@ -73,37 +68,7 @@ app.use(
   })
 );
 
-let gfs;
 connection();
-
-const conn = mongoose.connection;
-conn.once("open", function () {
-  gfs = Grid(conn.db, mongoose.mongo);
-  gfs.collection("photos");
-});
-
-app.use("/file", upload);
-
-// media routes
-app.get("/file/:filename", async (req, res) => {
-  try {
-    const file = await gfs.files.findOne({ filename: req.params.filename });
-    const readStream = gfs.createReadStream(file.filename);
-    readStream.pipe(res);
-  } catch (error) {
-    res.send("not found");
-  }
-});
-
-app.delete("/file/:filename", async (req, res) => {
-  try {
-    await gfs.files.deleteOne({ filename: req.params.filename });
-    res.send("success");
-  } catch (error) {
-    console.log(error);
-    res.send("An error occured.");
-  }
-});
 
 // requiring routes
 
@@ -120,6 +85,7 @@ const blog = require("./routes/blog.js");
 const comp = require("./routes/comp.js");
 const payment = require("./routes/payment.js");
 const comment = require("./routes/comment.js");
+const upload = require("./routes/upload");
 
 // using routes
 
@@ -136,6 +102,7 @@ app.use("/api/blogs", blog);
 app.use("/api/competitions", comp);
 app.use("/api/payments", payment);
 app.use("/api/comments", comment);
+app.use("/files", upload)
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, console.log(`Listening on port ${PORT}...`));
