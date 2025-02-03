@@ -66,7 +66,7 @@ router.delete("/delete/:file_key", async (req, res) => {
   try {
     const command = new DeleteObjectCommand({
       Bucket: process.env.DO_SPACES_BUCKET,
-      Key: `product/${file_key}`
+      Key: `products/${file_key}`
     })
 
     await s3.send(command)
