@@ -39,20 +39,20 @@ router.post("/upload/product", upload.array("files", 10), async (req, res) => {
 });
 
 router.post("/upload/profile", upload.single("file"), async (req, res) => {
-  console.log(req.files);  // Log to check the structure of req.files
-  if (!req.files || req.files.length === 0) {
-    return res.status(400).json({ message: "No files uploaded" });
+  console.log(req.file);  // Log to check the structure of req.files
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
   }
 
   try {
-    const buffer = await sharp(file.buffer).resize({ width: 480, height: 480 }).jpeg({ quality: 50 }).toBuffer()
-    const fileKey = `products/${Date.now()}-meneMarket-${file.originalname}`;
+    const buffer = await sharp(req.file.buffer).resize({ width: 480, height: 480 }).jpeg({ quality: 50 }).toBuffer()
+    const fileKey = `products/${Date.now()}-meneMarket-${req.file.originalname}`;
     const parameters = {
       Bucket: process.env.DO_SPACES_BUCKET,
       Key: fileKey,
       Body: buffer,
       ACL: "public-read",
-      ContentType: file.mimetype,
+      ContentType: req.file.mimetype,
     };
 
     const command = new PutObjectCommand(parameters);
@@ -216,7 +216,7 @@ module.exports = router;
  * @swagger
  * /files/upload/media:
  *   post:
- *     summary: Upload files to the server format w: 720 h:? jpeg
+ *     summary: Upload files to the server format w 720 h flex jpeg
  *     tags: [Media]
  *     requestBody:
  *       required: true
