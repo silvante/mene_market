@@ -96,7 +96,7 @@ module.exports = router;
  *           schema:
  *             type: object
  *             properties:
- *               file:
+ *               files:
  *                 type: string
  *                 format: binary
  *                 description: The file to upload
