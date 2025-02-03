@@ -2,25 +2,90 @@ const express = require("express");
 const router = express.Router();
 const { s3, DeleteObjectCommand, ListObjectsV2Command, PutObjectCommand } = require("../middleware/s3")
 const upload = require("../middleware/upload");
+const sharp = require("sharp")
 
-router.post("/upload", upload.array("files", 10), async (req, res) => {
+router.post("/upload/product", upload.array("files", 10), async (req, res) => {
   console.log(req.files);  // Log to check the structure of req.files
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ message: "No files uploaded" });
   }
 
   try {
-    const upload_promises = req.files.map((file) => {
+    const upload_promises = req.files.map(async (file) => {
       console.log(file);  // Log each file object
+      const buffer = await sharp(file.buffer).resize({ width: 720, height: 960 }).jpeg({ quality: 80 }).toBuffer()
       const fileKey = `products/${Date.now()}-meneMarket-${file.originalname}`;
       const parameters = {
         Bucket: process.env.DO_SPACES_BUCKET,
         Key: fileKey,
-        Body: file.buffer,
+        Body: buffer,
         ACL: "public-read",
         ContentType: file.mimetype,
       };
-      
+
+      const command = new PutObjectCommand(parameters);
+      return s3.send(command).then(() => ({
+        url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey}`
+      }))
+    });
+
+    const upload_results = await Promise.all(upload_promises);
+
+    return res.status(200).json({ files: upload_results.map((file) => file.url) });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Error while uploading", error: error });
+  }
+});
+
+router.post("/upload/profile", upload.single("file"), async (req, res) => {
+  console.log(req.files);  // Log to check the structure of req.files
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ message: "No files uploaded" });
+  }
+
+  try {
+    const buffer = await sharp(file.buffer).resize({ width: 480, height: 480 }).jpeg({ quality: 50 }).toBuffer()
+    const fileKey = `products/${Date.now()}-meneMarket-${file.originalname}`;
+    const parameters = {
+      Bucket: process.env.DO_SPACES_BUCKET,
+      Key: fileKey,
+      Body: buffer,
+      ACL: "public-read",
+      ContentType: file.mimetype,
+    };
+
+    const command = new PutObjectCommand(parameters);
+    const data = s3.send(command).then(() => ({
+      url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey}`
+    }))
+
+    return res.status(200).json({ message: "uploaded", url: data.url });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Error while uploading", error: error });
+  }
+});
+
+router.post("/upload/media", upload.array("files", 10), async (req, res) => {
+  console.log(req.files);  // Log to check the structure of req.files
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ message: "No files uploaded" });
+  }
+
+  try {
+    const upload_promises = req.files.map(async (file) => {
+      console.log(file);  // Log each file object
+      const buffer = await sharp(file.buffer).resize({ width: 720 }).jpeg({ quality: 80 }).toBuffer()
+      const fileKey = `products/${Date.now()}-meneMarket-${file.originalname}`;
+      const parameters = {
+        Bucket: process.env.DO_SPACES_BUCKET,
+        Key: fileKey,
+        Body: buffer,
+        ACL: "public-read",
+        ContentType: file.mimetype,
+      };
+
       const command = new PutObjectCommand(parameters);
       return s3.send(command).then(() => ({
         url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey}`
@@ -51,7 +116,7 @@ router.get("/all", async (req, res) => {
       key: file.Key,
       url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${file.Key}`
     }));
-    
+
     res.status(200).json(files);
   } catch (error) {
     console.log(error);
@@ -85,9 +150,9 @@ module.exports = router;
 
 /**
  * @swagger
- * /files/upload:
+ * /files/upload/product:
  *   post:
- *     summary: Upload files to the server
+ *     summary: Upload files to the server format 3 x 4 jpeg
  *     tags: [Media]
  *     requestBody:
  *       required: true
@@ -114,6 +179,71 @@ module.exports = router;
  *       400:
  *         description: "No file selected"
  */
+
+/**
+ * @swagger
+ * /files/upload/profile:
+ *   post:
+ *     summary: Upload files to the server format 1 x 1 jpeg
+ *     tags: [Media]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: The file to upload
+ *     responses:
+ *       200:
+ *         description: "File uploaded successfully"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 imgUrl:
+ *                   type: string
+ *                   description: The URL where the uploaded image can be accessed
+ *       400:
+ *         description: "No file selected"
+ */
+
+/**
+ * @swagger
+ * /files/upload/media:
+ *   post:
+ *     summary: Upload files to the server format w: 720 h:? jpeg
+ *     tags: [Media]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               files:
+ *                 type: string
+ *                 format: binary
+ *                 description: The file to upload
+ *     responses:
+ *       200:
+ *         description: "File uploaded successfully"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 imgUrl:
+ *                   type: string
+ *                   description: The URL where the uploaded image can be accessed
+ *       400:
+ *         description: "No file selected"
+ */
+
 
 /**
  * @swagger
