@@ -124,7 +124,7 @@ const divorceDonate = async (req, res) => {
             }
             if (active_box) {
               const new_fund = active_box.total_fund - fund;
-              await Dbox.findByIdAndUpdate(active_box, {
+              await Dbox.findByIdAndUpdate(active_box._id, {
                 total_fund: new_fund,
               });
               return res

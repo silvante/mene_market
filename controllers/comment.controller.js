@@ -89,7 +89,7 @@ const deleteComment = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin" || user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const deleted = await Comment.findByIdAndDelete(id);
             if (!deleted) {
