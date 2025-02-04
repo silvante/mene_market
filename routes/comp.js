@@ -22,7 +22,6 @@ router.delete("/:id", deleteComp);
 router.delete("/:id/end", endComp)
 
 module.exports = router;
-
 /**
  * @swagger
  * /api/competitions/{product_id}:
@@ -34,42 +33,44 @@ module.exports = router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: product_id  # Fixed parameter name
  *         required: true
  *         description: The product ID the competition is associated with.
  *         schema:
  *           type: string
- *       - in: body
- *         name: competition
- *         description: Competition details.
- *         required: true
- *         properties:
- *           title:
- *             type: string
- *             example: "Winter Sale"
- *           desc:
- *             type: string
- *             example: "Join our winter sale competition!"
- *           banner:
- *             type: string
- *             example: "https://example.com/banner.jpg"
- *           min_length:
- *             type: number
- *             example: 10
- *           places:
- *             type: number
- *             example: 3
- *           start_date:
- *             type: string
- *             format: date
- *             example: "2024-12-25"
- *           finish_date:
- *             type: string
- *             format: date
- *             example: "2025-01-01"
- *           price:
- *             type: Number
- *             example: 1000000
+ *     requestBody:  # Corrected body format
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Winter Sale"
+ *               desc:
+ *                 type: string
+ *                 example: "Join our winter sale competition!"
+ *               banner:
+ *                 type: string
+ *                 example: "https://example.com/banner.jpg"
+ *               min_length:
+ *                 type: number
+ *                 example: 10
+ *               places:
+ *                 type: number
+ *                 example: 3
+ *               start_date:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-12-25"
+ *               finish_date:
+ *                 type: string
+ *                 format: date
+ *                 example: "2025-01-01"
+ *               price:
+ *                 type: number  # Fixed incorrect type
+ *                 example: 1000000
  *     responses:
  *       201:
  *         description: Competition created successfully
@@ -78,6 +79,7 @@ module.exports = router;
  *       404:
  *         description: Not found
  */
+
 /**
  * @swagger
  * /api/competitions:

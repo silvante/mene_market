@@ -16,8 +16,13 @@ const commitDonate = async (req, res) => {
         }
 
         try {
-          const box_id = req.params.id;
-          const box = await Dbox.findById(box_id);
+          const boxes = await Dbox.findById(box_id);
+          const box = boxes[0]
+          if (boxes.length < 1) {
+            return res.status(400).json({
+              message: "there in no donate box active"
+            })
+          }
           const { fund, anonim } = req.body;
           const donate = await Donate.findOne({ user_id: user_doc.id });
           if (donate) {
@@ -57,7 +62,7 @@ const commitDonate = async (req, res) => {
               anonim,
               fund,
               user_id: user_doc.id,
-              box_id,
+              box_id: box._id,
             });
             const new_fund = box.total_fund + fund;
             const dbox = await Dbox.findByIdAndUpdate(box._id, {
@@ -115,4 +120,39 @@ const getDonate = async (req, res) => {
   }
 };
 
-module.exports = { commitDonate, getDonate };
+const getAllDonates = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
+          try {
+            const donates = Donate.findOne();
+            if (donates.length < 1) {
+              res.status(404).json({ message: "Hozircha ehsonlar yoq" });
+            }
+            res.status(200).send(donates);
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res.status(400).json({message: "You should be admin to use this endpoint"})
+        }
+      });
+    } else {
+      res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
+
+module.exports = { commitDonate, getDonate, getAllDonates };
