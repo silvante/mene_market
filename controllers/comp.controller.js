@@ -212,8 +212,6 @@ const deleteComp = async (req, res) => {
   }
 };
 
-const jwt = require("jsonwebtoken");
-
 const endComp = async (req, res) => {
   try {
     const auth_headers = req.headers.authorization;
