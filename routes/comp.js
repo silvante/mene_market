@@ -191,40 +191,39 @@ module.exports = router;
  *         description: The competition ID to edit.
  *         schema:
  *           type: string
- *       - in: body
- *         name: competition
- *         description: Updated competition details.
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 title:
- *                   type: string
- *                   example: "Summer Sale"
- *                 desc:
- *                   type: string
- *                   example: "Join our summer sale competition!"
- *                 banner:
- *                   type: string
- *                   example: "https://example.com/new-banner.jpg"
- *                 min_length:
- *                   type: number
- *                   example: 15
- *                 places:
- *                   type: number
- *                   example: 5
- *                 start_date:
- *                   type: string
- *                   format: date
- *                   example: "2025-06-01"
- *                 finish_date:
- *                   type: string
- *                   format: date
- *                   example: "2025-06-30"
- *                 price:
- *                  type: Number
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Summer Sale"
+ *               desc:
+ *                 type: string
+ *                 example: "Join our summer sale competition!"
+ *               banner:
+ *                 type: string
+ *                 example: "https://example.com/new-banner.jpg"
+ *               min_length:
+ *                 type: number
+ *                 example: 15
+ *               places:
+ *                 type: number
+ *                 example: 5
+ *               start_date:
+ *                 type: string
+ *                 format: date
+ *                 example: "2025-06-01"
+ *               finish_date:
+ *                 type: string
+ *                 format: date
+ *                 example: "2025-06-30"
+ *               price:
+ *                 type: number
+ *                 example: 50.99
  *     responses:
  *       200:
  *         description: Competition updated successfully
@@ -235,6 +234,7 @@ module.exports = router;
  *       500:
  *         description: Internal server error
  */
+
 /**
  * @swagger
  * /api/competitions/{id}:
@@ -277,12 +277,6 @@ module.exports = router;
  *         description: The ID of the competition to end
  *         schema:
  *           type: string
- *       - in: header
- *         name: Authorization
- *         required: true
- *         schema:
- *           type: string
- *         description: Bearer token for authentication
  *     responses:
  *       200:
  *         description: Competition successfully ended
