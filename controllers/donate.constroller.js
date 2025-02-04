@@ -16,7 +16,7 @@ const commitDonate = async (req, res) => {
         }
 
         try {
-          const boxes = await Dbox.findById(box_id);
+          const boxes = await Dbox.find();
           const box = boxes[0]
           if (boxes.length < 1) {
             return res.status(400).json({
