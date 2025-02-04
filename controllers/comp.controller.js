@@ -140,8 +140,7 @@ const editComp = async (req, res) => {
               finish_date,
             } = req.body;
             const id = req.params.id;
-            const edited_comp = await Comp.findByIdAndUpdate({
-              product_id: id,
+            const edited_comp = await Comp.findByIdAndUpdate(id, {
               title,
               desc,
               banner,

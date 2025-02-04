@@ -8,27 +8,20 @@ const router = express.Router();
 
 router.get("/", getDonate);
 
-router.post("/:id", commitDonate);
+router.post("/", commitDonate);
 
 router.get("/all", getAllDonates)
 
 module.exports = router;
 /**
  * @swagger
- * /api/donate/{id}:
+ * /api/donate/:
  *   post:
  *     summary: Commit a donation to a box
  *     description: Donate an amount of money to a specific donation box.
  *     tags: [Donate]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: The ID of the donation box.
- *         schema:
- *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -44,10 +37,6 @@ module.exports = router;
  *                 type: boolean
  *                 description: Whether the donation is anonymous.
  *                 example: true
- *               box_id:
- *                 type: string
- *                 description: ID of the donation box.
- *                 example: "645c77eaf28a2b1a7c8e1234"
  *     responses:
  *       200:
  *         description: Donation successful
@@ -111,8 +100,8 @@ module.exports = router;
  *                     properties:
  *                       fund:
  *                         type: number
- *                       description: Donation amount.
- *                       example: 50
+ *                         description: Donation amount.
+ *                         example: 50
  *                       anonim:
  *                         type: boolean
  *                         description: Whether the donation was anonymous.
@@ -130,8 +119,8 @@ module.exports = router;
  * @swagger
  * /api/donate/all:
  *   get:
- *     summary: Gets all donation information
- *     description: works only for admin or owner and gets all the informations of donations.
+ *     summary: Get all donation information
+ *     description: Works only for admins or owners and retrieves all donation information.
  *     tags: [Donate]
  *     security:
  *       - bearerAuth: []
@@ -145,18 +134,18 @@ module.exports = router;
  *               properties:
  *                 total_fund:
  *                   type: number
- *                   description: The total funds donated by the user.
+ *                   description: The total funds donated by users.
  *                   example: 100
  *                 donations:
  *                   type: array
- *                   description: List of user's donations.
+ *                   description: List of all donations.
  *                   items:
  *                     type: object
  *                     properties:
  *                       fund:
  *                         type: number
- *                       description: Donation amount.
- *                       example: 50
+ *                         description: Donation amount.
+ *                         example: 50
  *                       anonim:
  *                         type: boolean
  *                         description: Whether the donation was anonymous.
@@ -166,7 +155,7 @@ module.exports = router;
  *                         description: ID of the donation box.
  *                         example: "645c77eaf28a2b1a7c8e1234"
  *       404:
- *         description: No donations found for the user
+ *         description: No donations found
  *       500:
  *         description: Server error
  */
