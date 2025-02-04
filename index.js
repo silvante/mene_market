@@ -8,6 +8,8 @@ const cors = require("cors");
 const app = express();
 const cluster = require('cluster');
 const os = require('os');
+const Category = require("./models/category.model.js");
+const Product = require("./models/product.model.js");
 
 app.use(express.json());
 
@@ -107,6 +109,38 @@ app.use("/files", upload)
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, console.log(`Listening on port ${PORT}...`));
 
+// route
+
+app.get("/crp", async (req, res) => {
+  try {
+    const categories = await Category.find(); // Fetch all categories
+
+    const categoryData = await Promise.all(
+      categories.map(async (category) => {
+        const products = await Product.find({
+          $or: [
+            { tags: category.title }, // Products where category title is in tags array
+            { type: category.title }, // Products where type matches category title
+          ],
+        })
+          .limit(20) // Limit to 20 products per category
+          .sort({ created_at: -1 }); // Sort by newest products first
+
+        return {
+          category: category.title,
+          products,
+        };
+      })
+    );
+
+    res.json(categoryData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
 app.get("/", async (req, res) => {
   try {
     res.status(200).send("mene_market")
@@ -119,10 +153,10 @@ app.get("/", async (req, res) => {
 // Swagger documentation for User routes
 /**
  * @swagger
- * /:
+ * /crp:
  *   get:
  *     summary: All categories with 20 products max
- *     tags: [Home]
+ *     tags: [Categry Related Products]
  *     responses:
  *       200:
  *         description: A list of users
