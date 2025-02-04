@@ -43,37 +43,33 @@ module.exports = router;
  *         name: competition
  *         description: Competition details.
  *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 title:
- *                   type: string
- *                   example: "Winter Sale"
- *                 desc:
- *                   type: string
- *                   example: "Join our winter sale competition!"
- *                 banner:
- *                   type: string
- *                   example: "https://example.com/banner.jpg"
- *                 min_length:
- *                   type: number
- *                   example: 10
- *                 places:
- *                   type: number
- *                   example: 3
- *                 start_date:
- *                   type: string
- *                   format: date
- *                   example: "2024-12-25"
- *                 finish_date:
- *                   type: string
- *                   format: date
- *                   example: "2025-01-01"
- *                 price:
- *                   type: Number
- *                   example: 1000000
+ *         properties:
+ *           title:
+ *             type: string
+ *             example: "Winter Sale"
+ *           desc:
+ *             type: string
+ *             example: "Join our winter sale competition!"
+ *           banner:
+ *             type: string
+ *             example: "https://example.com/banner.jpg"
+ *           min_length:
+ *             type: number
+ *             example: 10
+ *           places:
+ *             type: number
+ *             example: 3
+ *           start_date:
+ *             type: string
+ *             format: date
+ *             example: "2024-12-25"
+ *           finish_date:
+ *             type: string
+ *             format: date
+ *             example: "2025-01-01"
+ *           price:
+ *             type: Number
+ *             example: 1000000
  *     responses:
  *       201:
  *         description: Competition created successfully
