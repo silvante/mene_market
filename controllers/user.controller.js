@@ -97,56 +97,59 @@ const addUser = async (req, res) => {
 const editUser = async (req, res) => {
   try {
     const auth_headers = req.headers.authorization;
-    if (auth_headers && auth_headers.startsWith("Bearer ")) {
-      const token = auth_headers.split("Bearer ")[1];
-
-      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
-        if (err) {
-          throw err;
-        }
-
-        try {
-          const id = req.params.id
-          if (id == user_doc.id || user_doc.status == "admin" || user_doc.status == "owner") {
-            const {
-              name,
-              password,
-              verificated,
-              username,
-              avatar,
-              bio,
-              email,
-              check,
-              balance,
-            } = req.body;
-            const editedUser = await User.findByIdAndUpdate(id, {
-              name,
-              password: bcryptjs.hashSync(password, cyfer),
-              verificated,
-              username,
-              avatar,
-              bio,
-              email,
-              check,
-              balance,
-            });
-            return res.status(202).send(editedUser);
-          } else {
-            res.status(404).json({message: "you made a mistake here sir"})
-          }
-        } catch (err) {
-          console.log(err);
-          res.send(err);
-        }
-      });
-    } else {
-      res.status(404).send("no token provided");
+    if (!auth_headers || !auth_headers.startsWith("Bearer ")) {
+      return res.status(404).send("No token provided");
     }
+
+    // Extract token
+    const token = auth_headers.split("Bearer ")[1];
+
+    // Verify token
+    const user_doc = await jwt.verify(token, jwtSecret);
+
+    // Check if user has permission to edit (either self, admin, or owner)
+    const id = req.params.id;
+    if (id !== user_doc.id && user_doc.status !== "admin" && user_doc.status !== "owner") {
+      return res.status(403).json({ message: "You don't have permission to edit this user" });
+    }
+
+    // Destructure request body
+    const {
+      name,
+      password,
+      verificated,
+      username,
+      avatar,
+      bio,
+      email,
+      check,
+      balance,
+    } = req.body;
+
+    // Optional: Check if password exists and hash it
+    let updatedFields = { name, verificated, username, avatar, bio, email, check, balance };
+
+    if (password) {
+      // Only hash if password is provided
+      updatedFields.password = bcryptjs.hashSync(password, cyfer);
+    }
+
+    // Update user
+    const editedUser = await User.findByIdAndUpdate(id, updatedFields, { new: true });
+
+    // Check if user was found and updated
+    if (!editedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Respond with updated user data
+    return res.status(202).json(editedUser);
   } catch (err) {
-    console.log(err);
-    res.send(err);
+    console.error(err); // Log error details for debugging
+    return res.status(500).json({ message: "Server error" }); // Send generic error message
   }
 };
+
 
 // mothod: delete
 // delete user by id
