@@ -52,7 +52,7 @@ const checkOrder = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "operator") {
+        if (user_doc.status == "operator" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
             const updated = await Order.findByIdAndUpdate(id, {
@@ -92,7 +92,7 @@ const sendOrder = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin") {
+        if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
             const { delivery_id } = req.body;
@@ -190,7 +190,7 @@ const successOrder = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "delivery") {
+        if (user_doc.status == "delivery" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
             const updated = await Order.findByIdAndUpdate(

@@ -13,7 +13,7 @@ router.get("/", getComments);
 router.get("/:id", getComment);
 router.get("/product/:product_id", getProductsComments)
 router.post("/:product_id", sendComment);
-router.put("/:id", editComment);
+// router.put("/:id", editComment);
 router.delete("/:id", deleteComment);
 
 module.exports = router;
@@ -121,42 +121,42 @@ module.exports = router;
  *         description: Bad request or server error
  */
 
-/**
- * @swagger
- * /api/comments/{id}:
- *   put:
- *     summary: Edit a comment
- *     description: Edit an existing comment by its ID.
- *     tags: [Comments]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: ID of the comment to edit
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               comment:
- *                 type: string
- *                 example: "Updated comment text."
- *               rating:
- *                 type: number
- *                 example: 4.0
- *               gender:
- *                 type: string
- *                 example: "male"
- *     responses:
- *       201:
- *         description: Comment updated successfully
- *       400:
- *         description: Bad request or server error
- */
+// /**
+//  * @swagger
+//  * /api/comments/{id}:
+//  *   put:
+//  *     summary: Edit a comment
+//  *     description: Edit an existing comment by its ID.
+//  *     tags: [Comments]
+//  *     parameters:
+//  *       - in: path
+//  *         name: id
+//  *         required: true
+//  *         description: ID of the comment to edit
+//  *         schema:
+//  *           type: string
+//  *     requestBody:
+//  *       required: true
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             type: object
+//  *             properties:
+//  *               comment:
+//  *                 type: string
+//  *                 example: "Updated comment text."
+//  *               rating:
+//  *                 type: number
+//  *                 example: 4.0
+//  *               gender:
+//  *                 type: string
+//  *                 example: "male"
+//  *     responses:
+//  *       201:
+//  *         description: Comment updated successfully
+//  *       400:
+//  *         description: Bad request or server error
+//  */
 
 /**
  * @swagger
@@ -165,6 +165,8 @@ module.exports = router;
  *     summary: Delete a comment
  *     description: Delete a comment by its ID.
  *     tags: [Comments]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

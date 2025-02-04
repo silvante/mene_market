@@ -1,4 +1,7 @@
 const Comment = require("../models/comment.model");
+const User = require("../models/user.model")
+const { jwtSecret } = require("../routes/extra")
+const jwt = require("jsonwebtoken")
 
 const getComments = async (req, res) => {
   try {
@@ -77,12 +80,35 @@ const editComment = async (req, res) => {
 const deleteComment = async (req, res) => {
   const id = req.params.id;
   try {
-    const deleted = await Comment.findByIdAndDelete(id);
-    if (!deleted) {
-      console.log("nothing to delete");
-      res.status(404).send("nothing to delete");
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status == "admin" || user_doc.status == "admin") {
+          try {
+            const deleted = await Comment.findByIdAndDelete(id);
+            if (!deleted) {
+              res.status(404).send("nothing to delete");
+            }
+            res.status(202).send(deleted);
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res
+            .status(404)
+            .send("bu metoddan foidalanish uchun admin bolishingiz kerak");
+        }
+      });
+    } else {
+      res.status(404).send("no token provided");
     }
-    res.status(202).send(deleted);
   } catch (err) {
     console.log(err);
     res.send(err);
