@@ -20,7 +20,7 @@ const getOqims = async (req, res) => {
 
           const oqims = await Oqim.find({ user: user_id }).populate("product").populate("user");
           if (!oqims) {
-            res.status(404).send("server error");
+            res.status(404).json({message: "server error"});
           }
           res.status(200).send(oqims);
         } catch (err) {
@@ -42,9 +42,13 @@ const getOqim = async (req, res) => {
   try {
     const oqim = await Oqim.findById(id).populate("product").populate("user");
     if (!oqim) {
-      res.status(404).send("server error");
+      res.status(404).json({message: "steam not found"});
     }
-    res.status(200).send(oqim);
+    const related_orders = await Order.find({oqim_id: oqim._id})
+    res.status(200).json({
+      stream: oqim,
+      related_orders: related_orders
+    });
   } catch (err) {
     console.log(err);
     res.send(err);
@@ -110,9 +114,9 @@ const deleteOqim = async (req, res) => {
           const oqim = await Oqim.findById(oqim_id);
           if (oqim.user == user_doc.id || user_doc.status == "admin" || user_doc.status == "owner") {
             await Oqim.findByIdAndDelete(oqim_id);
-            res.status(200).send("deleted");
+            res.status(200).json({message: "deleted"});
           } else {
-            res.status(404).send("bad request!");
+            res.status(404).json({message: "bad request!"});
           }
         } catch (err) {
           console.log(err);
@@ -147,7 +151,7 @@ const createOrder = async (req, res) => {
     const total_price = oqim.product.price + oqim.product.for_seller;
 
     if (!oqim) {
-      res.send("oqim topilmadi");
+      res.json({message: "oqim topilmadi"});
     } else {
       const new_order = await Order.create({
         client_mobile,
@@ -161,7 +165,7 @@ const createOrder = async (req, res) => {
         total_price,
       });
       if (!new_order) {
-        res.status(404).send("server error!");
+        res.status(404).json({message: "server error!"});
       }
       res.status(201).send(new_order);
     }

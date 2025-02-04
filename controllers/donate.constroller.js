@@ -27,8 +27,8 @@ const commitDonate = async (req, res) => {
           const donate = await Donate.findOne({ user_id: user_doc.id });
           if (donate) {
             const user = await User.findById(user_doc.id);
-            const new_balance = user.blance - fund;
-            if (user.blance < fund) {
+            const new_balance = user.balance - fund;
+            if (user.balance < fund) {
               return res.status(404).send("sizda yetarlicha pul yoq");
             }
             await User.findByIdAndUpdate(user.id, {
@@ -51,8 +51,8 @@ const commitDonate = async (req, res) => {
             });
           } else {
             const user = await User.findById(user_doc.id);
-            const new_balance = user.blance - fund;
-            if (user.blance < fund) {
+            const new_balance = user.balance - fund;
+            if (user.balance < fund) {
               return res.status(404).send("sizda yetarlicha pul yoq");
             }
             await User.findByIdAndUpdate(user.id, {
