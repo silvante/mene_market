@@ -60,7 +60,7 @@ router.post("/upload/profile", upload.single("file"), async (req, res) => {
       url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey}`
     }))
 
-    return res.status(200).json({ message: "uploaded", url: data.url });
+    return res.status(200).json({ message: "uploaded", url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey}` });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Error while uploading", error: error });
@@ -125,7 +125,7 @@ router.get("/all", async (req, res) => {
 });
 
 
-router.delete("/delete/:file_key", async (req, res) => {
+router.delete("/:file_key", async (req, res) => {
   const file_key = req.params.file_key
 
   try {

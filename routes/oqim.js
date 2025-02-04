@@ -6,9 +6,12 @@ const {
   addOqim,
   deleteOqim,
   createOrder,
+  getAllstreams,
 } = require("../controllers/oqim.controller");
 
 router.get("/", getOqims);
+
+router.get("/all", getAllstreams);
 
 router.get("/:id", getOqim);
 
@@ -22,12 +25,31 @@ module.exports = router;
 // Swagger documentation for Oqim routes
 /**
  * @swagger
- * /api/oqim:
+ * /api/oqim/all:
  *   get:
  *     summary: Get all "oqims" for the authenticated user
  *     tags: [Oqims]
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of "oqims" for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Oqim'
+ *       404:
+ *         description: "No oqims found or server error"
+ */
+
+/**
+ * @swagger
+ * /api/oqim:
+ *   get:
+ *     summary: Get all "oqims" for the authenticated user
+ *     tags: [Oqims]
  *     responses:
  *       200:
  *         description: List of "oqims" for the user

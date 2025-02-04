@@ -38,13 +38,13 @@ const commitDonate = async (req, res) => {
             const new_donate = await Donate.findByIdAndUpdate(donate._id, {
               fund: new_donate_fund,
               anonim,
-            });
+            }, {new: true} );
             const new_fund = box.total_fund + fund;
             const dbox = await Dbox.findByIdAndUpdate(box._id, {
               total_fund: new_fund,
-            });
+            }, {new: true});
 
-            res.status(200).json({
+            return res.status(200).json({
               your_donate: new_donate,
               dbox: dbox.total_fund,
               your_balance: new_balance,
@@ -57,7 +57,7 @@ const commitDonate = async (req, res) => {
             }
             await User.findByIdAndUpdate(user.id, {
               balance: new_balance,
-            });
+            }, {new: true});
             const new_donate = await Donate.create({
               anonim,
               fund,
@@ -68,7 +68,7 @@ const commitDonate = async (req, res) => {
             const dbox = await Dbox.findByIdAndUpdate(box._id, {
               total_fund: new_fund,
             });
-            res.status(200).json({
+            return res.status(200).json({
               your_donate: new_donate,
               dbox: dbox.total_fund,
               your_balance: new_balance,
@@ -105,7 +105,7 @@ const getDonate = async (req, res) => {
           if (!donate) {
             return res.status(404).json({ message: "sida ehsonlar yoq" });
           }
-          res.status(200).send(donate);
+          return res.status(200).send(donate);
         } catch (err) {
           console.log(err);
           res.send(err);
@@ -137,7 +137,7 @@ const getAllDonates = async (req, res) => {
             if (donates.length < 1) {
               return res.status(404).json({ message: "Hozircha ehsonlar yoq" });
             }
-            res.status(200).send(donates);
+            return res.status(200).send(donates);
           } catch (err) {
             console.log(err);
             res.send(err);

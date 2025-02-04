@@ -6,13 +6,14 @@ const {
   successOrder,
   cancelOrder,
   getOrders,
+  checkOrder,
 } = require("../controllers/order.controller");
 
 // routes here
 
 router.post("/:id", createOrder);
 
-router.put("/:id/check", sendOrder);
+router.put("/:id/check", checkOrder);
 
 router.put("/:id/send", sendOrder);
 

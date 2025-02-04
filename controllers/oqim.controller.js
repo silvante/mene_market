@@ -4,6 +4,19 @@ const { jwtSecret } = require("../routes/extra");
 const jwt = require("jsonwebtoken");
 const Order = require("../models/order.model");
 
+const getAllstreams = async (req, res) => {
+  try {
+    const all_streams = await Oqim.find()
+    if (!all_streams) {
+      return res.status(404).json({message: "server error"})
+    }
+    return res.status(200).send(all_streams)
+  } catch (err) {
+    console.log(err);
+    res.send(err)
+  }
+}
+
 const getOqims = async (req, res) => {
   try {
     const auth_headers = req.headers.authorization;
@@ -157,7 +170,7 @@ const createOrder = async (req, res) => {
         client_mobile,
         client_name,
         client_address,
-        user_id: oqim.user_id,
+        user_id: oqim.user,
         product_id: oqim.product,
         oqim_id: id,
         status: "pending",
@@ -181,4 +194,5 @@ module.exports = {
   addOqim,
   deleteOqim,
   createOrder,
+  getAllstreams
 };
