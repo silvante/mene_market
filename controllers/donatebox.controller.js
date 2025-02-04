@@ -44,7 +44,7 @@ const Activate = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -96,7 +96,7 @@ const Disable = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -134,7 +134,7 @@ const divorceDonate = async (req, res) => {
                   total_fund: new_fund,
                 });
             } else {
-              res.status(404).json({ message: "Quti active emas" });
+              return res.status(404).json({ message: "Quti active emas" });
             }
           } catch (err) {
             console.log(err);
@@ -147,7 +147,7 @@ const divorceDonate = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -159,7 +159,7 @@ const getDbox = async (req, res) => {
   try {
     const active_box = await Dbox.findOne({ is_active: true });
     if (!active_box) {
-      res.status(404).json({ message: "quti aktiv emas" });
+      return res.status(404).json({ message: "quti aktiv emas" });
     } else {
       res.status(200).json({
         message: "ehson qutusi",

@@ -16,7 +16,7 @@ const createPayment = async (req, res) => {
                 try {
                     const the_user = await User.findById(user_doc.id)
                     if (!the_user) {
-                        res.status(404).send("user in not defined")
+                        return res.status(404).send("user in not defined")
                     }
                     const { card_number, card_owner, payment, comment } = req.body
                     if (the_user.balance > payment) {
@@ -32,7 +32,7 @@ const createPayment = async (req, res) => {
                             sending: the_user._id,
                         }).populate("sending")
                         if (!new_paymment) {
-                            res.status(400).send("server error")
+                            return res.status(400).send("server error")
                         }
                         res.status(200).json({
                             message: "tolov uchun sorov jonatildi",
@@ -40,7 +40,7 @@ const createPayment = async (req, res) => {
                             your_balance: new_balance
                         })
                     } else {
-                        res.status(400).json({ message: "Sizni balansingizda yetaricha mablag yoq" })
+                        return res.status(400).json({ message: "Sizni balansingizda yetaricha mablag yoq" })
                     }
                 } catch (err) {
                     console.log(err);
@@ -48,7 +48,7 @@ const createPayment = async (req, res) => {
                 }
             });
         } else {
-            res.status(404).send("no token provided");
+            return res.status(404).send("no token provided");
         }
     } catch (err) {
         console.log(err);
@@ -69,7 +69,7 @@ const getMyPayments = async (req, res) => {
                 try {
                     const payments = await Payment.find({sending: user_doc.id})
                     if (!payments) {
-                        res.status(400).send("server error")
+                        return res.status(400).send("server error")
                     }
                     res.status(200).send(payments)
                 } catch (err) {
@@ -78,7 +78,7 @@ const getMyPayments = async (req, res) => {
                 }
             });
         } else {
-            res.status(404).send("no token provided");
+            return res.status(404).send("no token provided");
         }
     } catch (err) {
         console.log(err);
@@ -100,7 +100,7 @@ const getPaymantsAdmin = async (req, res) => {
                     if (user_doc.status == "admin" || user_doc.status == "owner") {
                         const payments = await Payment.find().populate("sending")
                         if (!payments) {
-                            res.status(400).send("server error")
+                            return res.status(400).send("server error")
                         }
                         res.status(200).send(payments)
                     }
@@ -110,7 +110,7 @@ const getPaymantsAdmin = async (req, res) => {
                 }
             });
         } else {
-            res.status(404).send("no token provided");
+            return res.status(404).send("no token provided");
         }
     } catch (err) {
         console.log(err);
@@ -135,7 +135,7 @@ const successPayment = async (req, res) => {
                             status: "success"
                         })
                         if (!the_payment) {
-                            res.status(400).send("Payment not found of server error")
+                            return res.status(400).send("Payment not found of server error")
                         }
                         res.status(200).json({
                             success: true,
@@ -149,7 +149,7 @@ const successPayment = async (req, res) => {
                 }
             });
         } else {
-            res.status(404).send("no token provided");
+            return res.status(404).send("no token provided");
         }
     } catch (err) {
         console.log(err);
@@ -179,7 +179,7 @@ const RejectPayment = async (req, res) => {
                             balance: new_balance
                         })
                         if (!the_payment) {
-                            res.status(400).send("Payment not found of server error")
+                            return res.status(400).send("Payment not found of server error")
                         }
                         res.status(200).json({
                             success: true,
@@ -194,7 +194,7 @@ const RejectPayment = async (req, res) => {
                 }
             });
         } else {
-            res.status(404).send("no token provided");
+            return res.status(404).send("no token provided");
         }
     } catch (err) {
         console.log(err);

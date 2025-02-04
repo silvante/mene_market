@@ -34,7 +34,7 @@ router.post("/upload/product", upload.array("files", 10), async (req, res) => {
     return res.status(200).json({ files: upload_results.map((file) => file.url) });
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Error while uploading", error: error });
+    return res.status(400).json({ message: "Error while uploading", error: error });
   }
 });
 
@@ -63,7 +63,7 @@ router.post("/upload/profile", upload.single("file"), async (req, res) => {
     return res.status(200).json({ message: "uploaded", url: data.url });
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Error while uploading", error: error });
+    return res.status(400).json({ message: "Error while uploading", error: error });
   }
 });
 
@@ -97,7 +97,7 @@ router.post("/upload/media", upload.array("files", 10), async (req, res) => {
     return res.status(200).json({ files: upload_results.map((file) => file.url) });
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Error while uploading", error: error });
+    return res.status(400).json({ message: "Error while uploading", error: error });
   }
 });
 
@@ -120,7 +120,7 @@ router.get("/all", async (req, res) => {
     res.status(200).json(files);
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Error while fetching", error: error.message });
+    return res.status(400).json({ message: "Error while fetching", error: error.message });
   }
 });
 
@@ -139,7 +139,7 @@ router.delete("/delete/:file_key", async (req, res) => {
     res.status(200).json({ message: "deleted successfully" })
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "error while deleting", error: error })
+    return res.status(400).json({ message: "error while deleting", error: error })
   }
 })
 

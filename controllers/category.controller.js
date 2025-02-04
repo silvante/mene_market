@@ -7,7 +7,7 @@ const getCategories = async (req, res) => {
   try {
     const categories = await Category.find();
     if (!categories) {
-      res.status(404).send("we have no categories yet...");
+      return res.status(404).send("we have no categories yet...");
     }
     return res.status(200).send(categories);
   } catch (err) {
@@ -50,7 +50,7 @@ const addCategory = async (req, res) => {
               title,
             });
             if (!new_Category) {
-              res.status(404).json({ message: "something went wrong!" });
+              return res.status(404).json({ message: "something went wrong!" });
             }
             res.status(200).json(new_Category);
           } catch (err) {
@@ -64,7 +64,7 @@ const addCategory = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -91,7 +91,7 @@ const editCategory = async (req, res) => {
               title,
             }).then((up_ct) => {
               if (!up_ct) {
-                res.status(404).json({ message: "something went wrong!" });
+                return res.status(404).json({ message: "something went wrong!" });
               }
               res.status(200).json({ message: "edited!" });
             });
@@ -106,7 +106,7 @@ const editCategory = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -144,7 +144,7 @@ const deleteCategory = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);

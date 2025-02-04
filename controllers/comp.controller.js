@@ -40,7 +40,7 @@ const createComp = async (req, res) => {
               price,
             });
             if (!new_comp) {
-              res.status(404).json({ message: "server error" });
+              return res.status(404).json({ message: "server error" });
             }
             res.status(200).json(new_comp);
           } else {
@@ -54,7 +54,7 @@ const createComp = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -66,7 +66,7 @@ const getComps = async (req, res) => {
   try {
     const comps = await Comp.find();
     if (!comps) {
-      res.status(404).json({ message: "server error" });
+      return res.status(404).json({ message: "server error" });
     }
     res.status(200).json(comps);
   } catch (err) {
@@ -80,7 +80,7 @@ const getCompById = async (req, res) => {
     const id = req.params.id;
     const comp = await Comp.findById(id);
     if (!comp) {
-      res.status(404).json({ message: "competition not found" });
+      return res.status(404).json({ message: "competition not found" });
     }
     const orders = await Order.find({
       oqim_id: { $ne: null },
@@ -150,7 +150,7 @@ const editComp = async (req, res) => {
               finish_date,
             });
             if (!edited_comp) {
-              res.status(404).json({ message: "server error" });
+              return res.status(404).json({ message: "server error" });
             }
             res
               .status(200)
@@ -166,7 +166,7 @@ const editComp = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -204,7 +204,7 @@ const deleteComp = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);

@@ -6,7 +6,7 @@ const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
     if (!products) {
-      res.status(404).send("we have no products yet...");
+      return res.status(404).send("we have no products yet...");
     }
     return res.status(200).send(products);
   } catch (err) {
@@ -55,7 +55,7 @@ const addProduct = async (req, res) => {
               type
             });
             if (!new_product) {
-              res.status(404).json({ message: "something went wrong!" });
+              return res.status(404).json({ message: "something went wrong!" });
             }
             res.status(200).json(new_product);
           } catch (err) {
@@ -69,7 +69,7 @@ const addProduct = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -104,7 +104,7 @@ const editProduct = async (req, res) => {
               type
             }).then((up_pr) => {
               if (!up_pr) {
-                res.status(404).json({ message: "something went wrong!" });
+                return res.status(404).json({ message: "something went wrong!" });
               }
               res.status(200).json({ message: "edited!" });
             });
@@ -119,7 +119,7 @@ const editProduct = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -157,7 +157,7 @@ const deleteProduct = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);

@@ -15,7 +15,7 @@ const getUsers = async (req, res) => {
   try {
     const users = await User.find();
     if (!users) {
-      res.status(404).send("we have no users yet...");
+      return res.status(404).send("we have no users yet...");
     }
     return res.status(200).send(users);
   } catch (err) {
@@ -70,7 +70,7 @@ const addUser = async (req, res) => {
 
     const username = await generateUniqueUsername(name);
     if (existingEmail.length >= 1) {
-      res.status(404).send("email is already used");
+      return res.status(404).send("email is already used");
       return;
     } else {
       const newUser = await new User({
@@ -182,11 +182,11 @@ const deleteUser = async (req, res) => {
             }
             const deletedUser = await User.findByIdAndDelete(the_user._id);
             if (!deletedUser) {
-              res.status(404).send("user is not defined...");
+              return res.status(404).send("user is not defined...");
             }
             return res.status(203).send("deleted successfully");
           } else {
-            res.status(404).json({message: "you made a mistake here sir"})
+            return res.status(404).json({message: "you made a mistake here sir"})
           }
         } catch (err) {
           console.log(err);
@@ -194,7 +194,7 @@ const deleteUser = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -361,7 +361,7 @@ const createWorkerAccount = async (req, res) => {
             });
             return res.status(202).send(editedUser);
           } else {
-            res.status(404).json({message: "you made a mistake here sir"})
+            return res.status(404).json({message: "you made a mistake here sir"})
           }
         } catch (err) {
           console.log(err);
@@ -369,7 +369,7 @@ const createWorkerAccount = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);

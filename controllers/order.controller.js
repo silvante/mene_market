@@ -17,7 +17,7 @@ const createOrder = async (req, res) => {
     const id = req.params.id;
     const product = await Product.findById(id);
     if (!product) {
-      res.status(404).send("products is not defined");
+      return res.status(404).send("products is not defined");
     } else {
       total_price = product.price + product.for_seller;
     }
@@ -32,7 +32,7 @@ const createOrder = async (req, res) => {
       status: "pending",
     });
     if (!new_order) {
-      res.status(404).send("try again!");
+      return res.status(404).send("try again!");
     }
     res.status(200).send(new_order);
   } catch (err) {
@@ -59,7 +59,7 @@ const checkOrder = async (req, res) => {
               status: "checked",
             });
             if (!updated) {
-              res.status(404).send("something went wrong, try again");
+              return res.status(404).send("something went wrong, try again");
             }
             res.status(200).json({ message: "status changed to checked" });
           } catch (err) {
@@ -73,7 +73,7 @@ const checkOrder = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -101,7 +101,7 @@ const sendOrder = async (req, res) => {
               delivery_id
             });
             if (!updated) {
-              res.status(404).send("something went wrong, try again");
+              return res.status(404).send("something went wrong, try again");
             }
             res.status(200).json({ message: "status changed to sent" });
           } catch (err) {
@@ -115,7 +115,7 @@ const sendOrder = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -145,7 +145,7 @@ const cancelOrder = async (req, res) => {
               { new: true }
             ).populate("product_id");
             if (!updated) {
-              res.status(404).send("something went wrong, try again");
+              return res.status(404).send("something went wrong, try again");
             }
             if (updated.user_id) {
               const user = User.findById(updated.user_id);
@@ -171,7 +171,7 @@ const cancelOrder = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -201,7 +201,7 @@ const successOrder = async (req, res) => {
               { new: true }
             ).populate("product_id");
             if (!updated) {
-              res.status(404).send("something went wrong, try again");
+              return res.status(404).send("something went wrong, try again");
             }
             if (updated.user_id) {
               const user = User.findById(updated.user_id);
@@ -227,7 +227,7 @@ const successOrder = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -250,7 +250,7 @@ const getOrders = async (req, res) => {
           try {
             const orders = await Order.find({status: "pending"})
             if (!orders) {
-              res.status(404).send("server error")
+              return res.status(404).send("server error")
             }
             res.status(200).send(orders)
           } catch (err) {
@@ -261,7 +261,7 @@ const getOrders = async (req, res) => {
           try {
             const orders = await Order.find({status: "checked"})
             if (!orders) {
-              res.status(404).send("server error")
+              return res.status(404).send("server error")
             }
             res.status(200).send(orders)
           } catch (err) {
@@ -272,7 +272,7 @@ const getOrders = async (req, res) => {
           try {
             const orders = await Order.find({status: "sent"})
             if (!orders) {
-              res.status(404).send("server error")
+              return res.status(404).send("server error")
             }
             res.status(200).send(orders)
           } catch (err) {
@@ -283,7 +283,7 @@ const getOrders = async (req, res) => {
           try {
             const orders = await Order.find()
             if (!orders) {
-              res.status(404).send("server error")
+              return res.status(404).send("server error")
             }
             res.status(200).send(orders)
           } catch (err) {
@@ -297,7 +297,7 @@ const getOrders = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);

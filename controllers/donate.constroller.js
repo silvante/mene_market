@@ -29,7 +29,7 @@ const commitDonate = async (req, res) => {
             const user = await User.findById(user_doc.id);
             const new_balance = user.balance - fund;
             if (user.balance < fund) {
-              return res.status(404).send("sizda yetarlicha pul yoq");
+              return res.status(404).json({message: "sizda yetarlicha pul yoq"});
             }
             await User.findByIdAndUpdate(user.id, {
               balance: new_balance,
@@ -53,7 +53,7 @@ const commitDonate = async (req, res) => {
             const user = await User.findById(user_doc.id);
             const new_balance = user.balance - fund;
             if (user.balance < fund) {
-              return res.status(404).send("sizda yetarlicha pul yoq");
+              return res.status(404).json({message: "sizda yetarlicha pul yoq"});
             }
             await User.findByIdAndUpdate(user.id, {
               balance: new_balance,
@@ -81,7 +81,7 @@ const commitDonate = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -101,9 +101,9 @@ const getDonate = async (req, res) => {
         }
 
         try {
-          const donate = Donate.findOne({ user_id: user_doc.id });
+          const donate = await Donate.findOne({ user_id: user_doc.id });
           if (!donate) {
-            res.status(404).json({ message: "sida ehsonlar yoq" });
+            return res.status(404).json({ message: "sida ehsonlar yoq" });
           }
           res.status(200).send(donate);
         } catch (err) {
@@ -112,7 +112,7 @@ const getDonate = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -133,9 +133,9 @@ const getAllDonates = async (req, res) => {
 
         if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
-            const donates = Donate.findOne();
+            const donates = await Donate.find();
             if (donates.length < 1) {
-              res.status(404).json({ message: "Hozircha ehsonlar yoq" });
+              return res.status(404).json({ message: "Hozircha ehsonlar yoq" });
             }
             res.status(200).send(donates);
           } catch (err) {
@@ -143,11 +143,11 @@ const getAllDonates = async (req, res) => {
             res.send(err);
           }
         } else {
-          res.status(400).json({message: "You should be admin to use this endpoint"})
+          return res.status(400).json({message: "You should be admin to use this endpoint"})
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);

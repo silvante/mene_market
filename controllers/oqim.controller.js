@@ -20,7 +20,7 @@ const getOqims = async (req, res) => {
 
           const oqims = await Oqim.find({ user: user_id }).populate("product").populate("user");
           if (!oqims) {
-            res.status(404).json({message: "server error"});
+            return res.status(404).json({message: "server error"});
           }
           res.status(200).send(oqims);
         } catch (err) {
@@ -29,7 +29,7 @@ const getOqims = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -42,7 +42,7 @@ const getOqim = async (req, res) => {
   try {
     const oqim = await Oqim.findById(id).populate("product").populate("user");
     if (!oqim) {
-      res.status(404).json({message: "steam not found"});
+      return res.status(404).json({message: "steam not found"});
     }
     const related_orders = await Order.find({oqim_id: oqim._id})
     res.status(200).json({
@@ -76,7 +76,7 @@ const addOqim = async (req, res) => {
             name: name,
           });
           if (!new_oqim) {
-            res.status(404).send("server error");
+            return res.status(404).send("server error");
           }
           res.status(200).json({
             message: "oqim yaratildi",
@@ -90,7 +90,7 @@ const addOqim = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -116,7 +116,7 @@ const deleteOqim = async (req, res) => {
             await Oqim.findByIdAndDelete(oqim_id);
             res.status(200).json({message: "deleted"});
           } else {
-            res.status(404).json({message: "bad request!"});
+            return res.status(404).json({message: "bad request!"});
           }
         } catch (err) {
           console.log(err);
@@ -124,7 +124,7 @@ const deleteOqim = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
@@ -165,7 +165,7 @@ const createOrder = async (req, res) => {
         total_price,
       });
       if (!new_order) {
-        res.status(404).json({message: "server error!"});
+        return res.status(404).json({message: "server error!"});
       }
       res.status(201).send(new_order);
     }

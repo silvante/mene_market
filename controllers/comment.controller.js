@@ -7,7 +7,7 @@ const getComments = async (req, res) => {
   try {
     const comments = await Comment.find();
     if (!comments) {
-      res.status(404).send("no comments here");
+      return res.status(404).send("no comments here");
     }
     res.status(200).send(comments);
   } catch (err) {
@@ -21,7 +21,7 @@ const getProductsComments = async (req, res) => {
     const product_id = req.params.product_id
     const comments = await Comment.find({to: product_id})
     if (!comments) {
-      res.status(404).send("server error or this product has no comments")
+      return res.status(404).send("server error or this product has no comments")
     }
     res.status(200).send(comments)
   } catch (err) {
@@ -35,7 +35,7 @@ const getComment = async (req, res) => {
   try {
     const comment = await Comment.find({ _id: commentId });
     if (!comment) {
-      res.status(404).send("user is not defined...");
+      return res.status(404).send("user is not defined...");
     }
     return res.status(200).send(comment);
   } catch (err) {
@@ -93,7 +93,7 @@ const deleteComment = async (req, res) => {
           try {
             const deleted = await Comment.findByIdAndDelete(id);
             if (!deleted) {
-              res.status(404).send("nothing to delete");
+              return res.status(404).send("nothing to delete");
             }
             res.status(202).send(deleted);
           } catch (err) {
@@ -107,7 +107,7 @@ const deleteComment = async (req, res) => {
         }
       });
     } else {
-      res.status(404).send("no token provided");
+      return res.status(404).send("no token provided");
     }
   } catch (err) {
     console.log(err);
