@@ -78,7 +78,7 @@ const getComps = async (req, res) => {
 const getCompById = async (req, res) => {
   try {
     const id = req.params.id;
-    const comp = Comp.findById(id);
+    const comp = await Comp.findById(id);
     if (!comp) {
       res.status(404).json({ message: "competition not found" });
     }
