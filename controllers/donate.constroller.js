@@ -35,7 +35,7 @@ const commitDonate = async (req, res) => {
               balance: new_balance,
             });
             const new_donate_fund = donate.fund + fund;
-            const new_donate = Donate.findByIdAndUpdate(donate._id, {
+            const new_donate = await Donate.findByIdAndUpdate(donate._id, {
               fund: new_donate_fund,
               anonim,
             });
@@ -58,7 +58,7 @@ const commitDonate = async (req, res) => {
             await User.findByIdAndUpdate(user.id, {
               balance: new_balance,
             });
-            const new_donate = Donate.create({
+            const new_donate = await Donate.create({
               anonim,
               fund,
               user_id: user_doc.id,
