@@ -203,16 +203,21 @@ router.get("/all", async (req, res) => {
 });
 
 
-router.delete("/:file_key", async (req, res) => {
-  const file_key = req.params.file_key
-
+router.delete("/delete", async (req, res) => {
   try {
-    const command = new DeleteObjectCommand({
-      Bucket: process.env.DO_SPACES_BUCKET,
-      Key: `products/${file_key}`
+    const keys = req.body.keys
+    if (keys.length < 1) {
+      return res.status(404).json({message: "No keys provided or invalid input"})
+    }
+    const delete_promices = keys.map((key) => {
+      const command = new DeleteObjectCommand({
+        Bucket: process.env.DO_SPACES_BUCKET,
+        Key: `${key}`
+      })
+      s3.send(command)
     })
 
-    await s3.send(command)
+    console.log(delete_promices);
 
     res.status(200).json({ message: "deleted successfully" })
   } catch (error) {
@@ -325,28 +330,54 @@ module.exports = router;
 
 /**
  * @swagger
- * /files/{file_key}:
+ * /files/delete:
  *   delete:
- *     summary: deletes file by key
+ *     summary: Deletes files by keys
  *     tags: [Media]
- *     parameters:
- *       - in: path
- *         name: file_key
- *         required: true
- *         schema:
- *           type: string
- *         description: The file_key of the file to delete
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               keys:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Array of file keys to delete
  *     responses:
  *       200:
- *         description: "File retrieved successfully"
+ *         description: Files deleted successfully
  *         content:
- *           application/octet-stream:
+ *           application/json:
  *             schema:
- *               type: string
- *               format: binary
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  *       404:
- *         description: "File not found"
+ *         description: No keys provided or invalid input
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error while deleting files
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
  */
+
 
 /**
  * @swagger
