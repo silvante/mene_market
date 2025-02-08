@@ -13,19 +13,50 @@ router.post("/upload/product", upload.array("files", 10), async (req, res) => {
   try {
     const upload_promises = req.files.map(async (file) => {
       console.log(file);  // Log each file object
-      const buffer = await sharp(file.buffer).resize({ width: 720, height: 960 }).jpeg({ quality: 80 }).toBuffer()
-      const fileKey = `products/${Date.now()}-meneMarket-${file.originalname}`;
-      const parameters = {
+      const buffer1 = await sharp(file.buffer).resize({ width: 720, height: 960 }).jpeg({ quality: 80 }).toBuffer()
+      const buffer2 = await sharp(file.buffer).resize({ width: 480, height: 640 }).jpeg({ quality: 70 }).toBuffer()
+      const buffer3 = await sharp(file.buffer).resize({ width: 120, height: 160 }).jpeg({ quality: 50 }).toBuffer()
+
+      const fileKey1 = `products/${Date.now()}-meneMarket-720px-${file.originalname}`;
+      const fileKey2 = `products/${Date.now()}-meneMarket-480px-${file.originalname}`;
+      const fileKey3 = `products/${Date.now()}-meneMarket-120px-${file.originalname}`;
+
+      const parameters_720 = {
         Bucket: process.env.DO_SPACES_BUCKET,
-        Key: fileKey,
-        Body: buffer,
+        Key: fileKey1,
+        Body: buffer1,
         ACL: "public-read",
         ContentType: file.mimetype,
       };
 
-      const command = new PutObjectCommand(parameters);
-      return s3.send(command).then(() => ({
-        url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey}`
+      const parameters_480 = {
+        Bucket: process.env.DO_SPACES_BUCKET,
+        Key: fileKey2,
+        Body: buffer2,
+        ACL: "public-read",
+        ContentType: file.mimetype,
+      };
+
+      const parameters_120 = {
+        Bucket: process.env.DO_SPACES_BUCKET,
+        Key: fileKey3,
+        Body: buffer3,
+        ACL: "public-read",
+        ContentType: file.mimetype,
+      };
+
+      const command1 = new PutObjectCommand(parameters_720);
+      const command2 = new PutObjectCommand(parameters_480);
+      const command3 = new PutObjectCommand(parameters_120);
+
+      await s3.send(command1)
+      await s3.send(command2)
+      return s3.send(command3).then(() => ({
+        urls: {
+          large: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey1}`,
+          medium: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey2}`,
+          small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey3}`
+        }
       }))
     });
 
@@ -45,22 +76,38 @@ router.post("/upload/profile", upload.single("file"), async (req, res) => {
   }
 
   try {
-    const buffer = await sharp(req.file.buffer).resize({ width: 480, height: 480 }).jpeg({ quality: 50 }).toBuffer()
-    const fileKey = `products/${Date.now()}-meneMarket-${req.file.originalname}`;
-    const parameters = {
+    const buffer1 = await sharp(req.file.buffer).resize({ width: 480, height: 480 }).jpeg({ quality: 40 }).toBuffer()
+    const fileKey1 = `profile_pics/${Date.now()}-meneMarket-${req.file.originalname}`;
+
+    const buffer2 = await sharp(req.file.buffer).resize({ width: 120, height: 120 }).jpeg({ quality: 40 }).toBuffer()
+    const fileKey2 = `profile_pics/${Date.now()}-meneMarket-${req.file.originalname}`;
+
+    const parameters_480 = {
       Bucket: process.env.DO_SPACES_BUCKET,
-      Key: fileKey,
-      Body: buffer,
+      Key: fileKey1,
+      Body: buffer1,
       ACL: "public-read",
       ContentType: req.file.mimetype,
     };
 
-    const command = new PutObjectCommand(parameters);
-    const data = s3.send(command).then(() => ({
-      url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey}`
-    }))
+    const parameters_120 = {
+      Bucket: process.env.DO_SPACES_BUCKET,
+      Key: fileKey2,
+      Body: buffer2,
+      ACL: "public-read",
+      ContentType: req.file.mimetype,
+    };
 
-    return res.status(200).json({ message: "uploaded", url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey}` });
+    const command1 = new PutObjectCommand(parameters_480);
+    const command2 = new PutObjectCommand(parameters_120);
+
+    await s3.send(command1)
+    await s3.send(command2)
+
+    return res.status(200).json({ message: "uploaded", urls: {
+      original: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey1}`,
+      small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey2}`
+    } });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Error while uploading", error: error });
@@ -76,19 +123,50 @@ router.post("/upload/media", upload.array("files", 10), async (req, res) => {
   try {
     const upload_promises = req.files.map(async (file) => {
       console.log(file);  // Log each file object
-      const buffer = await sharp(file.buffer).resize({ width: 720 }).jpeg({ quality: 80 }).toBuffer()
-      const fileKey = `products/${Date.now()}-meneMarket-${file.originalname}`;
-      const parameters = {
+      const buffer1 = await sharp(file.buffer).resize({ width: 720 }).jpeg({ quality: 80 }).toBuffer()
+      const buffer2 = await sharp(file.buffer).resize({ width: 480 }).jpeg({ quality: 70 }).toBuffer()
+      const buffer3 = await sharp(file.buffer).resize({ width: 120 }).jpeg({ quality: 50 }).toBuffer()
+
+      const fileKey1 = `photos/${Date.now()}-meneMarket-720px-${file.originalname}`;
+      const fileKey2 = `photos/${Date.now()}-meneMarket-480px-${file.originalname}`;
+      const fileKey3 = `photos/${Date.now()}-meneMarket-120px-${file.originalname}`;
+
+      const parameters_720 = {
         Bucket: process.env.DO_SPACES_BUCKET,
-        Key: fileKey,
-        Body: buffer,
+        Key: fileKey1,
+        Body: buffer1,
         ACL: "public-read",
         ContentType: file.mimetype,
       };
 
-      const command = new PutObjectCommand(parameters);
-      return s3.send(command).then(() => ({
-        url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey}`
+      const parameters_480 = {
+        Bucket: process.env.DO_SPACES_BUCKET,
+        Key: fileKey2,
+        Body: buffer2,
+        ACL: "public-read",
+        ContentType: file.mimetype,
+      };
+
+      const parameters_120 = {
+        Bucket: process.env.DO_SPACES_BUCKET,
+        Key: fileKey3,
+        Body: buffer3,
+        ACL: "public-read",
+        ContentType: file.mimetype,
+      };
+
+      const command1 = new PutObjectCommand(parameters_720);
+      const command2 = new PutObjectCommand(parameters_480);
+      const command3 = new PutObjectCommand(parameters_120);
+
+      await s3.send(command1)
+      await s3.send(command2)
+      return s3.send(command3).then(() => ({
+        urls: {
+          large: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey1}`,
+          medium: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey2}`,
+          small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey3}`
+        }
       }))
     });
 
