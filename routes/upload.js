@@ -62,7 +62,7 @@ router.post("/upload/product", upload.array("files", 10), async (req, res) => {
 
     const upload_results = await Promise.all(upload_promises);
 
-    return res.status(200).json({ files: upload_results.map((file) => file.url) });
+    return res.status(200).json({ files: upload_results.map((file) => file.urls) });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Error while uploading", error: error });
@@ -77,10 +77,10 @@ router.post("/upload/profile", upload.single("file"), async (req, res) => {
 
   try {
     const buffer1 = await sharp(req.file.buffer).resize({ width: 480, height: 480 }).jpeg({ quality: 40 }).toBuffer()
-    const fileKey1 = `profile_pics/${Date.now()}-meneMarket-${req.file.originalname}`;
+    const fileKey1 = `profile_pics/${Date.now()}-meneMarket-480px-${req.file.originalname}`;
 
     const buffer2 = await sharp(req.file.buffer).resize({ width: 120, height: 120 }).jpeg({ quality: 40 }).toBuffer()
-    const fileKey2 = `profile_pics/${Date.now()}-meneMarket-${req.file.originalname}`;
+    const fileKey2 = `profile_pics/${Date.now()}-meneMarket-120px-${req.file.originalname}`;
 
     const parameters_480 = {
       Bucket: process.env.DO_SPACES_BUCKET,
@@ -172,7 +172,7 @@ router.post("/upload/media", upload.array("files", 10), async (req, res) => {
 
     const upload_results = await Promise.all(upload_promises);
 
-    return res.status(200).json({ files: upload_results.map((file) => file.url) });
+    return res.status(200).json({ files: upload_results.map((file) => file.urls) });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Error while uploading", error: error });
