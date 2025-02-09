@@ -164,7 +164,7 @@ module.exports = router;
  *         price:
  *           type: number
  *         for_seller:
- *           type: boolean
+ *           type: number
  *         total:
  *           type: number
  */
