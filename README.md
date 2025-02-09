@@ -1,25 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mene Market Backend - README</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
-        h1, h2 { color: #333; }
-        code { background: #f4f4f4; padding: 4px; border-radius: 4px; }
-    </style>
-</head>
-<body>
     <h1>Mene Market Backend</h1>
     <img src="https://menemarket.netlify.app/assets/logo-CI3fWWPe.svg" alt="Mene Market Logo" width="200">
     
     <p><strong>Mene Market</strong> is a marketplace platform. This repository contains the backend API built with Node.js, Express, and MongoDB.</p>
     
     <h2>Installation</h2>
-    <pre><code>git clone https://github.com/silvante/mene_market.git
-cd mene_market
-npm install</code></pre>
+    <pre><code>git clone https://github.com/silvante/mene_market.git && cd mene_market && npm install</code></pre>
     
     <h2>Usage</h2>
     <p>To start the server, run:</p>
