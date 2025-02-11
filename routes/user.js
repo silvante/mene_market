@@ -7,6 +7,7 @@ const {
   deleteUser,
   verifyOTP,
   resendOTP,
+  createWorkerAccount,
 } = require("../controllers/user.controller");
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.get("/:id", getUser);
 router.post("/", addUser);
 
 // only owner can create workers
-router.post("/worker", addUser);
+router.post("/worker", createWorkerAccount);
 
 // edit user by id
 router.put("/:id", editUser);
