@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 
 const newsShema = mongoose.Schema({
-  banner: {
-    type: String,
-    required: true,
+  banner:
+  {
+    large: { required: true, type: String },
+    medium: { required: true, type: String },
+    small: { required: true, type: String },
   },
   title: {
     type: String,

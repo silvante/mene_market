@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 
 const blogShema = mongoose.Schema({
   banner: {
-    type: String,
-    required: true,
+    large: { required: true, type: String },
+    medium: { required: true, type: String },
+    small: { required: true, type: String },
   },
   title: {
     type: String,
