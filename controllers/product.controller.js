@@ -19,11 +19,16 @@ const getProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
+    const related_products = await Product.find({ type: product.type }).limit(40).sort({ cteated_at: -1 })
+
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    res.status(200).json(product);
+    res.status(200).json({
+      product: product,
+      related_products: related_products,
+    });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
