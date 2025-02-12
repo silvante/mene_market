@@ -340,13 +340,13 @@ const createWorkerAccount = async (req, res) => {
             const {
               name,
               password,
-              username,
               avatar,
               bio,
               email,
               check,
               status
             } = req.body;
+            const username = await generateUniqueUsername(name)
             const new_worker = await User.create({
               name,
               password: bcryptjs.hashSync(password, cyfer),
