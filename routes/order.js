@@ -98,6 +98,13 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: The order ID
+*     parameters:
+ *       - in: body
+ *         name: courier_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The courier_id
  *     security:
  *       - bearerAuth: []
  *     responses:

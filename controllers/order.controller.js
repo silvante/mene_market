@@ -96,6 +96,9 @@ const sendOrder = async (req, res) => {
           try {
             const id = req.params.id;
             const { courier_id } = req.body;
+            if (!courier_id) {
+              return res.send("courier_id kirilitilishi shart")
+            }
             const updated = await Order.findByIdAndUpdate(id, {
               status: "sent",
               courier_id
@@ -270,7 +273,7 @@ const getOrders = async (req, res) => {
           }     
         } else if (user_doc.status == "courier") {
           try {
-            const orders = await Order.find({status: "sent"})
+            const orders = await Order.find({status: "sent", courier_id: user_doc.id})
             if (!orders) {
               return res.status(404).send("server error")
             }
