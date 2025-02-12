@@ -177,7 +177,7 @@ app.get("/", async (req, res) => {
 // sellers
 // admins
 // owner
-// delivery
+// courier
 // operator
 
 // if (cluster.isMaster) {

@@ -44,7 +44,7 @@ const userSchame = mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["seller", "owner", "admin", "operator", "delivery"],
+    enum: ["seller", "owner", "admin", "operator", "courier"],
     default: "seller",
   },
 });

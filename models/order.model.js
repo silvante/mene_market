@@ -32,7 +32,7 @@ const orderSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
-  delivery_id: {
+  courier_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },

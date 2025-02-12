@@ -89,7 +89,7 @@ module.exports = router;
  * @swagger
  * /api/orders/{id}/send:
  *   put:
- *     summary: Change the status of an order to "sent", statuses [admin], {delivery_id} required
+ *     summary: Change the status of an order to "sent", statuses [admin], {courier_id} required
  *     tags: [Orders]
  *     parameters:
  *       - in: path
@@ -111,7 +111,7 @@ module.exports = router;
  * @swagger
  * /api/orders/{id}/cancel:
  *   put:
- *     summary: Change the status of an order to "canceled", statuses [admin, operator, delivery]
+ *     summary: Change the status of an order to "canceled", statuses [admin, operator, courier]
  *     tags: [Orders]
  *     parameters:
  *       - in: path
@@ -133,7 +133,7 @@ module.exports = router;
  * @swagger
  * /api/orders/{id}/success:
  *   put:
- *     summary: Change the status of an order to "success", statuses [delivery]
+ *     summary: Change the status of an order to "success", statuses [courier]
  *     tags: [Orders]
  *     parameters:
  *       - in: path
