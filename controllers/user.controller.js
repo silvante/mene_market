@@ -336,7 +336,6 @@ const createWorkerAccount = async (req, res) => {
         }
 
         try {
-          const id = req.params.id
           if (user_doc.status == "owner") {
             const {
               name,
@@ -348,7 +347,7 @@ const createWorkerAccount = async (req, res) => {
               check,
               status
             } = req.body;
-            const editedUser = await User.findByIdAndUpdate(id, {
+            const new_worker = await User.create({
               name,
               password: bcryptjs.hashSync(password, cyfer),
               username,
@@ -359,7 +358,7 @@ const createWorkerAccount = async (req, res) => {
               verificated: true,
               status
             });
-            return res.status(202).send(editedUser);
+            return res.status(202).send(new_worker);
           } else {
             return res.status(404).json({message: "you made a mistake here sir"})
           }
