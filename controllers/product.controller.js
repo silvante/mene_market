@@ -42,7 +42,7 @@ const addProduct = async (req, res) => {
 
         if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
-            const { title, desc, images, tags, price, for_seller, total, type } =
+            const { title, desc, images, tags, price, for_seller, total, type, discount_price } =
               req.body;
             const new_product = await Product.create({
               title,
@@ -52,7 +52,8 @@ const addProduct = async (req, res) => {
               price,
               for_seller,
               total,
-              type
+              type,
+              discount_price,
             });
             if (!new_product) {
               return res.status(404).json({ message: "something went wrong!" });
@@ -91,7 +92,7 @@ const editProduct = async (req, res) => {
         if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
-            const { title, desc, images, tags, price, for_seller, total, type } =
+            const { title, desc, images, tags, price, for_seller, total, type, discount_price } =
               req.body;
             await Product.findByIdAndUpdate(id, {
               title,
@@ -101,7 +102,8 @@ const editProduct = async (req, res) => {
               price,
               for_seller,
               total,
-              type
+              type,
+              discount_price
             }).then((up_pr) => {
               if (!up_pr) {
                 return res.status(404).json({ message: "something went wrong!" });

@@ -23,6 +23,10 @@ const productSchema = mongoose.Schema({
     required: true,
     type: Number,
   },
+  discount_price: {
+    required: true,
+    type: Number,
+  },
   for_seller: {
     required: true,
     type: Number,

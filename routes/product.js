@@ -163,6 +163,8 @@ module.exports = router;
  *             type: string
  *         price:
  *           type: number
+ *         discount_price:
+ *           type: number
  *         for_seller:
  *           type: number
  *         total:
