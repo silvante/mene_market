@@ -98,13 +98,18 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: The order ID
-*     parameters:
- *       - in: body
- *         name: courier_id
- *         required: true
- *         schema:
- *           type: string
- *         description: The courier_id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - courier_id
+ *             properties:
+ *               courier_id:
+ *                 type: string
+ *                 description: The courier's ID
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -113,6 +118,7 @@ module.exports = router;
  *       404:
  *         description: Order not found or unauthorized
  */
+
 
 /**
  * @swagger
