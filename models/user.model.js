@@ -6,8 +6,10 @@ const userSchame = mongoose.Schema({
     type: String,
     required: true,
   },
-  avatar: {
-    type: String,
+  avatar:
+  {
+    original: { required: true, type: String },
+    small: { required: true, type: String },
   },
   email: {
     type: String,
