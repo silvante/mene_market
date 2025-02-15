@@ -12,6 +12,8 @@ const Category = require("./models/category.model.js");
 const Product = require("./models/product.model.js");
 
 app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // for swagger
 
