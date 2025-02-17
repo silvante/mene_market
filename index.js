@@ -6,8 +6,8 @@ const helmet = require("helmet");
 // const csurf = require("csurf");
 const cors = require("cors");
 const app = express();
-const cluster = require('cluster');
-const os = require('os');
+const cluster = require("cluster");
+const os = require("os");
 const Category = require("./models/category.model.js");
 const Product = require("./models/product.model.js");
 
@@ -17,30 +17,30 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // for swagger
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
 
 const swaggerOptions = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'API Documentation of mene market',
-      version: '1.0.0',
-      description: 'specially for mene market in 2024 and 2025'
+      title: "API Documentation of mene market",
+      version: "1.0.0",
+      description: "specially for mene market in 2024 and 2025",
     },
     servers: [
       {
-        url: process.env.ORIGIN2
-      }
-    ]
+        url: process.env.ORIGIN2,
+      },
+    ],
   },
-  apis: ['./routes/*.js', "index.js"] // Path to API docs
+  apis: ["./routes/*.js", "index.js"], // Path to API docs
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.set('trust proxy', 1);
+app.set("trust proxy", 1);
 
 // limitter
 
@@ -58,17 +58,32 @@ app.use(helmet());
 
 // cors
 
-const allowedOrigins = [process.env.ORIGIN1, process.env.ORIGIN2, process.env.ORIGIN3, process.env.ORIGIN4, process.env.ORIGIN5, process.env.ORIGIN6, process.env.ORIGIN7, process.env.ORIGIN8];
+const allowedOrigins = [
+  process.env.ORIGIN1,
+  process.env.ORIGIN2,
+  process.env.ORIGIN3,
+  process.env.ORIGIN4,
+  process.env.ORIGIN5,
+  process.env.ORIGIN6,
+  process.env.ORIGIN7,
+  process.env.ORIGIN8,
+];
+
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//   })
+// );
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: "*",
   })
 );
 
@@ -106,7 +121,7 @@ app.use("/api/blogs", blog);
 app.use("/api/competitions", comp);
 app.use("/api/payments", payment);
 app.use("/api/comments", comment);
-app.use("/files", upload)
+app.use("/files", upload);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, console.log(`Listening on port ${PORT}...`));
@@ -142,13 +157,12 @@ app.get("/crp", async (req, res) => {
   }
 });
 
-
 app.get("/", async (req, res) => {
   try {
-    res.status(200).send("mene_market")
+    res.status(200).send("mene_market");
   } catch (err) {
     console.log(err);
-    res.send(err)
+    res.send(err);
   }
 });
 
