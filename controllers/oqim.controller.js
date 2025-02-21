@@ -6,16 +6,16 @@ const Order = require("../models/order.model");
 
 const getAllstreams = async (req, res) => {
   try {
-    const all_streams = await Oqim.find()
+    const all_streams = await Oqim.find();
     if (!all_streams) {
-      return res.status(404).json({message: "server error"})
+      return res.status(404).json({ message: "server error" });
     }
-    return res.status(200).send(all_streams)
+    return res.status(200).send(all_streams);
   } catch (err) {
     console.log(err);
-    res.send(err)
+    res.send(err);
   }
-}
+};
 
 const getOqims = async (req, res) => {
   try {
@@ -31,9 +31,11 @@ const getOqims = async (req, res) => {
         try {
           const user_id = user_doc.id;
 
-          const oqims = await Oqim.find({ user: user_id }).populate("product").populate("user");
+          const oqims = await Oqim.find({ user: user_id })
+            .populate("product")
+            .populate("user");
           if (!oqims) {
-            return res.status(404).json({message: "server error"});
+            return res.status(404).json({ message: "server error" });
           }
           res.status(200).send(oqims);
         } catch (err) {
@@ -55,12 +57,17 @@ const getOqim = async (req, res) => {
   try {
     const oqim = await Oqim.findById(id).populate("product").populate("user");
     if (!oqim) {
-      return res.status(404).json({message: "steam not found"});
+      return res.status(404).json({ message: "steam not found" });
     }
-    const related_orders = await Order.find({oqim_id: oqim._id})
+    const related_products = await Product.find({
+      $or: [
+        { tags: oqim.product.type }, // Products where category title is in tags array
+        { type: oqim.product.type }, // Products where type matches category title
+      ],
+    });
     res.status(200).json({
       stream: oqim,
-      related_orders: related_orders
+      related_products: related_products,
     });
   } catch (err) {
     console.log(err);
@@ -125,11 +132,15 @@ const deleteOqim = async (req, res) => {
         try {
           const oqim_id = req.params.id;
           const oqim = await Oqim.findById(oqim_id);
-          if (oqim.user == user_doc.id || user_doc.status == "admin" || user_doc.status == "owner") {
+          if (
+            oqim.user == user_doc.id ||
+            user_doc.status == "admin" ||
+            user_doc.status == "owner"
+          ) {
             await Oqim.findByIdAndDelete(oqim_id);
-            res.status(200).json({message: "deleted"});
+            res.status(200).json({ message: "deleted" });
           } else {
-            return res.status(404).json({message: "bad request!"});
+            return res.status(404).json({ message: "bad request!" });
           }
         } catch (err) {
           console.log(err);
@@ -164,7 +175,7 @@ const createOrder = async (req, res) => {
     const total_price = oqim.product.price + oqim.product.for_seller;
 
     if (!oqim) {
-      res.json({message: "oqim topilmadi"});
+      res.json({ message: "oqim topilmadi" });
     } else {
       const new_order = await Order.create({
         client_mobile,
@@ -178,7 +189,7 @@ const createOrder = async (req, res) => {
         total_price,
       });
       if (!new_order) {
-        return res.status(404).json({message: "server error!"});
+        return res.status(404).json({ message: "server error!" });
       }
       res.status(201).send(new_order);
     }
@@ -194,5 +205,5 @@ module.exports = {
   addOqim,
   deleteOqim,
   createOrder,
-  getAllstreams
+  getAllstreams,
 };
