@@ -1,11 +1,11 @@
 const User = require("../models/user.model");
-const crypto = require("crypto")
+const crypto = require("crypto");
 const bcryptjs = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const OTP = require("../models/otp.model");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
-const  { jwtSecret } = require("../routes/extra")
+const { jwtSecret } = require("../routes/extra");
 
 const cyfer = bcryptjs.genSaltSync(8);
 
@@ -44,7 +44,7 @@ const getUser = async (req, res) => {
 // unique username generator
 
 const generateUniqueUsername = async (name) => {
-  let baseUsername = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  let baseUsername = name.toLowerCase().replace(/[^a-z0-9]/g, "");
   let username = baseUsername;
   let isUnique = false;
 
@@ -79,7 +79,7 @@ const addUser = async (req, res) => {
         bio,
         password: bcryptjs.hashSync(password, cyfer),
         avatar,
-        username
+        username,
       });
       newUser.save().then((result) => {
         sendOTPverification(result, res);
@@ -109,25 +109,30 @@ const editUser = async (req, res) => {
 
     // Check if user has permission to edit (either self, admin, or owner)
     const id = req.params.id;
-    if (id !== user_doc.id && user_doc.status !== "admin" && user_doc.status !== "owner") {
-      return res.status(403).json({ message: "You don't have permission to edit this user" });
+    if (
+      id !== user_doc.id &&
+      user_doc.status !== "admin" &&
+      user_doc.status !== "owner"
+    ) {
+      return res
+        .status(403)
+        .json({ message: "You don't have permission to edit this user" });
     }
 
     // Destructure request body
-    const {
+    const { name, password, verificated, username, avatar, bio, email, check } =
+      req.body;
+
+    // Optional: Check if password exists and hash it
+    let updatedFields = {
       name,
-      password,
       verificated,
       username,
       avatar,
       bio,
       email,
       check,
-      balance,
-    } = req.body;
-
-    // Optional: Check if password exists and hash it
-    let updatedFields = { name, verificated, username, avatar, bio, email, check, balance };
+    };
 
     if (password) {
       // Only hash if password is provided
@@ -135,7 +140,9 @@ const editUser = async (req, res) => {
     }
 
     // Update user
-    const editedUser = await User.findByIdAndUpdate(id, updatedFields, { new: true });
+    const editedUser = await User.findByIdAndUpdate(id, updatedFields, {
+      new: true,
+    });
 
     // Check if user was found and updated
     if (!editedUser) {
@@ -149,7 +156,6 @@ const editUser = async (req, res) => {
     return res.status(500).json({ message: "Server error" }); // Send generic error message
   }
 };
-
 
 // mothod: delete
 // delete user by id
@@ -166,19 +172,27 @@ const deleteUser = async (req, res) => {
         }
 
         try {
-          if ( user_doc.status == "admin" || user_doc.status == "owner") {
-            const the_user = await User.findById(removingUserId)
+          if (user_doc.status == "admin" || user_doc.status == "owner") {
+            const the_user = await User.findById(removingUserId);
             // owner can not delete himself
             if (the_user.status == "owner" && user_doc.id == the_user._id) {
-              return res.status(401).json({message: "owner can not delete himself"})
+              return res
+                .status(401)
+                .json({ message: "owner can not delete himself" });
             }
             // any other admins can not delete owner
             if (the_user.status == "owner") {
-              return res.status(402).json({message: "deleting user is owner, owner can not be deleted"})
+              return res
+                .status(402)
+                .json({
+                  message: "deleting user is owner, owner can not be deleted",
+                });
             }
             // admin can not delete himself but owner can
             if (the_user.status == "admin" && the_user._id == user_doc.id) {
-              return res.status(401).json({message: "admin can not delete himself"})
+              return res
+                .status(401)
+                .json({ message: "admin can not delete himself" });
             }
             const deletedUser = await User.findByIdAndDelete(the_user._id);
             if (!deletedUser) {
@@ -186,7 +200,9 @@ const deleteUser = async (req, res) => {
             }
             return res.status(203).send("deleted successfully");
           } else {
-            return res.status(404).json({message: "you made a mistake here sir"})
+            return res
+              .status(404)
+              .json({ message: "you made a mistake here sir" });
           }
         } catch (err) {
           console.log(err);
@@ -337,16 +353,9 @@ const createWorkerAccount = async (req, res) => {
 
         try {
           if (user_doc.status == "owner") {
-            const {
-              name,
-              password,
-              avatar,
-              bio,
-              email,
-              check,
-              status
-            } = req.body;
-            const username = await generateUniqueUsername(name)
+            const { name, password, avatar, bio, email, check, status } =
+              req.body;
+            const username = await generateUniqueUsername(name);
             const new_worker = await User.create({
               name,
               password: bcryptjs.hashSync(password, cyfer),
@@ -356,11 +365,13 @@ const createWorkerAccount = async (req, res) => {
               email,
               check,
               verificated: true,
-              status
+              status,
             });
             return res.status(202).send(new_worker);
           } else {
-            return res.status(404).json({message: "you made a mistake here sir"})
+            return res
+              .status(404)
+              .json({ message: "you made a mistake here sir" });
           }
         } catch (err) {
           console.log(err);
@@ -372,9 +383,9 @@ const createWorkerAccount = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.send(err)
+    res.send(err);
   }
-}
+};
 
 module.exports = {
   getUser,
@@ -385,5 +396,5 @@ module.exports = {
   sendOTPverification,
   verifyOTP,
   resendOTP,
-  createWorkerAccount
+  createWorkerAccount,
 };
