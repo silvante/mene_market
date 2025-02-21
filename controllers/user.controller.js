@@ -182,11 +182,9 @@ const deleteUser = async (req, res) => {
             }
             // any other admins can not delete owner
             if (the_user.status == "owner") {
-              return res
-                .status(402)
-                .json({
-                  message: "deleting user is owner, owner can not be deleted",
-                });
+              return res.status(402).json({
+                message: "deleting user is owner, owner can not be deleted",
+              });
             }
             // admin can not delete himself but owner can
             if (the_user.status == "admin" && the_user._id == user_doc.id) {

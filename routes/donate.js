@@ -10,7 +10,7 @@ router.get("/", getDonate);
 
 router.post("/", commitDonate);
 
-router.get("/all", getAllDonates)
+router.get("/all", getAllDonates);
 
 module.exports = router;
 /**

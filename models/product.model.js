@@ -16,7 +16,7 @@ const productSchema = mongoose.Schema({
       large: { required: true, type: String },
       medium: { required: true, type: String },
       small: { required: true, type: String },
-    }
+    },
   ],
   tags: [String],
   price: {
@@ -41,12 +41,12 @@ const productSchema = mongoose.Schema({
     default: Date.now, // Automatically sets the current date when the document is created
   },
   type: {
-    type: String
+    type: String,
   },
   created_at: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 const Product = mongoose.model("product", productSchema);

@@ -30,11 +30,11 @@ const competitionSchema = mongoose.Schema({
   },
   start_date: {
     type: Date,
-    required: true
+    required: true,
   },
   finish_date: {
     type: Date,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
@@ -42,8 +42,8 @@ const competitionSchema = mongoose.Schema({
   },
   created_at: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 const Comp = mongoose.model("competition", competitionSchema);

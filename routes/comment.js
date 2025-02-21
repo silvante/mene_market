@@ -11,7 +11,7 @@ const {
 
 router.get("/", getComments);
 router.get("/:id", getComment);
-router.get("/product/:product_id", getProductsComments)
+router.get("/product/:product_id", getProductsComments);
 router.post("/:product_id", sendComment);
 // router.put("/:id", editComment);
 router.delete("/:id", deleteComment);

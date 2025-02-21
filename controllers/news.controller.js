@@ -6,7 +6,9 @@ const getNews = async (req, res) => {
   try {
     const news = await News.find();
     if (!news) {
-      return res.status(404).json({ message: "server error or we have no news" });
+      return res
+        .status(404)
+        .json({ message: "server error or we have no news" });
     }
     res.status(200).send(news);
   } catch (err) {
@@ -42,8 +44,7 @@ const createNews = async (req, res) => {
 
         if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
-            const { title, desc, banner } =
-              req.body;
+            const { title, desc, banner } = req.body;
             const news = await News.create({
               title,
               desc,
@@ -86,15 +87,16 @@ const editNews = async (req, res) => {
         if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
-            const { title, desc, banner } =
-              req.body;
+            const { title, desc, banner } = req.body;
             await News.findByIdAndUpdate(id, {
               title,
               desc,
               banner,
             }).then((up_pr) => {
               if (!up_pr) {
-                return res.status(404).json({ message: "something went wrong!" });
+                return res
+                  .status(404)
+                  .json({ message: "something went wrong!" });
               }
               res.status(200).json({ message: "edited!" });
             });

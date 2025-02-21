@@ -17,11 +17,11 @@ const commitDonate = async (req, res) => {
 
         try {
           const boxes = await Dbox.find();
-          const box = boxes[0]
+          const box = boxes[0];
           if (boxes.length < 1) {
             return res.status(400).json({
-              message: "there in no donate box active"
-            })
+              message: "there in no donate box active",
+            });
           }
           const { fund, anonim } = req.body;
           const donate = await Donate.findOne({ user_id: user_doc.id });
@@ -29,20 +29,30 @@ const commitDonate = async (req, res) => {
             const user = await User.findById(user_doc.id);
             const new_balance = user.balance - fund;
             if (user.balance < fund) {
-              return res.status(404).json({message: "sizda yetarlicha pul yoq"});
+              return res
+                .status(404)
+                .json({ message: "sizda yetarlicha pul yoq" });
             }
             await User.findByIdAndUpdate(user.id, {
               balance: new_balance,
             });
             const new_donate_fund = donate.fund + fund;
-            const new_donate = await Donate.findByIdAndUpdate(donate._id, {
-              fund: new_donate_fund,
-              anonim,
-            }, {new: true} );
+            const new_donate = await Donate.findByIdAndUpdate(
+              donate._id,
+              {
+                fund: new_donate_fund,
+                anonim,
+              },
+              { new: true }
+            );
             const new_fund = box.total_fund + fund;
-            const dbox = await Dbox.findByIdAndUpdate(box._id, {
-              total_fund: new_fund,
-            }, {new: true});
+            const dbox = await Dbox.findByIdAndUpdate(
+              box._id,
+              {
+                total_fund: new_fund,
+              },
+              { new: true }
+            );
 
             return res.status(200).json({
               your_donate: new_donate,
@@ -53,11 +63,17 @@ const commitDonate = async (req, res) => {
             const user = await User.findById(user_doc.id);
             const new_balance = user.balance - fund;
             if (user.balance < fund) {
-              return res.status(404).json({message: "sizda yetarlicha pul yoq"});
+              return res
+                .status(404)
+                .json({ message: "sizda yetarlicha pul yoq" });
             }
-            await User.findByIdAndUpdate(user.id, {
-              balance: new_balance,
-            }, {new: true});
+            await User.findByIdAndUpdate(
+              user.id,
+              {
+                balance: new_balance,
+              },
+              { new: true }
+            );
             const new_donate = await Donate.create({
               anonim,
               fund,
@@ -143,7 +159,9 @@ const getAllDonates = async (req, res) => {
             res.send(err);
           }
         } else {
-          return res.status(400).json({message: "You should be admin to use this endpoint"})
+          return res
+            .status(400)
+            .json({ message: "You should be admin to use this endpoint" });
         }
       });
     } else {

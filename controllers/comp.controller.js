@@ -296,7 +296,6 @@ const endComp = async (req, res) => {
   }
 };
 
-
 module.exports = {
   createComp,
   getComps,

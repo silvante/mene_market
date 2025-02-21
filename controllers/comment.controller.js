@@ -1,7 +1,7 @@
 const Comment = require("../models/comment.model");
-const User = require("../models/user.model")
-const { jwtSecret } = require("../routes/extra")
-const jwt = require("jsonwebtoken")
+const User = require("../models/user.model");
+const { jwtSecret } = require("../routes/extra");
+const jwt = require("jsonwebtoken");
 
 const getComments = async (req, res) => {
   try {
@@ -18,17 +18,19 @@ const getComments = async (req, res) => {
 
 const getProductsComments = async (req, res) => {
   try {
-    const product_id = req.params.product_id
-    const comments = await Comment.find({to: product_id})
+    const product_id = req.params.product_id;
+    const comments = await Comment.find({ to: product_id });
     if (!comments) {
-      return res.status(404).send("server error or this product has no comments")
+      return res
+        .status(404)
+        .send("server error or this product has no comments");
     }
-    res.status(200).send(comments)
+    res.status(200).send(comments);
   } catch (err) {
     res.send(err);
     console.log(err);
   }
-}
+};
 
 const getComment = async (req, res) => {
   const commentId = req.params.id;
@@ -45,14 +47,14 @@ const getComment = async (req, res) => {
 
 const sendComment = async (req, res) => {
   try {
-    const product_id = req.params.product_id
+    const product_id = req.params.product_id;
     const { comment, commentor, rating, gender } = req.body;
     const newComment = await Comment.create({
       to: product_id,
       comment,
       commentor,
       rating,
-      gender
+      gender,
     });
     res.status(201).json(newComment);
   } catch (err) {
@@ -68,7 +70,7 @@ const editComment = async (req, res) => {
     const edited = await Comment.findByIdAndUpdate(id, {
       rating,
       comment,
-      gender
+      gender,
     });
     res.status(201).send(edited);
   } catch (err) {
@@ -121,5 +123,5 @@ module.exports = {
   sendComment,
   editComment,
   deleteComment,
-  getProductsComments
+  getProductsComments,
 };

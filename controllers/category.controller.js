@@ -24,9 +24,9 @@ const getCategory = async (req, res) => {
       return res.status(404).json({ message: "Category not found" });
     }
 
-    const products = await Product.find({tags: category.title})
+    const products = await Product.find({ tags: category.title });
 
-    res.status(200).json({category: category, products: products });
+    res.status(200).json({ category: category, products: products });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
@@ -91,7 +91,9 @@ const editCategory = async (req, res) => {
               title,
             }).then((up_ct) => {
               if (!up_ct) {
-                return res.status(404).json({ message: "something went wrong!" });
+                return res
+                  .status(404)
+                  .json({ message: "something went wrong!" });
               }
               res.status(200).json({ message: "edited!" });
             });

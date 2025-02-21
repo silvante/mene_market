@@ -19,7 +19,7 @@ router.put("/:id", editComp);
 
 router.delete("/:id", deleteComp);
 
-router.delete("/:id/end", endComp)
+router.delete("/:id/end", endComp);
 
 module.exports = router;
 /**
@@ -300,7 +300,7 @@ module.exports = router;
  *           text/plain:
  *             schema:
  *               type: string
- *               example: "no token provided"      
+ *               example: "no token provided"
  *       500:
  *         description: Internal server error
  *         content:

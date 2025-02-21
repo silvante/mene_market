@@ -6,7 +6,9 @@ const getBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find();
     if (!blogs) {
-      return res.status(404).json({ message: "server error or we have no blogs" });
+      return res
+        .status(404)
+        .json({ message: "server error or we have no blogs" });
     }
     res.status(200).send(blogs);
   } catch (err) {
@@ -92,7 +94,9 @@ const editBlog = async (req, res) => {
               banner,
             }).then((up_pr) => {
               if (!up_pr) {
-                return res.status(404).json({ message: "something went wrong!" });
+                return res
+                  .status(404)
+                  .json({ message: "something went wrong!" });
               }
               res.status(200).json({ message: "edited!" });
             });

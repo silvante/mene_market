@@ -1,18 +1,24 @@
-const express = require("express")
-const router = express.Router()
-const { getMyPayments, getPaymantsAdmin, successPayment, RejectPayment, createPayment } = require("../controllers/payment.controller")
+const express = require("express");
+const router = express.Router();
+const {
+  getMyPayments,
+  getPaymantsAdmin,
+  successPayment,
+  RejectPayment,
+  createPayment,
+} = require("../controllers/payment.controller");
 
-router.get("/", getMyPayments)
+router.get("/", getMyPayments);
 
-router.post("/", createPayment)
+router.post("/", createPayment);
 
-router.get("/admin", getPaymantsAdmin)
+router.get("/admin", getPaymantsAdmin);
 
-router.put("/:id/success", successPayment)
+router.put("/:id/success", successPayment);
 
-router.put("/:id/reject", RejectPayment)
+router.put("/:id/reject", RejectPayment);
 
-module.exports = router
+module.exports = router;
 
 /**
  * @swagger

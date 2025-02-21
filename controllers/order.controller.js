@@ -97,11 +97,11 @@ const sendOrder = async (req, res) => {
             const id = req.params.id;
             const { courier_id } = req.body;
             if (!courier_id) {
-              return res.send("courier_id kirilitilishi shart")
+              return res.send("courier_id kirilitilishi shart");
             }
             const updated = await Order.findByIdAndUpdate(id, {
               status: "sent",
-              courier_id
+              courier_id,
             });
             if (!updated) {
               return res.status(404).send("something went wrong, try again");
@@ -137,7 +137,12 @@ const cancelOrder = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin" || user_doc.status == "owner" || user_doc.status == "operator" || user_doc.status == "courier") {
+        if (
+          user_doc.status == "admin" ||
+          user_doc.status == "owner" ||
+          user_doc.status == "operator" ||
+          user_doc.status == "courier"
+        ) {
           try {
             const id = req.params.id;
             const updated = await Order.findByIdAndUpdate(
@@ -157,12 +162,10 @@ const cancelOrder = async (req, res) => {
                 balance: new_balance,
               });
             }
-            res
-              .status(200)
-              .json({
-                message:
-                  "status changed to canceled # and user's balance is changed",
-              });
+            res.status(200).json({
+              message:
+                "status changed to canceled # and user's balance is changed",
+            });
           } catch (err) {
             console.log(err);
             res.send(err);
@@ -213,12 +216,10 @@ const successOrder = async (req, res) => {
                 balance: new_balance,
               });
             }
-            res
-              .status(200)
-              .json({
-                message:
-                  "status changed to success # and user's balance is changed",
-              });
+            res.status(200).json({
+              message:
+                "status changed to success # and user's balance is changed",
+            });
           } catch (err) {
             console.log(err);
             res.send(err);
@@ -251,48 +252,51 @@ const getOrders = async (req, res) => {
 
         if (user_doc.status == "operator") {
           try {
-            const orders = await Order.find({status: "pending"})
+            const orders = await Order.find({ status: "pending" });
             if (!orders) {
-              return res.status(404).send("server error")
+              return res.status(404).send("server error");
             }
-            res.status(200).send(orders)
+            res.status(200).send(orders);
           } catch (err) {
             console.log(err);
-            res.send(err)
-          }            
+            res.send(err);
+          }
         } else if (user_doc.status == "admin") {
           try {
-            const orders = await Order.find({status: "checked"})
+            const orders = await Order.find({ status: "checked" });
             if (!orders) {
-              return res.status(404).send("server error")
+              return res.status(404).send("server error");
             }
-            res.status(200).send(orders)
+            res.status(200).send(orders);
           } catch (err) {
             console.log(err);
-            res.send(err)
-          }     
+            res.send(err);
+          }
         } else if (user_doc.status == "courier") {
           try {
-            const orders = await Order.find({status: "sent", courier_id: user_doc.id})
+            const orders = await Order.find({
+              status: "sent",
+              courier_id: user_doc.id,
+            });
             if (!orders) {
-              return res.status(404).send("server error")
+              return res.status(404).send("server error");
             }
-            res.status(200).send(orders)
+            res.status(200).send(orders);
           } catch (err) {
             console.log(err);
-            res.send(err)
-          }     
+            res.send(err);
+          }
         } else if (user_doc.status == "owner") {
           try {
-            const orders = await Order.find()
+            const orders = await Order.find();
             if (!orders) {
-              return res.status(404).send("server error")
+              return res.status(404).send("server error");
             }
-            res.status(200).send(orders)
+            res.status(200).send(orders);
           } catch (err) {
             console.log(err);
-            res.send(err)
-          }     
+            res.send(err);
+          }
         } else {
           res
             .status(404)
@@ -304,8 +308,15 @@ const getOrders = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.send(err)
+    res.send(err);
   }
-}
+};
 
-module.exports = { createOrder, sendOrder, cancelOrder, successOrder, checkOrder, getOrders };
+module.exports = {
+  createOrder,
+  sendOrder,
+  cancelOrder,
+  successOrder,
+  checkOrder,
+  getOrders,
+};

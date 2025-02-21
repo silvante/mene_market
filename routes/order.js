@@ -21,7 +21,7 @@ router.put("/:id/success", successOrder);
 
 router.put("/:id/cancel", cancelOrder);
 
-router.get("/", getOrders)
+router.get("/", getOrders);
 
 module.exports = router;
 
@@ -118,7 +118,6 @@ module.exports = router;
  *       404:
  *         description: Order not found or unauthorized
  */
-
 
 /**
  * @swagger

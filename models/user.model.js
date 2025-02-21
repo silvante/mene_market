@@ -6,8 +6,7 @@ const userSchame = mongoose.Schema({
     type: String,
     required: true,
   },
-  avatar:
-  {
+  avatar: {
     original: { type: String },
     small: { type: String },
   },

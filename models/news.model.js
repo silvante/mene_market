@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 
 const newsShema = mongoose.Schema({
-  banner:
-  {
+  banner: {
     large: { required: true, type: String },
     medium: { required: true, type: String },
     small: { required: true, type: String },
@@ -19,8 +18,8 @@ const newsShema = mongoose.Schema({
   },
   created_at: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 const News = mongoose.model("news", newsShema);

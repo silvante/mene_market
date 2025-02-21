@@ -127,12 +127,10 @@ const divorceDonate = async (req, res) => {
               await Dbox.findByIdAndUpdate(active_box._id, {
                 total_fund: new_fund,
               });
-              return res
-                .status(200)
-                .json({
-                  message: "Mablag' muaffaqiyat yechildi",
-                  total_fund: new_fund,
-                });
+              return res.status(200).json({
+                message: "Mablag' muaffaqiyat yechildi",
+                total_fund: new_fund,
+              });
             } else {
               return res.status(404).json({ message: "Quti active emas" });
             }

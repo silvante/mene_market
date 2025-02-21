@@ -19,7 +19,9 @@ const getProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
-    const related_products = await Product.find({ type: product.type }).limit(40).sort({ cteated_at: -1 })
+    const related_products = await Product.find({ type: product.type })
+      .limit(40)
+      .sort({ cteated_at: -1 });
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -47,8 +49,17 @@ const addProduct = async (req, res) => {
 
         if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
-            const { title, desc, images, tags, price, for_seller, total, type, discount_price } =
-              req.body;
+            const {
+              title,
+              desc,
+              images,
+              tags,
+              price,
+              for_seller,
+              total,
+              type,
+              discount_price,
+            } = req.body;
             const new_product = await Product.create({
               title,
               desc,
@@ -97,8 +108,17 @@ const editProduct = async (req, res) => {
         if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
-            const { title, desc, images, tags, price, for_seller, total, type, discount_price } =
-              req.body;
+            const {
+              title,
+              desc,
+              images,
+              tags,
+              price,
+              for_seller,
+              total,
+              type,
+              discount_price,
+            } = req.body;
             await Product.findByIdAndUpdate(id, {
               title,
               desc,
@@ -108,10 +128,12 @@ const editProduct = async (req, res) => {
               for_seller,
               total,
               type,
-              discount_price
+              discount_price,
             }).then((up_pr) => {
               if (!up_pr) {
-                return res.status(404).json({ message: "something went wrong!" });
+                return res
+                  .status(404)
+                  .json({ message: "something went wrong!" });
               }
               res.status(200).json({ message: "edited!" });
             });
