@@ -88,6 +88,18 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: The order ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - full_address
+ *             properties:
+ *               full_address:
+ *                 type: string
+ *                 description: Full and correct id of client
  *     security:
  *       - bearerAuth: []
  *     responses:

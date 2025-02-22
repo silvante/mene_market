@@ -55,8 +55,10 @@ const checkOrder = async (req, res) => {
         if (user_doc.status == "operator" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
+            const { full_address } = req.body;
             const updated = await Order.findByIdAndUpdate(id, {
               status: "checked",
+              full_address,
             });
             if (!updated) {
               return res.status(404).send("something went wrong, try again");
