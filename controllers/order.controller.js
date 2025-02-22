@@ -69,7 +69,7 @@ const checkOrder = async (req, res) => {
         } else {
           res
             .status(404)
-            .send("bu metoddan foidalanish uchun admin bolishingiz kerak");
+            .send("bu metoddan foidalanish uchun operator bolishingiz kerak");
         }
       });
     } else {
@@ -171,9 +171,7 @@ const cancelOrder = async (req, res) => {
             res.send(err);
           }
         } else {
-          res
-            .status(404)
-            .send("bu metoddan foidalanish uchun admin bolishingiz kerak");
+          res.status(404).send("sizning statusingiz ushbu metod uchun nomalum");
         }
       });
     } else {
@@ -227,7 +225,7 @@ const successOrder = async (req, res) => {
         } else {
           res
             .status(404)
-            .send("bu metoddan foidalanish uchun admin bolishingiz kerak");
+            .send("bu metoddan foidalanish uchun courier bolishingiz kerak");
         }
       });
     } else {
@@ -298,9 +296,7 @@ const getOrders = async (req, res) => {
             res.send(err);
           }
         } else {
-          res
-            .status(404)
-            .send("bu metoddan foidalanish uchun admin bolishingiz kerak");
+          res.status(404).send("sizning statusingiz ushbu metod uchun nomalum");
         }
       });
     } else {
@@ -356,7 +352,152 @@ const returnOrder = async (req, res) => {
         } else {
           res
             .status(404)
-            .send("bu metoddan foidalanish uchun admin bolishingiz kerak");
+            .send("bu metoddan foidalanish uchun courier bolishingiz kerak");
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(err);
+  }
+};
+
+const signOrderToOperator = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status == "operator") {
+          try {
+            const operator_id = user_doc.id;
+            const { address } = req.body;
+            const avaible_orders = await Order.find({
+              status: "pending",
+              client_address: address,
+            });
+            const random_order =
+              avaible_orders[Math.floor(Math.random() * avaible_orders.langth)];
+
+            const signed_order = await Order.findByIdAndUpdate(
+              random_order._id,
+              {
+                status: "checking",
+                operator_id,
+              },
+              { new: true }
+            );
+            if (!signed_order) {
+              return res.status(404).json({
+                message: "serverda hatolik yuz berdi yoki order topilmadi",
+              });
+            }
+            return res.status(200).json({
+              message: "signed",
+              signed_order: signed_order,
+            });
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res
+            .status(404)
+            .send("bu metoddan foidalanish uchun operator bolishingiz kerak");
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(err);
+  }
+};
+
+const getOrdersOfOperator = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status == "operator") {
+          try {
+            const operator_id = user_doc.id;
+            const orders = await Order.find({
+              operator_id: operator_id,
+              status: "checking",
+            });
+
+            if (!orders) {
+              return res
+                .status(404)
+                .json({ message: "orders are not avaible" });
+            }
+
+            return res.status(200).send(orders);
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res
+            .status(404)
+            .send("bu metoddan foidalanish uchun operator bolishingiz kerak");
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(err);
+  }
+};
+
+const getAllOrdersOfOperator = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status == "operator") {
+          try {
+            const operator_id = user_doc.id;
+            const orders = await Order.find({ operator_id: operator_id });
+
+            if (!orders) {
+              return res
+                .status(404)
+                .json({ message: "orders are not avaible" });
+            }
+
+            return res.status(200).send(orders);
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res
+            .status(404)
+            .send("bu metoddan foidalanish uchun operator bolishingiz kerak");
         }
       });
     } else {
@@ -376,4 +517,7 @@ module.exports = {
   checkOrder,
   getOrders,
   returnOrder,
+  signOrderToOperator,
+  getOrdersOfOperator,
+  getAllOrdersOfOperator,
 };

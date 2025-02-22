@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { type } = require("os");
 
 const orderSchema = mongoose.Schema({
   product_id: {
@@ -16,8 +17,9 @@ const orderSchema = mongoose.Schema({
     required: true,
   },
   client_address: {
-    type: String,
-    maxlength: 255,
+    type: Number,
+    max: [14, "address id can be maximum 14"],
+    min: [1, "address id can be minimum 1"],
     required: true,
   },
   oqim_id: {
@@ -39,7 +41,15 @@ const orderSchema = mongoose.Schema({
   status: {
     type: String,
     default: "pending",
-    enum: ["pending", "checking", "checked", "sent", "canceled", "success", "returned"],
+    enum: [
+      "pending",
+      "checking",
+      "checked",
+      "sent",
+      "canceled",
+      "success",
+      "returned",
+    ],
   },
   total_price: {
     type: Number,
@@ -52,6 +62,10 @@ const orderSchema = mongoose.Schema({
   operator_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
+  },
+  full_address: {
+    type: String,
+    maxlength: 1040,
   },
 });
 

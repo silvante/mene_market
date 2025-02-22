@@ -8,6 +8,9 @@ const {
   getOrders,
   checkOrder,
   returnOrder,
+  signOrderToOperator,
+  getOrdersOfOperator,
+  getAllOrdersOfOperator,
 } = require("../controllers/order.controller");
 
 // routes here
@@ -25,6 +28,12 @@ router.put("/:id/cancel", cancelOrder);
 router.put("/:id/return", returnOrder);
 
 router.get("/", getOrders);
+
+router.put("/sign_order_to_operator", signOrderToOperator);
+
+router.get("/operator", getOrdersOfOperator);
+
+router.get("/operator/all", getAllOrdersOfOperator);
 
 module.exports = router;
 
@@ -193,6 +202,64 @@ module.exports = router;
  * /api/orders/:
  *   get:
  *     summary: gets and filters orders by your status
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Order status updated to "success" and user's balance adjusted
+ *       404:
+ *         description: Order not found or unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/orders/sign_order_to_operator:
+ *   put:
+ *     summary: sign an order to logged operator
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               address:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Order created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Order'
+ *       404:
+ *         description: Product not found or failed to create the order
+ */
+
+/**
+ * @swagger
+ * /api/orders/operator:
+ *   get:
+ *     summary: gets operators orders which still not checked
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Order status updated to "success" and user's balance adjusted
+ *       404:
+ *         description: Order not found or unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/orders/operator/all:
+ *   get:
+ *     summary: gets operators orders which still not checked
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
