@@ -60,12 +60,10 @@ const checkOrder = async (req, res) => {
               order.status !== "checking" ||
               order.operator_id === user_doc.id
             ) {
-              return res
-                .status(404)
-                .json({
-                  message:
-                    "order hali roihatdan orkazilmagan yoki ushbu order sizga tesgishli emas",
-                });
+              return res.status(404).json({
+                message:
+                  "order hali roihatdan orkazilmagan yoki ushbu order sizga tesgishli emas",
+              });
             }
             const { full_address } = req.body;
             const updated = await Order.findByIdAndUpdate(id, {
@@ -381,63 +379,66 @@ const returnOrder = async (req, res) => {
 const signOrderToOperator = async (req, res) => {
   try {
     const auth_headers = req.headers.authorization;
-    if (auth_headers && auth_headers.startsWith("Bearer ")) {
-      const token = auth_headers.split("Bearer ")[1];
-
-      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
-        if (err) {
-          throw err;
-        }
-
-        if (user_doc.status == "operator") {
-          try {
-            const operator_id = user_doc.id;
-            const { address } = req.body;
-            const avaible_orders = await Order.find({
-              status: "pending",
-              client_address: address,
-            });
-            if (!random_order) {
-              return res
-                .status(404)
-                .json({ message: "No available orders found" });
-            }
-            const random_order =
-              avaible_orders[Math.floor(Math.random() * avaible_orders.length)];
-
-            const signed_order = await Order.findByIdAndUpdate(
-              random_order._id,
-              {
-                status: "checking",
-                operator_id,
-              },
-              { new: true }
-            );
-            if (!signed_order) {
-              return res.status(404).json({
-                message: "serverda hatolik yuz berdi yoki order topilmadi",
-              });
-            }
-            return res.status(200).json({
-              message: "signed",
-              signed_order: signed_order,
-            });
-          } catch (err) {
-            console.log(err);
-            res.send(err);
-          }
-        } else {
-          res
-            .status(404)
-            .send("bu metoddan foidalanish uchun operator bolishingiz kerak");
-        }
-      });
-    } else {
-      return res.status(404).send("no token provided");
+    if (!auth_headers || !auth_headers.startsWith("Bearer ")) {
+      return res.status(401).send("No token provided");
     }
+
+    const token = auth_headers.split("Bearer ")[1];
+
+    jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+      if (err) {
+        return res.status(401).json({ error: "Invalid token" });
+      }
+
+      if (user_doc.status !== "operator") {
+        return res
+          .status(403)
+          .send("Bu metoddan foydalanish uchun operator bo'lishingiz kerak");
+      }
+
+      try {
+        const operator_id = user_doc.id;
+        const { address } = req.body;
+
+        const available_orders = await Order.find({
+          status: "pending",
+          client_address: address,
+        });
+
+        if (!available_orders.length) {
+          return res.status(404).json({ message: "No available orders found" });
+        }
+
+        const random_order =
+          available_orders[Math.floor(Math.random() * available_orders.length)];
+
+        const signed_order = await Order.findByIdAndUpdate(
+          random_order._id,
+          {
+            status: "checking",
+            operator_id,
+          },
+          { new: true }
+        );
+
+        if (!signed_order) {
+          return res.status(500).json({
+            message: "Serverda xatolik yuz berdi yoki order topilmadi",
+          });
+        }
+
+        return res.status(200).json({
+          message: "signed",
+          signed_order,
+        });
+      } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: err.message });
+      }
+    });
   } catch (err) {
-    console.log(err);
-    res.status(err);
+    console.error(err);
+    return res.status(500).json({ error: err.message });
   }
 };
 
