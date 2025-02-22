@@ -419,7 +419,10 @@ const signOrderToOperator = async (req, res) => {
             operator_id,
           },
           { new: true }
-        );
+        )
+          .populate("product_id")
+          .populate("oqim_id")
+          .populate("user_id");
 
         if (!signed_order) {
           return res.status(500).json({
@@ -459,7 +462,10 @@ const getOrdersOfOperator = async (req, res) => {
             const orders = await Order.find({
               operator_id: operator_id,
               status: "checking",
-            });
+            })
+              .populate("product_id")
+              .populate("oqim_id")
+              .populate("user_id");
 
             if (!orders) {
               return res
@@ -501,7 +507,10 @@ const getAllOrdersOfOperator = async (req, res) => {
         if (user_doc.status == "operator") {
           try {
             const operator_id = user_doc.id;
-            const orders = await Order.find({ operator_id: operator_id });
+            const orders = await Order.find({ operator_id: operator_id })
+              .populate("product_id")
+              .populate("oqim_id")
+              .populate("user_id");
 
             if (!orders) {
               return res

@@ -271,7 +271,7 @@ module.exports = router;
  * @swagger
  * /api/orders/operator/all:
  *   get:
- *     summary: gets operators orders which still not checked
+ *     summary: gets all operators orders
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
