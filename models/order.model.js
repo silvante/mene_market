@@ -48,6 +48,10 @@ const orderSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  operator_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+  },
 });
 
 const Order = mongoose.model("order", orderSchema);

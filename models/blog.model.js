@@ -13,7 +13,7 @@ const blogShema = mongoose.Schema({
   },
   desc: {
     type: String,
-    maxlength: 1040,
+    maxlength: 10000,
     required: true,
   },
   created_at: {
