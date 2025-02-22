@@ -312,6 +312,62 @@ const getOrders = async (req, res) => {
   }
 };
 
+// new gen
+
+const returnOrder = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status == "courier" || user_doc.status == "owner") {
+          try {
+            const id = req.params.id;
+            const updated = await Order.findByIdAndUpdate(
+              id,
+              {
+                status: "returned",
+              },
+              { new: true }
+            ).populate("product_id");
+            if (!updated) {
+              return res.status(404).send("something went wrong, try again");
+            }
+            if (updated.user_id) {
+              const user = User.findById(updated.user_id);
+              const new_balance = user.balance - updated.product_id.for_seller;
+              await User.findByIdAndUpdate(updated.user_id, {
+                balance: new_balance,
+              });
+            }
+            res.status(200).json({
+              message:
+                "status changed to returned # and user's balance is changed",
+            });
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res
+            .status(404)
+            .send("bu metoddan foidalanish uchun admin bolishingiz kerak");
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(err);
+  }
+};
+
 module.exports = {
   createOrder,
   sendOrder,
@@ -319,4 +375,5 @@ module.exports = {
   successOrder,
   checkOrder,
   getOrders,
+  returnOrder,
 };
