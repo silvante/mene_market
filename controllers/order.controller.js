@@ -55,6 +55,18 @@ const checkOrder = async (req, res) => {
         if (user_doc.status == "operator" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
+            const order = await Order.findById(id);
+            if (
+              order.status !== "checking" ||
+              order.operator_id === user_doc.id
+            ) {
+              return res
+                .status(404)
+                .json({
+                  message:
+                    "order hali roihatdan orkazilmagan yoki ushbu order sizga tesgishli emas",
+                });
+            }
             const { full_address } = req.body;
             const updated = await Order.findByIdAndUpdate(id, {
               status: "checked",
@@ -385,8 +397,13 @@ const signOrderToOperator = async (req, res) => {
               status: "pending",
               client_address: address,
             });
+            if (!random_order) {
+              return res
+                .status(404)
+                .json({ message: "No available orders found" });
+            }
             const random_order =
-              avaible_orders[Math.floor(Math.random() * avaible_orders.langth)];
+              avaible_orders[Math.floor(Math.random() * avaible_orders.length)];
 
             const signed_order = await Order.findByIdAndUpdate(
               random_order._id,

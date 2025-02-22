@@ -63,7 +63,7 @@ module.exports = router;
  *               client_mobile:
  *                 type: string
  *               client_address:
- *                 type: string
+ *                 type: number
  *     responses:
  *       200:
  *         description: Order created successfully
