@@ -10,6 +10,8 @@ const cluster = require("cluster");
 const os = require("os");
 const Category = require("./models/category.model.js");
 const Product = require("./models/product.model.js");
+const path = require("path");
+app.use(express.static("public"));
 
 app.use(express.json());
 app.use(express.json({ limit: "50mb" }));
@@ -157,9 +159,18 @@ app.get("/crp", async (req, res) => {
   }
 });
 
+// Set the view engine to EJS
+app.set("view engine", "ejs");
+
+// Specify the directory for view files
+app.set("views", path.join(__dirname, "views"));
+
 app.get("/", async (req, res) => {
   try {
-    res.status(200).send("mene_market");
+    res.render("index", {
+      title: "mene-market server",
+      message: "server side for web site mene-market!",
+    });
   } catch (err) {
     console.log(err);
     res.send(err);

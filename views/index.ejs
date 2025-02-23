@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <title>server from silvante</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="logo-container">
+          <img src="/menemarket.svg" alt="" />
+          <h2><%= title %></h2>
+        </div>
+        <nav>
+          <ul>
+            <li>
+              <a class="nav_links" target="_blank" href="/api-docs"
+                >swagger docs →</a
+              >
+            </li>
+            <li>
+              <a class="nav_links" target="_blank" href="/api/users">user →</a>
+            </li>
+            <li>
+              <a class="nav_links" target="_blank" href="/api/products"
+                >products →</a
+              >
+            </li>
+            <li>
+              <a
+                class="nav_links"
+                target="_blank"
+                href="https://menemarket.netlify.app"
+                >main website →</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main>
+        <section class="hero">
+          <h2><%= message %></h2>
+          <a
+            class="href-github"
+            href="https://github.com/silvante/mene_market"
+            target="_blank"
+            >open github codes <i class="bx bxl-github font_bold"></i
+          ></a>
+          <p>
+            author is Mardonbek Khamidov
+            <a href="https://github.com/silvante" target="_blank">__github</a>
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: "Arial", sans-serif;
+      }
+
+      .logo-container {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+      }
+
+      nav ul li {
+        margin-left: 20px;
+      }
+
+      .hero {
+        text-align: center;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .href-github {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: 1px, solid, black;
+        text-decoration: none;
+        color: black;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+
+      .href-github:hover {
+        border: 1px, solid, white;
+        background: black;
+        color: white;
+      }
+
+      .font_bold {
+        font-size: 25px;
+      }
+
+      .nav_links {
+        text-decoration: none;
+        color: black;
+      }
+    </style>
+  </body>
+</html>
