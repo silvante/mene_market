@@ -211,18 +211,34 @@ app.get("/", async (req, res) => {
  *     tags: [Categry Related Products]
  *     responses:
  *       200:
- *         description: A list of users
+ *         description: List of products and categories
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/User'
+ *                 $ref: '#/components/schemas/Order'
  *       404:
  *         description: No users found
  */
-// just experiment
-
+/**
+ * @swagger
+ * /home:
+ *   get:
+ *     summary: gets products to display in home page
+ *     tags: [Home]
+ *     responses:
+ *       200:
+ *         description: List of products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Order'
+ *       404:
+ *         description: No users found
+ */
 // account by status
 
 // now we have only
