@@ -177,12 +177,15 @@ const createOrder = async (req, res) => {
     if (!oqim) {
       res.json({ message: "oqim topilmadi" });
     } else {
+      await Product.findByIdAndUpdate(oqim.product._id, {
+        sold: oqim.product.sold + 1,
+      });
       const new_order = await Order.create({
         client_mobile,
         client_name,
         client_address,
         user_id: oqim.user,
-        product_id: oqim.product,
+        product_id: oqim.product._id,
         oqim_id: id,
         status: "pending",
         order_code: generateOTP(),

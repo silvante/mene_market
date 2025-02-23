@@ -159,6 +159,31 @@ app.get("/crp", async (req, res) => {
   }
 });
 
+app.get("/home", async (req, res) => {
+  try {
+    const latest_products = await Product.find()
+      .sort({ created_at: -1 })
+      .limit(40);
+    const discount_products = await Product.find({
+      $expr: { $gt: ["$discount_price", "$price"] },
+    })
+      .sort({ discount_price: -1 })
+      .limit(40);
+    const popular_products = await Product.find().sort({ sold: -1 }).limit(40);
+    if (!popular_products || !latest_products || !discount_products) {
+      return res.status(404).send("server error");
+    }
+    return res.status(404).json({
+      latest_products: latest_products,
+      discount_products: discount_products,
+      popular_products: popular_products,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error", message: error.message });
+  }
+});
+
 // Set the view engine to EJS
 app.set("view engine", "ejs");
 

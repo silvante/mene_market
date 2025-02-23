@@ -21,10 +21,13 @@ const createOrder = async (req, res) => {
     } else {
       total_price = product.price + product.for_seller;
     }
+    await Product.findByIdAndUpdate(product._id, {
+      sold: product.sold + 1,
+    });
     const { client_name, client_mobile, client_address } = req.body;
     const new_order = await Order.create({
       total_price,
-      product_id: product.id,
+      product_id: product._id,
       client_name,
       client_mobile,
       client_address,

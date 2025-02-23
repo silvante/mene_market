@@ -35,7 +35,10 @@ const productSchema = mongoose.Schema({
     required: true,
     type: Number,
   },
-  sold: Number,
+  sold: {
+    type: Number,
+    default: 0,
+  },
   created_at: {
     type: Date,
     default: Date.now, // Automatically sets the current date when the document is created
