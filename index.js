@@ -173,7 +173,7 @@ app.get("/home", async (req, res) => {
     if (!popular_products || !latest_products || !discount_products) {
       return res.status(404).send("server error");
     }
-    return res.status(404).json({
+    return res.status(200).json({
       latest_products: latest_products,
       discount_products: discount_products,
       popular_products: popular_products,
