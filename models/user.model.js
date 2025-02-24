@@ -50,16 +50,6 @@ const userSchame = mongoose.Schema({
   },
 });
 
-userSchame.pre("remove", async function (next) {
-  try {
-    const user = this._id;
-
-    await Oqim.deleteMany({ user_id: user });
-  } catch (error) {
-    next(error);
-  }
-});
-
 const User = mongoose.model("user", userSchame);
 
 userSchame.pre("remove", async function (next) {
