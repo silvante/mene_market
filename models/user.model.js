@@ -61,4 +61,15 @@ userSchame.pre("remove", async function (next) {
 });
 
 const User = mongoose.model("user", userSchame);
+
+userSchame.pre("remove", async function (next) {
+  try {
+    const user = this._id;
+
+    await Oqim.deleteMany({ user: user });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = User;
