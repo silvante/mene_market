@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("./crons/nodecron.js");
 const connection = require("./db");
 const express = require("express");
 const rateLimit = require("express-rate-limit");

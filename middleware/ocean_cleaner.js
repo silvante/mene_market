@@ -110,3 +110,6 @@ const clean_the_ocean = async () => {
     }
   }
 };
+
+module.exports = clean_the_ocean;
+// clean_the_ocean();
