@@ -38,10 +38,13 @@ function extractFilePath(url) {
 }
 
 const clean_the_ocean = async () => {
+  let shouldCloseConnection = mongoose.connection.readyState === 0;
   try {
     console.log("process ocean clean has began...");
 
-    await connDB();
+    if (shouldCloseConnection) {
+      await connDB();
+    }
     let used_images = new Set();
 
     // users
@@ -88,8 +91,22 @@ const clean_the_ocean = async () => {
 
     const all_files = await ListAllFilekeys();
 
-    console.log("cleaning process has been successful!");
+    for (const file_key of all_files) {
+      if (!used_images.has(file_key)) {
+        console.log(`deleting orphaned image: ${file_key}`);
+        const delete_command = new DeleteObjectCommand({
+          Bucket: process.env.DO_SPACES_BUCKET,
+          Key: file_key,
+        });
+        await s3.send(delete_command);
+      }
+    }
+    console.log("cleaning process has been ended successful!");
   } catch (error) {
     console.log(error.message);
+  } finally {
+    if (shouldCloseConnection) {
+      mongoose.connection.close();
+    }
   }
 };
