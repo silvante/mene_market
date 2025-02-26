@@ -11,7 +11,7 @@ const ListAllFilekeys = async () => {
   let continuationToken = undefined;
 
   do {
-    const command = ListObjectsV2Command({
+    const command = new ListObjectsV2Command({
       Bucket: process.env.DO_SPACES_BUCKET,
       ContinuationToken: continuationToken,
     });
@@ -29,7 +29,7 @@ const ListAllFilekeys = async () => {
 
 function extractFilePath(url) {
   try {
-    // Extract the pathname from the URL and remove leading slashes
+    if (!url) return null;
     return new URL(url).pathname.replace(/^\/+/, "");
   } catch (error) {
     console.warn(`Invalid URL: ${url}, skipping...`);
@@ -48,7 +48,7 @@ const clean_the_ocean = async () => {
     let used_images = new Set();
 
     // users
-    const users = await User.find({}, "avatar").lead();
+    const users = await User.find({}, "avatar").lean();
     users.forEach((user) => {
       [user.avatar?.original, user.avatar?.small].forEach((url) => {
         const filepath = extractFilePath(url);
