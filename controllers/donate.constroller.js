@@ -117,7 +117,9 @@ const getDonate = async (req, res) => {
         }
 
         try {
-          const donate = await Donate.findOne({ user_id: user_doc.id });
+          const donate = await Donate.findOne({
+            user_id: user_doc.id,
+          }).populate("user_id");
           if (!donate) {
             return res.status(404).json({ message: "sida ehsonlar yoq" });
           }
@@ -149,7 +151,7 @@ const getAllDonates = async (req, res) => {
 
         if (user_doc.status == "admin" || user_doc.status == "owner") {
           try {
-            const donates = await Donate.find();
+            const donates = await Donate.find().populate("user_id");
             if (donates.length < 1) {
               return res.status(404).json({ message: "Hozircha ehsonlar yoq" });
             }
