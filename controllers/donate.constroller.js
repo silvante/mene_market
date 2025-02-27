@@ -149,21 +149,15 @@ const getAllDonates = async (req, res) => {
           throw err;
         }
 
-        if (user_doc.status == "admin" || user_doc.status == "owner") {
-          try {
-            const donates = await Donate.find().populate("user_id");
-            if (donates.length < 1) {
-              return res.status(404).json({ message: "Hozircha ehsonlar yoq" });
-            }
-            return res.status(200).send(donates);
-          } catch (err) {
-            console.log(err);
-            res.send(err);
+        try {
+          const donates = await Donate.find().populate("user_id");
+          if (donates.length < 1) {
+            return res.status(404).json({ message: "Hozircha ehsonlar yoq" });
           }
-        } else {
-          return res
-            .status(400)
-            .json({ message: "You should be admin to use this endpoint" });
+          return res.status(200).send(donates);
+        } catch (err) {
+          console.log(err);
+          res.send(err);
         }
       });
     } else {
