@@ -86,7 +86,7 @@ const getCompById = async (req, res) => {
       oqim_id: { $ne: null },
       status: "success",
       product_id: comp.product_id,
-    }).populate("user_id");
+    }).populate("user_id", "-password");
     const groupedOrders = orders.reduce((acc, order) => {
       // Find if the user already exists in the accumulator
       const existingUser = acc.find(
@@ -242,7 +242,7 @@ const endComp = async (req, res) => {
       oqim_id: { $ne: null },
       status: "success",
       product_id: comp.product_id,
-    }).populate("user_id");
+    }).populate("user_id", "-password");
 
     if (orders.length === 0) {
       return res.status(404).json({ error: "No successful orders found" });

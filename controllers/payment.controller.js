@@ -36,7 +36,7 @@ const createPayment = async (req, res) => {
             }
             res.status(200).json({
               message: "tolov uchun sorov jonatildi",
-              payment_data: new_paymment.populate("sending"),
+              payment_data: new_paymment.populate("sending", "-password"),
               your_balance: new_balance,
             });
           } else {
@@ -100,7 +100,10 @@ const getPaymantsAdmin = async (req, res) => {
 
         try {
           if (user_doc.status == "admin" || user_doc.status == "owner") {
-            const payments = await Payment.find().populate("sending");
+            const payments = await Payment.find().populate(
+              "sending",
+              "-password"
+            );
             if (!payments) {
               return res.status(400).send("server error");
             }

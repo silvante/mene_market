@@ -33,7 +33,7 @@ const getOqims = async (req, res) => {
 
           const oqims = await Oqim.find({ user: user_id })
             .populate("product")
-            .populate("user");
+            .populate("user", "-password");
           if (!oqims) {
             return res.status(404).json({ message: "server error" });
           }
@@ -55,7 +55,9 @@ const getOqims = async (req, res) => {
 const getOqim = async (req, res) => {
   const id = req.params.id;
   try {
-    const oqim = await Oqim.findById(id).populate("product").populate("user");
+    const oqim = await Oqim.findById(id)
+      .populate("product")
+      .populate("user", "-password -balance");
     if (!oqim) {
       return res.status(404).json({ message: "steam not found" });
     }

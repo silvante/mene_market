@@ -425,7 +425,7 @@ const signOrderToOperator = async (req, res) => {
         )
           .populate("product_id")
           .populate("oqim_id")
-          .populate("user_id");
+          .populate("user_id", "-password -balance");
 
         if (!signed_order) {
           return res.status(500).json({
@@ -468,7 +468,7 @@ const getOrdersOfOperator = async (req, res) => {
             })
               .populate("product_id")
               .populate("oqim_id")
-              .populate("user_id");
+              .populate("user_id", "-password -balance");
 
             if (!orders) {
               return res
@@ -513,7 +513,7 @@ const getAllOrdersOfOperator = async (req, res) => {
             const orders = await Order.find({ operator_id: operator_id })
               .populate("product_id")
               .populate("oqim_id")
-              .populate("user_id");
+              .populate("user_id", "-password -balance");
 
             if (!orders) {
               return res
