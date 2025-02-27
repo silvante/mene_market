@@ -385,6 +385,162 @@ const createWorkerAccount = async (req, res) => {
   }
 };
 
+const getAllWorkers = async () => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        try {
+          if (user_doc.status == "admin" || user_doc.status === "owner") {
+            const workers = await User.find({
+              status: { $in: ["admin", "operator", "courier"] },
+            });
+            if (!workers) {
+              return res.status(404).json({ message: "server error" });
+            }
+            return res.status(200).send(workers);
+          } else {
+            return res
+              .status(404)
+              .json({ message: "you made a mistake here sir" });
+          }
+        } catch (err) {
+          console.log(err);
+          res.send(err);
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
+
+const getAllAdmins = async () => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        try {
+          if (user_doc.status == "admin" || user_doc.status === "owner") {
+            const admins = await User.find({
+              status: "admin",
+            });
+            if (!admins) {
+              return res.status(404).json({ message: "server error" });
+            }
+            return res.status(200).send(admins);
+          } else {
+            return res
+              .status(404)
+              .json({ message: "you made a mistake here sir" });
+          }
+        } catch (err) {
+          console.log(err);
+          res.send(err);
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
+
+const getAllOperators = async () => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        try {
+          if (user_doc.status == "admin" || user_doc.status === "owner") {
+            const operators = await User.find({
+              status: "operator",
+            });
+            if (!operators) {
+              return res.status(404).json({ message: "server error" });
+            }
+            return res.status(200).send(operators);
+          } else {
+            return res
+              .status(404)
+              .json({ message: "you made a mistake here sir" });
+          }
+        } catch (err) {
+          console.log(err);
+          res.send(err);
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
+
+const getAllCourier = async () => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        try {
+          if (user_doc.status == "admin" || user_doc.status === "owner") {
+            const courier = await User.find({
+              status: "courier",
+            });
+            if (!courier) {
+              return res.status(404).json({ message: "server error" });
+            }
+            return res.status(200).send(courier);
+          } else {
+            return res
+              .status(404)
+              .json({ message: "you made a mistake here sir" });
+          }
+        } catch (err) {
+          console.log(err);
+          res.send(err);
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
+
 module.exports = {
   getUser,
   getUsers,
@@ -395,4 +551,8 @@ module.exports = {
   verifyOTP,
   resendOTP,
   createWorkerAccount,
+  getAllWorkers,
+  getAllAdmins,
+  getAllCourier,
+  getAllOperators,
 };

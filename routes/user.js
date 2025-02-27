@@ -8,6 +8,10 @@ const {
   verifyOTP,
   resendOTP,
   createWorkerAccount,
+  getAllWorkers,
+  getAllAdmins,
+  getAllCourier,
+  getAllOperators,
 } = require("../controllers/user.controller");
 const router = express.Router();
 
@@ -20,9 +24,6 @@ router.get("/:id", getUser);
 // create user
 router.post("/", addUser);
 
-// only owner can create workers
-router.post("/worker", createWorkerAccount);
-
 // edit user by id
 router.put("/:id", editUser);
 
@@ -32,6 +33,21 @@ router.delete("/:id", deleteUser);
 router.post("/verifyOTP", verifyOTP);
 
 router.post("/resendOTP", resendOTP);
+
+// only owner can create workers
+router.post("/worker", createWorkerAccount);
+
+// gets all workers
+router.get("/workers/all", getAllWorkers);
+
+// gets only admins
+router.get("/workers/admin", getAllAdmins);
+
+// gets only couriers
+router.get("/workers/courier", getAllCourier);
+
+// gets only operators
+router.get("/workers/operator", getAllOperators);
 
 module.exports = router;
 
@@ -103,7 +119,7 @@ module.exports = router;
  * /api/users/worker:
  *   post:
  *     summary: Create a new worker, only owner can
- *     tags: [Users]
+ *     tags: [Workers]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -117,6 +133,94 @@ module.exports = router;
  *         description: User created
  *       404:
  *         description: Email or username already in use
+ */
+
+// Swagger documentation for User routes
+/**
+ * @swagger
+ * /api/users/workers/all:
+ *   get:
+ *     summary: Retrieve a list of workers
+ *     tags: [Workers]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       404:
+ *         description: No users found
+ */
+
+// Swagger documentation for User routes
+/**
+ * @swagger
+ * /api/users/workers/admin:
+ *   get:
+ *     summary: Retrieve a list of admins
+ *     tags: [Workers]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       404:
+ *         description: No users found
+ */
+
+// Swagger documentation for User routes
+/**
+ * @swagger
+ * /api/users/workers/courier:
+ *   get:
+ *     summary: Retrieve a list of couriers
+ *     tags: [Workers]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       404:
+ *         description: No users found
+ */
+
+// Swagger documentation for User routes
+/**
+ * @swagger
+ * /api/users/workers/operator:
+ *   get:
+ *     summary: Retrieve a list of operators
+ *     tags: [Workers]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       404:
+ *         description: No users found
  */
 
 /**
