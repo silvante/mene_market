@@ -5,7 +5,7 @@ const router = express.Router();
 
 const User = require("../models/user.model");
 // const Comment = require("../models/comments.model");
-const jwtSecret = "mene_market_d34DJ058jsllass345dd";
+const jwtSecret = process.env.JWT_SECRET;
 
 // login part codes
 router.post("/login", async (req, res) => {

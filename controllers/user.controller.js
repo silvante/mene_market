@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 const { jwtSecret } = require("../routes/extra");
 
-const cyfer = bcryptjs.genSaltSync(8);
+const cyfer = bcryptjs.genSaltSync(10);
 
 // mothod: get
 // get all users
