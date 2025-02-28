@@ -385,7 +385,7 @@ const createWorkerAccount = async (req, res) => {
   }
 };
 
-const getAllWorkers = async () => {
+const getAllWorkers = async (req, res) => {
   try {
     const auth_headers = req.headers.authorization;
     if (auth_headers && auth_headers.startsWith("Bearer ")) {
@@ -424,7 +424,7 @@ const getAllWorkers = async () => {
   }
 };
 
-const getAllAdmins = async () => {
+const getAllAdmins = async (req, res) => {
   try {
     const auth_headers = req.headers.authorization;
     if (auth_headers && auth_headers.startsWith("Bearer ")) {
@@ -463,7 +463,7 @@ const getAllAdmins = async () => {
   }
 };
 
-const getAllOperators = async () => {
+const getAllOperators = async (req, res) => {
   try {
     const auth_headers = req.headers.authorization;
     if (auth_headers && auth_headers.startsWith("Bearer ")) {
@@ -502,7 +502,7 @@ const getAllOperators = async () => {
   }
 };
 
-const getAllCourier = async () => {
+const getAllCourier = async (req, res) => {
   try {
     const auth_headers = req.headers.authorization;
     if (auth_headers && auth_headers.startsWith("Bearer ")) {
