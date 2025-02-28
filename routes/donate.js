@@ -3,7 +3,7 @@ const {
   getDonate,
   commitDonate,
   getAllDonates,
-} = require("../controllers/donate.constroller");
+} = require("../controllers/donate.controller");
 const router = express.Router();
 
 router.get("/", getDonate);
