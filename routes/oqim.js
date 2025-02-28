@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const cors = require("cors");
 const {
   getOqims,
   getOqim,
@@ -13,13 +14,13 @@ router.get("/", getOqims);
 
 router.get("/all", getAllstreams);
 
-router.get("/:id", getOqim);
+router.get("/:id", cors({ origin: "*" }), getOqim);
 
 router.post("/:product_id", addOqim);
 
 router.delete("/:id", deleteOqim);
 
-router.post("/:id/order", createOrder);
+router.post("/:id/order", cors({ origin: "*" }), createOrder);
 
 module.exports = router;
 // Swagger documentation for Oqim routes
