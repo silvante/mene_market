@@ -60,3 +60,5 @@ const createKeeper = async (req, res) => {
     res.send(err);
   }
 };
+
+module.exports = { createKeeper };

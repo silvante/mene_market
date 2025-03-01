@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const {} = require("./keeper.controller");
+const { createKeeper } = require("./keeper.controller");
+
+router.post("/", createKeeper);
 
 module.exports = router;
