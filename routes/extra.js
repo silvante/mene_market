@@ -30,7 +30,13 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, email: user.email, status: user.status },
+      {
+        id: user._id,
+        email: user.email,
+        status: user.status,
+        telegram_id: user.telegram_id,
+        name: user.name,
+      },
       jwtSecret,
       {}
     );

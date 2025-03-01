@@ -3,6 +3,7 @@ const Product = require("../models/product.model");
 const { jwtSecret } = require("../routes/extra");
 const jwt = require("jsonwebtoken");
 const Order = require("../models/order.model");
+const SendMessage = require("../messenger/send_message");
 
 const getAllstreams = async (req, res) => {
   try {
@@ -97,6 +98,10 @@ const addOqim = async (req, res) => {
             product: product_id,
             name: name,
           });
+          if (user_doc.telegram_id) {
+            let message = `Assalomu alaykum ${user_doc.name}, siz mene market saytidan "${product.title}" nomli mahsulotga yangi oqim yaratdingiz oqimni Boshqalar bilan ulashish uchun Shaxsiy telegram Grippalar va Auditoriyangizdan foidalanishingiz mumkin`;
+            await SendMessage(user_doc.telegram_id, message);
+          }
           if (!new_oqim) {
             return res.status(404).send("server error");
           }
@@ -172,7 +177,7 @@ const createOrder = async (req, res) => {
   try {
     const id = req.params.id;
     const { client_mobile, client_name, client_address } = req.body;
-    const oqim = await Oqim.findById(id).populate("product");
+    const oqim = await Oqim.findById(id).populate("product").populate("user");
 
     const total_price = oqim.product.price + oqim.product.for_seller;
 
@@ -193,6 +198,10 @@ const createOrder = async (req, res) => {
         order_code: generateOTP(),
         total_price,
       });
+      if (oqim.user.telegram_id) {
+        let message = `Sizning "${oqim.name}" nomi oqimingizga ${client_name} isimli odam buyurtma berdi berdi ✅`;
+        await SendMessage(oqim.user.telegram_id, message);
+      }
       if (!new_order) {
         return res.status(404).json({ message: "server error!" });
       }

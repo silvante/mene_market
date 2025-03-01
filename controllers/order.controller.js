@@ -1,3 +1,4 @@
+const SendMessange = require("../messenger/send_message");
 const Order = require("../models/order.model");
 const Product = require("../models/product.model");
 const User = require("../models/user.model");
@@ -166,7 +167,9 @@ const cancelOrder = async (req, res) => {
                 status: "canceled",
               },
               { new: true }
-            ).populate("product_id");
+            )
+              .populate("product_id")
+              .populate("oqim_id");
             if (!updated) {
               return res.status(404).send("something went wrong, try again");
             }
@@ -176,6 +179,10 @@ const cancelOrder = async (req, res) => {
               await User.findByIdAndUpdate(updated.user_id, {
                 balance: new_balance,
               });
+              if (!user.telegram_id) {
+                let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma bekor qilindi (buyurtma ${updated.client_name} dan), va sizga ${updated.product_id.for_seller}sum miqdorda pul jarima yechib olindi. ✅`;
+                await SendMessange(user.telegram_id, message);
+              }
             }
             res.status(200).json({
               message:
@@ -218,7 +225,9 @@ const successOrder = async (req, res) => {
                 status: "success",
               },
               { new: true }
-            ).populate("product_id");
+            )
+              .populate("product_id")
+              .populate("oqim_id");
             if (!updated) {
               return res.status(404).send("something went wrong, try again");
             }
@@ -228,6 +237,10 @@ const successOrder = async (req, res) => {
               await User.findByIdAndUpdate(updated.user_id, {
                 balance: new_balance,
               });
+              if (!user.telegram_id) {
+                let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma mijozga (${updated.client_name} ga) yetkazildi, va sizga ${updated.product_id.for_seller}sum miqdorda pul o'tkazildi.`;
+                await SendMessange(user.telegram_id, message);
+              }
             }
             res.status(200).json({
               message:
@@ -345,7 +358,7 @@ const returnOrder = async (req, res) => {
                 status: "returned",
               },
               { new: true }
-            ).populate("product_id");
+            ).populate("product_id").populate("oqim_id");
             if (!updated) {
               return res.status(404).send("something went wrong, try again");
             }
@@ -355,6 +368,10 @@ const returnOrder = async (req, res) => {
               await User.findByIdAndUpdate(updated.user_id, {
                 balance: new_balance,
               });
+              if (!user.telegram_id) {
+                let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma qaytarildi (qaytardi ${updated.client_name}), va sizga ${updated.product_id.for_seller}sum miqdorda pul jarima yechib olindi.`;
+                await SendMessange(user.telegram_id, message);
+              }
             }
             res.status(200).json({
               message:
