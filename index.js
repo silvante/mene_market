@@ -37,7 +37,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["./routes/*.js", "index.js"], // Path to API docs
+  apis: ["./routes/*.js", "index.js", "./messangers/keeper/*.js"], // Path to API docs
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

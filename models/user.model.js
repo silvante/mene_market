@@ -48,6 +48,9 @@ const userSchame = mongoose.Schema({
     enum: ["seller", "owner", "admin", "operator", "courier"],
     default: "seller",
   },
+  telegram_id: {
+    type: String,
+  },
 });
 
 const User = mongoose.model("user", userSchame);
