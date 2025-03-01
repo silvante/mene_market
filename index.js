@@ -37,7 +37,12 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["./routes/*.js", "index.js", "./messangers/keeper/*.js"], // Path to API docs
+  apis: [
+    "./routes/*.js",
+    "index.js",
+    "./messangers/keeper/*.js",
+    "./messangers/*.js",
+  ], // Path to API docs
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -108,6 +113,8 @@ const comp = require("./routes/comp.js");
 const payment = require("./routes/payment.js");
 const comment = require("./routes/comment.js");
 const upload = require("./routes/upload");
+const keeper = require("./messangers/keeper/keeper.js");
+const messager = require("./messangers/messagner.js");
 
 // using routes
 
@@ -125,6 +132,8 @@ app.use("/api/competitions", comp);
 app.use("/api/payments", payment);
 app.use("/api/comments", comment);
 app.use("/files", upload);
+app.use("/api/keeper", keeper);
+app.use("/api/messanger", messager);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, console.log(`Listening on port ${PORT}...`));

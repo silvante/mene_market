@@ -1,4 +1,6 @@
 const TokenKeeper = require("./keeper.model");
+const { jwtSecret } = require("../../routes/extra");
+const jwt = require("jsonwebtoken");
 
 const createKeeper = async (req, res) => {
   try {
