@@ -113,8 +113,8 @@ const comp = require("./routes/comp.js");
 const payment = require("./routes/payment.js");
 const comment = require("./routes/comment.js");
 const upload = require("./routes/upload");
-const keeper = require("./messangers/keeper/keeper.js");
-const messager = require("./messangers/messagner.js");
+const keeper = require("./messenger/keeper/keeper.js");
+const messenger = require("./messenger/messenger.js");
 
 // using routes
 
@@ -133,7 +133,7 @@ app.use("/api/payments", payment);
 app.use("/api/comments", comment);
 app.use("/files", upload);
 app.use("/api/keeper", keeper);
-app.use("/api/messanger", messager);
+app.use("/api/messenger", messenger);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, console.log(`Listening on port ${PORT}...`));

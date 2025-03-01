@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { linkUserToTelegram } = require("./messagner.controller");
+const { linkUserToTelegram } = require("./messenger.controller");
 
 router.put("/link_user", linkUserToTelegram);
 
