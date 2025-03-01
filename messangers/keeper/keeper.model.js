@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const KeeperSchema = mongoose.Schema({
-  token: {
+  bot_token: {
     type: String,
     required: true,
   },
