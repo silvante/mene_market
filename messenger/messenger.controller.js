@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const { jwtSecret } = require("../routes/extra");
 const jwt = require("jsonwebtoken");
+const SendMessage = require("./send_message");
 
 const linkUserToTelegram = async (req, res) => {
   try {
@@ -29,6 +30,8 @@ const linkUserToTelegram = async (req, res) => {
           if (!linked_user) {
             return res.status(404).send("user is not defined or server error");
           }
+          let message = `Assalomu alaykum, ${linked_user.name}, sizni hisobingiz telegram bot bilan muaffaqiyatli ulandi ✅`;
+          await SendMessage(chat_id, message);
           return res.status(200).json({
             message: "linked",
             user: linked_user,

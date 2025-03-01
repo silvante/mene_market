@@ -1,4 +1,4 @@
-const SendMessange = require("../messenger/send_message");
+const SendMessage = require("../messenger/send_message");
 const Order = require("../models/order.model");
 const Product = require("../models/product.model");
 const User = require("../models/user.model");
@@ -181,7 +181,7 @@ const cancelOrder = async (req, res) => {
               });
               if (!user.telegram_id) {
                 let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma bekor qilindi (buyurtma ${updated.client_name} dan), va sizga ${updated.product_id.for_seller}sum miqdorda pul jarima yechib olindi. ✅`;
-                await SendMessange(user.telegram_id, message);
+                await SendMessage(user.telegram_id, message);
               }
             }
             res.status(200).json({
@@ -239,7 +239,7 @@ const successOrder = async (req, res) => {
               });
               if (!user.telegram_id) {
                 let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma mijozga (${updated.client_name} ga) yetkazildi, va sizga ${updated.product_id.for_seller}sum miqdorda pul o'tkazildi.`;
-                await SendMessange(user.telegram_id, message);
+                await SendMessage(user.telegram_id, message);
               }
             }
             res.status(200).json({
@@ -370,7 +370,7 @@ const returnOrder = async (req, res) => {
               });
               if (!user.telegram_id) {
                 let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma qaytarildi (qaytardi ${updated.client_name}), va sizga ${updated.product_id.for_seller}sum miqdorda pul jarima yechib olindi.`;
-                await SendMessange(user.telegram_id, message);
+                await SendMessage(user.telegram_id, message);
               }
             }
             res.status(200).json({

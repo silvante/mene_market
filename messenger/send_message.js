@@ -1,7 +1,7 @@
 const axios = require("axios");
 const { LoadToken } = require("./token_loader");
 
-const SendMessange = async (chat_id, message) => {
+const SendMessage = async (chat_id, message) => {
   try {
     const bot_token = await LoadToken();
     if (!bot_token) console.log("❌ token loading error");
@@ -25,4 +25,4 @@ const SendMessange = async (chat_id, message) => {
   }
 };
 
-module.exports = SendMessange;
+module.exports = SendMessage;
