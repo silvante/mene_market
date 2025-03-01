@@ -38,12 +38,10 @@ const createKeeper = async (req, res) => {
                 }
               );
               if (!updated_keeper) return res.status(404).send("server error");
-              return res
-                .status(200)
-                .send({
-                  message: "activated & updated",
-                  keeper: updated_keeper,
-                });
+              return res.status(200).send({
+                message: "activated & updated",
+                keeper: updated_keeper,
+              });
             }
           } catch (err) {
             console.log(err);
@@ -103,4 +101,4 @@ const getKeeper = async (req, res) => {
   }
 };
 
-module.exports = { createKeeper };
+module.exports = { createKeeper, getKeeper };
