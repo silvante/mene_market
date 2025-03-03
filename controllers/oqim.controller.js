@@ -177,7 +177,9 @@ const createOrder = async (req, res) => {
   try {
     const id = req.params.id;
     const { client_mobile, client_name, client_address } = req.body;
-    const oqim = await Oqim.findById(id).populate("product").populate("user");
+    const oqim = await Oqim.findById(id)
+      .populate("product")
+      .populate("user", "-password");
 
     const total_price = oqim.product.price + oqim.product.for_seller;
 
@@ -191,13 +193,13 @@ const createOrder = async (req, res) => {
         client_mobile,
         client_name,
         client_address,
-        user_id: oqim.user,
+        user_id: oqim.user._id,
         product_id: oqim.product._id,
         oqim_id: id,
         status: "pending",
         order_code: generateOTP(),
         total_price,
-      });
+      }).populate("user_id", "-password -balance");
       if (!new_order) {
         return res.status(404).json({ message: "server error!" });
       }
