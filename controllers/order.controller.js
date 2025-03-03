@@ -278,7 +278,9 @@ const getOrders = async (req, res) => {
 
         if (user_doc.status == "operator") {
           try {
-            const orders = await Order.find({ status: "pending" });
+            const orders = await Order.find({ status: "pending" }).populate(
+              "product_id"
+            );
             if (!orders) {
               return res.status(404).send("server error");
             }
@@ -289,7 +291,9 @@ const getOrders = async (req, res) => {
           }
         } else if (user_doc.status == "admin") {
           try {
-            const orders = await Order.find({ status: "checked" });
+            const orders = await Order.find({ status: "checked" }).populate(
+              "product_id"
+            );
             if (!orders) {
               return res.status(404).send("server error");
             }
@@ -303,7 +307,7 @@ const getOrders = async (req, res) => {
             const orders = await Order.find({
               status: "sent",
               courier_id: user_doc.id,
-            });
+            }).populate("product_id");
             if (!orders) {
               return res.status(404).send("server error");
             }
@@ -314,7 +318,7 @@ const getOrders = async (req, res) => {
           }
         } else if (user_doc.status == "owner") {
           try {
-            const orders = await Order.find();
+            const orders = await Order.find().populate("product_id");
             if (!orders) {
               return res.status(404).send("server error");
             }
