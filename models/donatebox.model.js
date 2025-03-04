@@ -11,7 +11,7 @@ const boxSchema = mongoose.Schema({
       "Hayriya qilish uchun quti, Barcha hayriyalar ratingda korinadi yoki anonim sifatida berishingiz mumkin",
   },
   total_fund: {
-    type: Number,
+    type: mongoose.Schema.Types.Decimal128,
     default: 0,
   },
   is_active: {
