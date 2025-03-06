@@ -40,8 +40,8 @@ const swaggerOptions = {
   apis: [
     "./routes/*.js",
     "index.js",
-    "./messangers/keeper/*.js",
-    "./messangers/*.js",
+    "./messenger/keeper/*.js",
+    "./messenger/*.js",
   ], // Path to API docs
 };
 
