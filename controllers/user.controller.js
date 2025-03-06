@@ -302,11 +302,26 @@ const verifyOTP = async (req, res) => {
           if (!validOTP) {
             throw new Error("Noto'g'ri kod, pochta qutingizni tekshiring");
           } else {
-            await User.updateOne({ _id: userid }, { verificated: true });
+            const user = await User.updateOne(
+              { _id: userid },
+              { verificated: true }
+            );
             await OTP.deleteMany({ userid });
+            const token = jwt.sign(
+              {
+                id: user._id,
+                email: user.email,
+                status: user.status,
+                telegram_id: user.telegram_id,
+                name: user.name,
+              },
+              jwtSecret,
+              {}
+            );
             res.json({
               status: "TEKSHIRILDI",
               message: "Sizning emailingiz muvaffaqiyatli tekshirildi",
+              token: token,
             });
           }
         }
