@@ -174,7 +174,7 @@ const cancelOrder = async (req, res) => {
               return res.status(404).send("something went wrong, try again");
             }
             if (updated.user_id) {
-              const user = User.findById(updated.user_id);
+              const user = await User.findById(updated.user_id);
               const new_balance = user.balance - updated.product_id.for_seller;
               await User.findByIdAndUpdate(updated.user_id, {
                 balance: new_balance,
@@ -232,7 +232,7 @@ const successOrder = async (req, res) => {
               return res.status(404).send("something went wrong, try again");
             }
             if (updated.user_id) {
-              const user = User.findById(updated.user_id);
+              const user = await User.findById(updated.user_id);
               const new_balance = user.balance + updated.product_id.for_seller;
               await User.findByIdAndUpdate(updated.user_id, {
                 balance: new_balance,
@@ -369,7 +369,7 @@ const returnOrder = async (req, res) => {
               return res.status(404).send("something went wrong, try again");
             }
             if (updated.user_id) {
-              const user = User.findById(updated.user_id);
+              const user = await User.findById(updated.user_id);
               const new_balance = user.balance - updated.product_id.for_seller;
               await User.findByIdAndUpdate(updated.user_id, {
                 balance: new_balance,
