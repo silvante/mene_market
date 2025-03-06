@@ -175,18 +175,17 @@ const cancelOrder = async (req, res) => {
             }
             if (updated.user_id) {
               const user = await User.findById(updated.user_id);
-              const new_balance = user.balance - updated.product_id.for_seller;
-              await User.findByIdAndUpdate(updated.user_id, {
-                balance: new_balance,
-              });
+              // const new_balance = user.balance - updated.product_id.for_seller;
+              // await User.findByIdAndUpdate(updated.user_id, {
+              // balance: new_balance,
+              // });
               if (!user.telegram_id) {
-                let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma bekor qilindi (buyurtma ${updated.client_name} dan), va sizga ${updated.product_id.for_seller}sum miqdorda pul jarima yechib olindi. BUYURTMA KODI: ${updated.order_code}`;
+                let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma bekor qilindi (buyurtma ${updated.client_name} dan). BUYURTMA KODI: ${updated.order_code}`;
                 await SendMessage(user.telegram_id, message);
               }
             }
             res.status(200).json({
-              message:
-                "status changed to canceled # and user's balance is changed",
+              message: "status changed to canceled",
             });
           } catch (err) {
             console.log(err);

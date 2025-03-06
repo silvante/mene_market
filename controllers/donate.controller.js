@@ -81,9 +81,13 @@ const commitDonate = async (req, res) => {
               box_id: box._id,
             });
             const new_fund = box.total_fund + fund;
-            const dbox = await Dbox.findByIdAndUpdate(box._id, {
-              total_fund: new_fund,
-            });
+            const dbox = await Dbox.findByIdAndUpdate(
+              box._id,
+              {
+                total_fund: new_fund,
+              },
+              { new: true }
+            );
             return res.status(200).json({
               your_donate: new_donate,
               dbox: dbox.total_fund,
