@@ -46,6 +46,9 @@ const productSchema = mongoose.Schema({
   type: {
     type: String,
   },
+  ads_post: {
+    type: String,
+  },
   created_at: {
     type: Date,
     default: Date.now,

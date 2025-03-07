@@ -59,6 +59,7 @@ const addProduct = async (req, res) => {
               total,
               type,
               discount_price,
+              ads_post,
             } = req.body;
             const new_product = await Product.create({
               title,
@@ -70,6 +71,7 @@ const addProduct = async (req, res) => {
               total,
               type,
               discount_price,
+              ads_post,
             });
             if (!new_product) {
               return res.status(404).json({ message: "something went wrong!" });
@@ -118,6 +120,7 @@ const editProduct = async (req, res) => {
               total,
               type,
               discount_price,
+              ads_post,
             } = req.body;
             await Product.findByIdAndUpdate(id, {
               title,
@@ -129,6 +132,7 @@ const editProduct = async (req, res) => {
               total,
               type,
               discount_price,
+              ads_post,
             }).then((up_pr) => {
               if (!up_pr) {
                 return res
