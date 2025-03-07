@@ -15,7 +15,7 @@ const createKeeper = async (req, res) => {
 
         if (user_doc.status == "owner") {
           try {
-            const keeper = await TokenKeeper.find()[0];
+            const keeper = await TokenKeeper.findOne();
             const { bot_token } = req.body;
 
             if (!bot_token) {
@@ -52,7 +52,7 @@ const createKeeper = async (req, res) => {
         } else {
           res
             .status(404)
-            .send("bu metoddan foidalanish uchun admin bolishingiz kerak");
+            .send("bu metoddan foidalanish uchun owner bolishingiz kerak");
         }
       });
     } else {
@@ -77,7 +77,7 @@ const getKeeper = async (req, res) => {
 
         if (user_doc.status == "owner") {
           try {
-            const keeper = await TokenKeeper.find()[0];
+            const keeper = await TokenKeeper.findOne();
             if (!keeper) {
               return res
                 .status(404)
@@ -91,7 +91,7 @@ const getKeeper = async (req, res) => {
         } else {
           res
             .status(404)
-            .send("bu metoddan foidalanish uchun admin bolishingiz kerak");
+            .send("bu metoddan foidalanish uchun owner bolishingiz kerak");
         }
       });
     } else {

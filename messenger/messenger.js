@@ -12,7 +12,7 @@ module.exports = router;
  *   post:
  *     summary: Link a user to Telegram
  *     description: Associates a user's account with a Telegram chat ID.
- *     tags: [Messagner]
+ *     tags: [Messenger]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
