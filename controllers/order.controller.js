@@ -161,10 +161,13 @@ const cancelOrder = async (req, res) => {
         ) {
           try {
             const id = req.params.id;
+            const { desc } = req.body;
+            if (!desc) return res.status(404).send("desc is required");
             const updated = await Order.findByIdAndUpdate(
               id,
               {
                 status: "canceled",
+                desc,
               },
               { new: true }
             )
@@ -355,10 +358,13 @@ const returnOrder = async (req, res) => {
         if (user_doc.status == "courier" || user_doc.status == "owner") {
           try {
             const id = req.params.id;
+            const { desc } = req.body;
+            if (!desc) return res.status(404).send("desc is required");
             const updated = await Order.findByIdAndUpdate(
               id,
               {
                 status: "returned",
+                desc,
               },
               { new: true }
             )

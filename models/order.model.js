@@ -63,6 +63,9 @@ const orderSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
+  desc: {
+    type: String,
+  },
   full_address: {
     type: String,
     maxlength: 1040,

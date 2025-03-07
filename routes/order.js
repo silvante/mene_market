@@ -156,6 +156,18 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: The order ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - desc
+ *             properties:
+ *               desc:
+ *                 type: string
+ *                 description: reason to fail
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -178,6 +190,18 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: The order ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - desc
+ *             properties:
+ *               desc:
+ *                 type: string
+ *                 description: reason to fail
  *     security:
  *       - bearerAuth: []
  *     responses:
