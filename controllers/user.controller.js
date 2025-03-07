@@ -120,8 +120,17 @@ const editUser = async (req, res) => {
     }
 
     // Destructure request body
-    const { name, password, verificated, username, avatar, bio, email, check } =
-      req.body;
+    const {
+      name,
+      password,
+      verificated,
+      username,
+      avatar,
+      bio,
+      email,
+      check,
+      balance,
+    } = req.body;
 
     // Optional: Check if password exists and hash it
     let updatedFields = {
@@ -132,6 +141,7 @@ const editUser = async (req, res) => {
       bio,
       email,
       check,
+      balance,
     };
 
     if (password) {
