@@ -102,8 +102,11 @@ const addOqim = async (req, res) => {
             return res.status(404).send("server error");
           }
           if (user_doc.t_id) {
-            let message = `Assalomu alaykum ${user_doc.name}, siz mene market saytidan "${product.title}" nomli mahsulotga yangi oqim yaratdingiz oqimni Boshqalar bilan ulashish uchun Shaxsiy telegram Grippalar va Auditoriyangizdan foidalanishingiz mumkin`;
-            await SendMessage(user_doc.t_id, message);
+            const data = {
+              title: "Yangi Oqim 🆕",
+              message: `Assalomu alaykum ${user_doc.name}, siz mene market saytidan "${product.title}" nomli mahsulotga yangi oqim yaratdingiz oqimni Boshqalar bilan ulashish uchun Shaxsiy telegram Grippalar va Auditoriyangizdan foidalanishingiz mumkin. ✅`,
+            };
+            await SendMessage(user_doc.t_id, data);
           }
           res.status(200).json({
             message: "oqim yaratildi",
@@ -205,8 +208,12 @@ const createOrder = async (req, res) => {
         return res.status(404).json({ message: "server error!" });
       }
       if (oqim.user.telegram_id) {
-        let message = `Sizning "${oqim.name}" nomi oqimingizga ${client_name} isimli odam buyurtma berdi berdi. ✅ BUYURTMA KODI: ${new_order.order_code}`;
-        await SendMessage(oqim.user.telegram_id, message);
+        const data = {
+          title: "Yangi buyurtma 🆕",
+          message: `Sizning "${oqim.name}" nomli oqimingiz orqali "${client_name}" ismli shaxs tomonidan buyurtma qabul qilindi. ✅`,
+          order_code: new_order.order_code,
+        };
+        await SendMessage(oqim.user.telegram_id, data);
       }
       res.status(201).send(new_order);
     }

@@ -1,13 +1,19 @@
 const axios = require("axios");
 const { LoadToken } = require("./token_loader");
 
-const SendMessage = async (chat_id, message) => {
+const SendMessage = async (chat_id, data) => {
   try {
     const bot_token = await LoadToken();
     if (!bot_token) console.log("❌ token loading error");
+    const { title, message, balance, order_code, desc, warning } = data;
 
-    let rendered_message = `menemarket sayti tomonidan: \n\n habar: ${message} \n\n sahifa: menemarket.uz ✅
-    `;
+    let rendered_message = `${title} \n\n habar:\n ${message} \n\n ${
+      warning && `eslatma: \n` + wanring + `\n\n`
+    } ${desc && `izoh: \n` + desc + `\n\n`} ${
+      order_code && `Buyurtma kodi: \n` + order_code + `\n\n`
+    } ${
+      balance && `hozirda hisobingizda: \n` + balance + `\n\n`
+    } website: https://menemarket.uz`;
 
     const response = await axios.post(
       `https://api.telegram.org/bot${bot_token}/sendMessage`,

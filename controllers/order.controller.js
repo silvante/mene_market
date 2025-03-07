@@ -183,8 +183,13 @@ const cancelOrder = async (req, res) => {
               // balance: new_balance,
               // });
               if (user.telegram_id) {
-                let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma bekor qilindi (buyurtma ${updated.client_name} dan). BUYURTMA KODI: ${updated.order_code}`;
-                await SendMessage(user.telegram_id, message);
+                const data = {
+                  title: "Buyurtma holati haqida xabar ✍️",
+                  message: `Sizning "${updated.oqim_id.name}" nomli oqimingiz orqali "${updated.client_name}" ismli shaxs tomonidan qabul qilingan buyurtma bekor qilindi. ❌`,
+                  desc: desc,
+                  order_code: updated.order_code,
+                };
+                await SendMessage(user.telegram_id, data);
               }
             }
             res.status(200).json({
@@ -240,8 +245,14 @@ const successOrder = async (req, res) => {
                 balance: new_balance,
               });
               if (user.telegram_id) {
-                let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma mijozga (${updated.client_name} ga) yetkazildi, va sizga ${updated.product_id.for_seller}sum miqdorda pul o'tkazildi. ✅ BUYURTMA KODI: ${updated.order_code}`;
-                await SendMessage(user.telegram_id, message);
+                const data = {
+                  title: "Buyurtma holati haqida xabar ✍️",
+                  message: `Sizning "${updated.oqim_id.name}" nomli oqimingiz orqali "${updated.client_name}" ismli shaxs tomonidan qabul qilingan buyurtma muvaffaqiyatli yetkazildi. ✅`,
+                  warning: `Shuningdek sizning hisobingizga ${updated.product_id.for_seller} so'm otkazildi!`,
+                  order_code: updated.order_code,
+                  balance: new_balance,
+                };
+                await SendMessage(user.telegram_id, data);
               }
             }
             res.status(200).json({
@@ -380,8 +391,15 @@ const returnOrder = async (req, res) => {
                 balance: new_balance,
               });
               if (user.telegram_id) {
-                let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma qaytarildi (qaytardi ${updated.client_name}), va sizga ${updated.product_id.for_seller}sum miqdorda pul jarima yechib olindi. BUYURTMA KODI: ${updated.order_code}`;
-                await SendMessage(user.telegram_id, message);
+                const data = {
+                  title: "Buyurtma holati haqida xabar ✍️",
+                  message: `Sizning "${updated.oqim_id.name}" nomli oqimingiz orqali "${updated.client_name}" ismli shaxs tomonidan qabul qilingan buyurtma qaytarildi. ❌`,
+                  warning: `Shuningdek jarima sifatida sizning hisobingizdan ${updated.product_id.for_seller} so'm yechib olindi!`,
+                  desc: desc,
+                  order_code: updated.order_code,
+                  balance: new_balance,
+                };
+                await SendMessage(user.telegram_id, data);
               }
             }
             res.status(200).json({
