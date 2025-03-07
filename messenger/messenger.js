@@ -8,7 +8,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/messagner/link_user:
+ * /api/messenger/link_user:
  *   post:
  *     summary: Link a user to Telegram
  *     description: Associates a user's account with a Telegram chat ID.

@@ -37,7 +37,8 @@ const createKeeper = async (req, res) => {
                 keeper._id,
                 {
                   bot_token,
-                }
+                },
+                { new: true }
               );
               if (!updated_keeper) return res.status(404).send("server error");
               return res.status(200).send({
