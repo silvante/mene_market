@@ -6,12 +6,7 @@ const SendMessage = async (chat_id, message) => {
     const bot_token = await LoadToken();
     if (!bot_token) console.log("❌ token loading error");
 
-    let rendered_message = `
-    menemarket sayti tomonidan:
-
-    habar: ${message}
-
-    sahifa: menemarket.uz ✅
+    let rendered_message = `menemarket sayti tomonidan: \n\n habar: ${message} \n\n sahifa: menemarket.uz ✅
     `;
 
     const response = await axios.post(
