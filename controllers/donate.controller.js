@@ -27,7 +27,7 @@ const commitDonate = async (req, res) => {
           const donate = await Donate.findOne({ user_id: user_doc.id });
           if (donate) {
             const user = await User.findById(user_doc.id);
-            const new_balance = user.balance - fund;
+            const new_balance = Number(user.balance) - Number(fund);
             if (user.balance < fund) {
               return res
                 .status(404)
@@ -36,7 +36,7 @@ const commitDonate = async (req, res) => {
             await User.findByIdAndUpdate(user.id, {
               balance: new_balance,
             });
-            const new_donate_fund = donate.fund + fund;
+            const new_donate_fund = Number(donate.fund) + Number(fund);
             const new_donate = await Donate.findByIdAndUpdate(
               donate._id,
               {
@@ -45,7 +45,7 @@ const commitDonate = async (req, res) => {
               },
               { new: true }
             );
-            const new_fund = box.total_fund + fund;
+            const new_fund = Number(box.total_fund) + Number(fund);
             const dbox = await Dbox.findByIdAndUpdate(
               box._id,
               {
@@ -61,7 +61,7 @@ const commitDonate = async (req, res) => {
             });
           } else {
             const user = await User.findById(user_doc.id);
-            const new_balance = user.balance - fund;
+            const new_balance = Number(user.balance) - Number(fund);
             if (user.balance < fund) {
               return res
                 .status(404)
@@ -80,7 +80,7 @@ const commitDonate = async (req, res) => {
               user_id: user_doc.id,
               box_id: box._id,
             });
-            const new_fund = box.total_fund + fund;
+            const new_fund = Number(box.total_fund) + Number(fund);
             const dbox = await Dbox.findByIdAndUpdate(
               box._id,
               {
@@ -94,7 +94,6 @@ const commitDonate = async (req, res) => {
               your_balance: new_balance,
             });
           }
-          res.status(200).send(new_donate);
         } catch (err) {
           console.log(err);
           res.send(err);
