@@ -34,7 +34,7 @@ router.post("/login", async (req, res) => {
         id: user._id,
         email: user.email,
         status: user.status,
-        telegram_id: user.telegram_id,
+        t_id: user.telegram_id,
         name: user.name,
       },
       jwtSecret,
@@ -76,6 +76,7 @@ router.get("/profile", async (req, res) => {
             check,
             balance,
             status,
+            telegram_id,
           } = user;
           res.json({
             _id,
@@ -88,6 +89,7 @@ router.get("/profile", async (req, res) => {
             check,
             balance,
             status,
+            telegram_id,
           });
         } catch (error) {
           console.log(error);

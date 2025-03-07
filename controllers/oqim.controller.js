@@ -101,9 +101,9 @@ const addOqim = async (req, res) => {
           if (!new_oqim) {
             return res.status(404).send("server error");
           }
-          if (user_doc.telegram_id) {
+          if (user_doc.t_id) {
             let message = `Assalomu alaykum ${user_doc.name}, siz mene market saytidan "${product.title}" nomli mahsulotga yangi oqim yaratdingiz oqimni Boshqalar bilan ulashish uchun Shaxsiy telegram Grippalar va Auditoriyangizdan foidalanishingiz mumkin`;
-            await SendMessage(user_doc.telegram_id, message);
+            await SendMessage(user_doc.t_id, message);
           }
           res.status(200).json({
             message: "oqim yaratildi",

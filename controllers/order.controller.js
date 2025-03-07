@@ -182,7 +182,7 @@ const cancelOrder = async (req, res) => {
               // await User.findByIdAndUpdate(updated.user_id, {
               // balance: new_balance,
               // });
-              if (!user.telegram_id) {
+              if (user.telegram_id) {
                 let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma bekor qilindi (buyurtma ${updated.client_name} dan). BUYURTMA KODI: ${updated.order_code}`;
                 await SendMessage(user.telegram_id, message);
               }
@@ -239,7 +239,7 @@ const successOrder = async (req, res) => {
               await User.findByIdAndUpdate(updated.user_id, {
                 balance: new_balance,
               });
-              if (!user.telegram_id) {
+              if (user.telegram_id) {
                 let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma mijozga (${updated.client_name} ga) yetkazildi, va sizga ${updated.product_id.for_seller}sum miqdorda pul o'tkazildi. ✅ BUYURTMA KODI: ${updated.order_code}`;
                 await SendMessage(user.telegram_id, message);
               }
@@ -379,7 +379,7 @@ const returnOrder = async (req, res) => {
               await User.findByIdAndUpdate(updated.user_id, {
                 balance: new_balance,
               });
-              if (!user.telegram_id) {
+              if (user.telegram_id) {
                 let message = `Sizni ${updated.oqim_id.name} noli oqmingizdan qilingan buyurtma qaytarildi (qaytardi ${updated.client_name}), va sizga ${updated.product_id.for_seller}sum miqdorda pul jarima yechib olindi. BUYURTMA KODI: ${updated.order_code}`;
                 await SendMessage(user.telegram_id, message);
               }
