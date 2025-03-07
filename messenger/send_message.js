@@ -8,7 +8,7 @@ const SendMessage = async (chat_id, data) => {
     const { title, message, balance, order_code, desc, warning } = data;
 
     let rendered_message = `${title} \n\n habar:\n ${message} \n\n ${
-      warning && `eslatma: \n` + wanring + `\n\n`
+      warning && `eslatma: \n` + warning + `\n\n`
     } ${desc && `izoh: \n` + desc + `\n\n`} ${
       order_code && `Buyurtma kodi: \n` + order_code + `\n\n`
     } ${
