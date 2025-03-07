@@ -108,8 +108,9 @@ const addOqim = async (req, res) => {
           res.status(200).json({
             message: "oqim yaratildi",
             id: new_oqim.id,
+            oqim: new_oqim,
             product: product,
-            name,
+            name: name,
           });
         } catch (err) {
           console.log(err);
@@ -199,7 +200,7 @@ const createOrder = async (req, res) => {
         status: "pending",
         order_code: generateOTP(),
         total_price,
-      }).populate("user_id", "-password -balance");
+      });
       if (!new_order) {
         return res.status(404).json({ message: "server error!" });
       }
