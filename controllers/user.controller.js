@@ -13,7 +13,7 @@ const cyfer = bcryptjs.genSaltSync(10);
 // get all users
 const getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find().select("-password");
     if (!users) {
       return res.status(404).send("we have no users yet...");
     }
@@ -30,7 +30,7 @@ const getUser = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id).select("-password");
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -49,7 +49,7 @@ const generateUniqueUsername = async (name) => {
   let isUnique = false;
 
   while (!isUnique) {
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ username }).select("-password");
     if (!existingUser) {
       isUnique = true;
     } else {
@@ -142,7 +142,7 @@ const editUser = async (req, res) => {
     // Update user
     const editedUser = await User.findByIdAndUpdate(id, updatedFields, {
       new: true,
-    });
+    }).select("-password");
 
     // Check if user was found and updated
     if (!editedUser) {
