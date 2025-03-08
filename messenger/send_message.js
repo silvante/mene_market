@@ -4,16 +4,27 @@ const { LoadToken } = require("./token_loader");
 const SendMessage = async (chat_id, data) => {
   try {
     const bot_token = await LoadToken();
-    if (!bot_token) console.log("❌ token loading error");
-    const { title, message, balance, order_code, desc, warning } = data;
+    if (!bot_token) {
+      console.log("❌ token loading error");
+      return;
+    }
+    const {
+      title = "",
+      message = "",
+      balance = "",
+      order_code = "",
+      desc = "",
+      warning = "",
+    } = data || {};
 
-    let rendered_message = `${title} \n\n habar:\n ${message} \n\n ${
-      warning ? `eslatma: \n` + warning + `\n\n` : ""
-    } ${desc ? `izoh: \n` + desc + `\n\n` : ""} ${
-      order_code ? `Buyurtma kodi: \n` + order_code + `\n\n` : ""
-    } ${
-      balance ? `hozirda hisobingizda: \n` + balance + `\n\n` : ""
-    } website: https://menemarket.uz`;
+    let rendered_message = `${title}\n\nhabar:\n${message}`;
+
+    if (warning) rendered_message += `\n\neslatma:\n${warning}`;
+    if (desc) rendered_message += `\n\nizoh:\n${desc}`;
+    if (order_code) rendered_message += `\n\nBuyurtma kodi:\n${order_code}`;
+    if (balance) rendered_message += `\n\nhozirda hisobingizda:\n${balance}`;
+
+    rendered_message += `\n\nofficial website: menemarket.uz`;
 
     const response = await axios.post(
       `https://api.telegram.org/bot${bot_token}/sendMessage`,
@@ -22,7 +33,10 @@ const SendMessage = async (chat_id, data) => {
 
     console.log(`✅ Telegram Response: ${response.data}`);
   } catch (err) {
-    console.log(`error: ${err.message}`);
+    console.error(
+      `❌ Telegram API Error: ${err.message}`,
+      err.response?.data || err
+    );
   }
 };
 
