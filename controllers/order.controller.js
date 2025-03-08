@@ -185,7 +185,7 @@ const cancelOrder = async (req, res) => {
               if (user.telegram_id) {
                 const data = {
                   title: "Buyurtma holati haqida xabar ✍️",
-                  message: `Sizning "${updated.oqim_id.name}" nomli oqimingiz orqali "${updated.client_name}" ismli shaxs tomonidan qabul qilingan buyurtma bekor qilindi. ❌`,
+                  message: `Sizning *${updated.oqim_id.name}* nomli oqimingiz orqali *${updated.client_name}* ismli shaxs tomonidan qabul qilingan buyurtma bekor qilindi. ❌`,
                   desc: desc,
                   order_code: updated.order_code,
                 };
@@ -247,8 +247,8 @@ const successOrder = async (req, res) => {
               if (user.telegram_id) {
                 const data = {
                   title: "Buyurtma holati haqida xabar ✍️",
-                  message: `Sizning "${updated.oqim_id.name}" nomli oqimingiz orqali "${updated.client_name}" ismli shaxs tomonidan qabul qilingan buyurtma muvaffaqiyatli yetkazildi. ✅`,
-                  warning: `Shuningdek sizning hisobingizga ${updated.product_id.for_seller} so'm otkazildi!`,
+                  message: `Sizning *${updated.oqim_id.name}* nomli oqimingiz orqali *${updated.client_name}* ismli shaxs tomonidan qabul qilingan buyurtma muvaffaqiyatli yetkazildi. ✅`,
+                  warning: `Shuningdek sizning hisobingizga *${updated.product_id.for_seller}* so'm otkazildi!`,
                   order_code: updated.order_code,
                   balance: new_balance,
                 };
@@ -393,8 +393,8 @@ const returnOrder = async (req, res) => {
               if (user.telegram_id) {
                 const data = {
                   title: "Buyurtma holati haqida xabar ✍️",
-                  message: `Sizning "${updated.oqim_id.name}" nomli oqimingiz orqali "${updated.client_name}" ismli shaxs tomonidan qabul qilingan buyurtma qaytarildi. ❌`,
-                  warning: `Shuningdek jarima sifatida sizning hisobingizdan ${updated.product_id.for_seller} so'm yechib olindi!`,
+                  message: `Sizning *${updated.oqim_id.name}* nomli oqimingiz orqali *${updated.client_name}* ismli shaxs tomonidan qabul qilingan buyurtma qaytarildi. ❌`,
+                  warning: `Shuningdek jarima sifatida sizning hisobingizdan *${updated.product_id.for_seller}* so'm yechib olindi!`,
                   desc: desc,
                   order_code: updated.order_code,
                   balance: new_balance,

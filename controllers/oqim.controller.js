@@ -104,7 +104,7 @@ const addOqim = async (req, res) => {
           if (user_doc.t_id) {
             const data = {
               title: "Yangi Oqim 🆕",
-              message: `Assalomu alaykum ${user_doc.name}, siz mene market saytidan "${product.title}" nomli mahsulotga yangi oqim yaratdingiz oqimni Boshqalar bilan ulashish uchun Shaxsiy telegram Grippalar va Auditoriyangizdan foidalanishingiz mumkin. ✅`,
+              message: `Assalomu alaykum *${user_doc.name}*, siz mene market saytidan *${product.title}* nomli mahsulotga yangi oqim yaratdingiz oqimni Boshqalar bilan ulashish uchun Shaxsiy telegram Grippalar va Auditoriyangizdan foidalanishingiz mumkin. ✅`,
             };
             await SendMessage(user_doc.t_id, data);
           }
@@ -210,7 +210,7 @@ const createOrder = async (req, res) => {
       if (oqim.user.telegram_id) {
         const data = {
           title: "Yangi buyurtma 🆕",
-          message: `Sizning "${oqim.name}" nomli oqimingiz orqali "${client_name}" ismli shaxs tomonidan buyurtma qabul qilindi. ✅`,
+          message: `Sizning *${oqim.name}* nomli oqimingiz orqali *${client_name}* ismli shaxs tomonidan buyurtma qabul qilindi. ✅`,
           order_code: new_order.order_code,
         };
         await SendMessage(oqim.user.telegram_id, data);

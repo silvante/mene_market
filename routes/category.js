@@ -71,7 +71,7 @@ module.exports = router;
  *     summary: Create a new category
  *     tags: [Categories]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -92,7 +92,7 @@ module.exports = router;
  *     summary: Update a category by ID
  *     tags: [Categories]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -120,7 +120,7 @@ module.exports = router;
  *     summary: Delete a category by ID
  *     tags: [Categories]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
