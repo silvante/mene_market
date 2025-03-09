@@ -203,8 +203,8 @@ app.set("views", path.join(__dirname, "views"));
 app.get("/", async (req, res) => {
   try {
     res.render("index", {
-      title: "mene-market server",
-      message: "server side for web site mene-market!",
+      title: "menemarket server",
+      message: "server side for web site menemarket.uz!",
     });
   } catch (err) {
     console.log(err);
