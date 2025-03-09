@@ -11,11 +11,14 @@ const {
   signOrderToOperator,
   getOrdersOfOperator,
   getAllOrdersOfOperator,
+  getOrderById,
 } = require("../controllers/order.controller");
 
 // routes here
 
 router.post("/:id", createOrder);
+
+router.get("/:id", getOrderById);
 
 router.put("/:id/check", checkOrder);
 
@@ -241,6 +244,28 @@ module.exports = router;
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Order status updated to "success" and user's balance adjusted
+ *       404:
+ *         description: Order not found or unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   get:
+ *     summary: gets and filters orders by your status
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The Order ID
  *     responses:
  *       200:
  *         description: Order status updated to "success" and user's balance adjusted

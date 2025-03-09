@@ -13,6 +13,23 @@ function generateOTP() {
   return otp;
 }
 
+const getOrderById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const order = await Order.findById(id)
+      .populate("user_id", "-password")
+      .populate("product_id")
+      .populate("oqim_id");
+    if (!order) {
+      return res.status(404).json({ message: "order does not exsist" });
+    }
+    return res.status(200).send(order);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
+
 const createOrder = async (req, res) => {
   try {
     const id = req.params.id;
@@ -588,6 +605,7 @@ const getAllOrdersOfOperator = async (req, res) => {
 };
 
 module.exports = {
+  getOrderById,
   createOrder,
   sendOrder,
   cancelOrder,

@@ -223,6 +223,23 @@ const createOrder = async (req, res) => {
   }
 };
 
+const getRelatedOrders = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const related_orders = await Order.find({ oqim_id: id })
+      .populate("product_id")
+      .populate("oqim_id")
+      .populate("user_id", "-password -balance");
+    if (!related_products) {
+      return res.status(404).send("server error");
+    }
+    res.status(200).send(related_orders);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
+
 module.exports = {
   getOqim,
   getOqims,
@@ -230,4 +247,5 @@ module.exports = {
   deleteOqim,
   createOrder,
   getAllstreams,
+  getRelatedOrders
 };
