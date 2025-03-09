@@ -604,6 +604,51 @@ const getAllOrdersOfOperator = async (req, res) => {
   }
 };
 
+const getAllOrdersOfSeller = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status == "seller") {
+          try {
+            const seller_id = user_doc.id;
+            const orders = await Order.find({ user_id: seller_id })
+              .populate("product_id")
+              .populate("oqim_id")
+              .populate("user_id", "-password");
+
+            if (!orders) {
+              return res
+                .status(404)
+                .json({ message: "orders are not avaible" });
+            }
+
+            return res.status(200).send(orders);
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res
+            .status(404)
+            .send("bu metoddan foidalanish uchun seller bolishingiz kerak");
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(err);
+  }
+};
+
 module.exports = {
   getOrderById,
   createOrder,
@@ -616,4 +661,5 @@ module.exports = {
   signOrderToOperator,
   getOrdersOfOperator,
   getAllOrdersOfOperator,
+  getAllOrdersOfSeller,
 };

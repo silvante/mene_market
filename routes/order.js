@@ -12,6 +12,7 @@ const {
   getOrdersOfOperator,
   getAllOrdersOfOperator,
   getOrderById,
+  getAllOrdersOfSeller,
 } = require("../controllers/order.controller");
 
 // routes here
@@ -35,6 +36,8 @@ router.get("/", getOrders);
 router.put("/sign_order_to_operator", signOrderToOperator);
 
 router.get("/operator", getOrdersOfOperator);
+
+router.get("/seller/all", getAllOrdersOfSeller);
 
 router.get("/operator/all", getAllOrdersOfOperator);
 
@@ -255,10 +258,8 @@ module.exports = router;
  * @swagger
  * /api/orders/{id}:
  *   get:
- *     summary: gets and filters orders by your status
+ *     summary: gets order by id
  *     tags: [Orders]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -321,6 +322,21 @@ module.exports = router;
  * /api/orders/operator/all:
  *   get:
  *     summary: gets all operators orders
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Order status updated to "success" and user's balance adjusted
+ *       404:
+ *         description: Order not found or unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/orders/seller/all:
+ *   get:
+ *     summary: gets all seller's orders
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []

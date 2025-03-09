@@ -8,6 +8,7 @@ const {
   deleteOqim,
   createOrder,
   getAllstreams,
+  getRelatedOrders,
 } = require("../controllers/oqim.controller");
 
 router.get("/", getOqims);
@@ -15,6 +16,8 @@ router.get("/", getOqims);
 router.get("/all", getAllstreams);
 
 router.get("/:id", cors({ origin: "*" }), getOqim);
+
+router.get("/:id/orders", cors({ origin: "*" }), getRelatedOrders);
 
 router.post("/:product_id", addOqim);
 
@@ -87,6 +90,31 @@ module.exports = router;
  *       404:
  *         description: "Oqim not found"
  */
+
+/**
+ * @swagger
+ * /api/oqim/{id}/orders:
+ *   get:
+ *     summary: Gets all orders of one "oqim"
+ *     tags: [Oqims]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the "oqim" to retrieve
+ *     responses:
+ *       200:
+ *         description: "The oqim object"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Oqim'
+ *       404:
+ *         description: "Oqim not found"
+ */
+
 
 /**
  * @swagger
