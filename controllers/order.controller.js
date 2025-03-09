@@ -386,18 +386,18 @@ const returnOrder = async (req, res) => {
             }
             if (updated.user_id) {
               const user = await User.findById(updated.user_id);
-              const new_balance = user.balance - updated.product_id.for_seller;
-              await User.findByIdAndUpdate(updated.user_id, {
-                balance: new_balance,
-              });
+              // const new_balance = user.balance - updated.product_id.for_seller;
+              // await User.findByIdAndUpdate(updated.user_id, {
+              //   balance: new_balance,
+              // });
               if (user.telegram_id) {
                 const data = {
                   title: "Buyurtma holati haqida xabar ✍️",
                   message: `Sizning *${updated.oqim_id.name}* nomli oqimingiz orqali *${updated.client_name}* ismli shaxs tomonidan qabul qilingan buyurtma qaytarildi. ❌`,
-                  warning: `Shuningdek jarima sifatida sizning hisobingizdan *${updated.product_id.for_seller}* so'm yechib olindi!`,
+                  // warning: `Shuningdek jarima sifatida sizning hisobingizdan *${updated.product_id.for_seller}* so'm yechib olindi!`,
                   desc: desc,
                   order_code: updated.order_code,
-                  balance: new_balance,
+                  // balance: new_balance,
                 };
                 await SendMessage(user.telegram_id, data);
               }
