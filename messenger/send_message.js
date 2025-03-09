@@ -2,7 +2,7 @@ const axios = require("axios");
 const { LoadToken } = require("./token_loader");
 
 const escapeMarkdown = (text) => {
-  return text.replace(/[*_]/g, "\\$&"); // Escape only necessary characters
+  return text; // Escape only necessary characters
 };
 
 const SendMessage = async (chat_id, data) => {
