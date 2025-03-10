@@ -304,7 +304,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/orders/operator:
+ * /api/orders/operator/uo:
  *   get:
  *     summary: gets operators orders which still not checked
  *     tags: [Orders]
