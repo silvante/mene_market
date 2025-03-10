@@ -1,5 +1,5 @@
 const SendMessage = require("../messenger/send_message");
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 const Order = require("../models/order.model");
 const Product = require("../models/product.model");
 const User = require("../models/user.model");
@@ -464,7 +464,6 @@ const signOrderToOperator = async (req, res) => {
       }
 
       try {
-        const operator_id = new mongoose.Schema.Types.ObjectId(user_doc.id);
         const { address } = req.body;
 
         const available_orders = await Order.find({
@@ -483,7 +482,7 @@ const signOrderToOperator = async (req, res) => {
           random_order._id,
           {
             status: "checking",
-            operator_id,
+            operator_id: user_doc.id,
           },
           { new: true }
         )
@@ -525,9 +524,8 @@ const getOrdersOfOperator = async (req, res) => {
 
         if (user_doc.status == "operator") {
           try {
-            const operator_id = new mongoose.Schema.Types.ObjectId(user_doc.id);
             const orders = await Order.find({
-              operator_id: operator_id,
+              operator_id: user_doc.id,
               status: "checking",
             })
               .populate("product_id")
@@ -573,8 +571,7 @@ const getAllOrdersOfOperator = async (req, res) => {
 
         if (user_doc.status == "operator") {
           try {
-            const operator_id = new mongoose.Schema.Types.ObjectId(user_doc.id);
-            const orders = await Order.find({ operator_id: operator_id })
+            const orders = await Order.find({ operator_id: user_doc.id })
               .populate("product_id")
               .populate("oqim_id")
               .populate("user_id", "-password -balance");
@@ -618,8 +615,7 @@ const getAllOrdersOfSeller = async (req, res) => {
 
         if (user_doc.status == "seller") {
           try {
-            const seller_id = new mongoose.Schema.Types.ObjectId(user_doc.id);
-            const orders = await Order.find({ user_id: seller_id })
+            const orders = await Order.find({ user_id: user_doc.id })
               .populate("product_id")
               .populate("oqim_id")
               .populate("user_id", "-password");

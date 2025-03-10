@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { type } = require("os");
 
 const orderSchema = mongoose.Schema({
   product_id: {
