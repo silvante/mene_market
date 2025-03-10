@@ -54,6 +54,8 @@ module.exports = router;
  *   get:
  *     summary: Get all "oqims" for the authenticated user
  *     tags: [Oqims]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of "oqims" for the user
@@ -114,7 +116,6 @@ module.exports = router;
  *       404:
  *         description: "Oqim not found"
  */
-
 
 /**
  * @swagger
