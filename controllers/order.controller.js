@@ -523,10 +523,10 @@ const getOrdersOfOperator = async (req, res) => {
         }
 
         if (user_doc.status == "operator") {
-          const operator_id = user_doc.id;
           try {
             const orders = await Order.find({
-              operator_id: operator_id,
+              operator_id: user_doc.id,
+              status: "checking",
             })
               .populate("product_id")
               .populate("oqim_id")
@@ -573,7 +573,6 @@ const getAllOrdersOfOperator = async (req, res) => {
           try {
             const orders = await Order.find({
               operator_id: user_doc.id,
-              status: "checking",
             })
               .populate("product_id")
               .populate("oqim_id")
