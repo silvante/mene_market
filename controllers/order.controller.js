@@ -523,9 +523,10 @@ const getOrdersOfOperator = async (req, res) => {
         }
 
         if (user_doc.status == "operator") {
+          const operator_id = user_doc.id
           try {
             const orders = await Order.find({
-              operator_id: user_doc.id,
+              operator_id: operator_id,
               status: "checking",
             })
               .populate("product_id")
