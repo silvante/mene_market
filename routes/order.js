@@ -35,7 +35,7 @@ router.get("/", getOrders);
 
 router.put("/sign_order_to_operator", signOrderToOperator);
 
-router.get("/operator", getOrdersOfOperator);
+router.get("/operator/uo", getOrdersOfOperator);
 
 router.get("/seller/all", getAllOrdersOfSeller);
 
