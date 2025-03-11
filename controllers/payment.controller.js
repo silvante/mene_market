@@ -149,11 +149,11 @@ const successPayment = async (req, res) => {
             if (!the_payment) {
               return res.status(400).send("Payment not found of server error");
             }
-            // const data = {
-            //   title: "To'lov muvaffaqiyatli yakunlandi ✅",
-            //   message: `Siz *${the_payment.card_owner}ning* *${the_payment.card_number}* karta raqamiga *${the_payment.payment}* so'm miqdorda to'lov uchun yuborgan so'rovingiz muvaffaqiyatli yakunlandi!`,
-            //   balance: the_payment.sending.balance,
-            // };
+            const data = {
+              title: "To'lov muvaffaqiyatli yakunlandi ✅",
+              message: `Siz *${the_payment.card_owner}ning* *${the_payment.card_number}* karta raqamiga *${the_payment.payment}* so'm miqdorda to'lov uchun yuborgan so'rovingiz muvaffaqiyatli yakunlandi!`,
+              balance: the_payment.sending.balance,
+            };
             await SendMessage(the_payment.sending.telegram_id, data);
             res.status(200).json({
               success: true,
