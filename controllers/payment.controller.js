@@ -196,11 +196,11 @@ const RejectPayment = async (req, res) => {
             await User.findByIdAndUpdate(the_user._id, {
               balance: new_balance,
             });
-            // const data = {
-            //   title: "To'lov uchun so'rov bekor qilindi ❌",
-            //   message: `Siz *${the_payment.card_owner}ning* *${the_payment.card_number}* karta raqamiga *${the_payment.payment}* so'm miqdorda to'lov uchun yuborgan so'rovingiz bekor qilindi!`,
-            //   balance: new_balance,
-            // };
+            const data = {
+              title: "To'lov uchun so'rov bekor qilindi ❌",
+              message: `Siz *${the_payment.card_owner}ning* *${the_payment.card_number}* karta raqamiga *${the_payment.payment}* so'm miqdorda to'lov uchun yuborgan so'rovingiz bekor qilindi!`,
+              balance: new_balance,
+            };
             await SendMessage(the_user.telegram_id, data);
             if (!the_payment) {
               return res.status(400).send("Payment not found of server error");
