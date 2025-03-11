@@ -2,6 +2,7 @@ const Payment = require("../models/paymant.model");
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const { jwtSecret } = require("../routes/extra");
+const SendMessage = require("../messenger/send_message");
 
 const createPayment = async (req, res) => {
   try {
@@ -138,10 +139,16 @@ const successPayment = async (req, res) => {
           if (user_doc.status == "admin" || user_doc.status == "owner") {
             const the_payment = await Payment.findByIdAndUpdate(id, {
               status: "success",
-            });
+            }).populate("sending", "-password");
             if (!the_payment) {
               return res.status(400).send("Payment not found of server error");
             }
+            const data = {
+              title: "Tolov qabul qilindi ✅",
+              message: `Sizing tolov uchun jonatgan sorovingiz qabul qilindi va jonatildi, tolov summasi ${the_payment.payment} sum edi`,
+              balance: the_payment.sending.balance,
+            };
+            await SendMessage(the_payment.sending.telegram_id, data);
             res.status(200).json({
               success: true,
               message: "Tolov muaffaqiyatli yopildi",
@@ -183,6 +190,12 @@ const RejectPayment = async (req, res) => {
             await User.findByIdAndUpdate(the_user._id, {
               balance: new_balance,
             });
+            const data = {
+              title: "Tolov rad etildi ❌",
+              message: `Sizing tolov uchun jonatgan sorovingiz rad etildi, tolov summasi ${the_payment.payment} sum edi`,
+              balance: new_balance,
+            };
+            await SendMessage(the_user.telegram_id, data);
             if (!the_payment) {
               return res.status(400).send("Payment not found of server error");
             }
