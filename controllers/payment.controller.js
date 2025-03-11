@@ -35,6 +35,12 @@ const createPayment = async (req, res) => {
             if (!new_paymment) {
               return res.status(400).send("server error");
             }
+            const data = {
+              title: "To'lov uchun so'rov yuborish 🆕",
+              message: `Siz *${card_owner}ning* *${card_number}* karta raqamiga *${payment}* so'm miqdorda to'lov uchun so'rov yubordingiz.`,
+              balance: the_payment.sending.balance,
+            };
+            await SendMessage(the_payment.sending.telegram_id, data);
             res.status(200).json({
               message: "tolov uchun sorov jonatildi",
               payment_data: new_paymment.populate("sending", "-password"),
@@ -143,11 +149,11 @@ const successPayment = async (req, res) => {
             if (!the_payment) {
               return res.status(400).send("Payment not found of server error");
             }
-            const data = {
-              title: "Tolov qabul qilindi ✅",
-              message: `Sizing tolov uchun jonatgan sorovingiz qabul qilindi va jonatildi, tolov summasi ${the_payment.payment} sum edi`,
-              balance: the_payment.sending.balance,
-            };
+            // const data = {
+            //   title: "To'lov muvaffaqiyatli yakunlandi ✅",
+            //   message: `Siz *${the_payment.card_owner}ning* *${the_payment.card_number}* karta raqamiga *${the_payment.payment}* so'm miqdorda to'lov uchun yuborgan so'rovingiz muvaffaqiyatli yakunlandi!`,
+            //   balance: the_payment.sending.balance,
+            // };
             await SendMessage(the_payment.sending.telegram_id, data);
             res.status(200).json({
               success: true,
@@ -190,11 +196,11 @@ const RejectPayment = async (req, res) => {
             await User.findByIdAndUpdate(the_user._id, {
               balance: new_balance,
             });
-            const data = {
-              title: "Tolov rad etildi ❌",
-              message: `Sizing tolov uchun jonatgan sorovingiz rad etildi, tolov summasi ${the_payment.payment} sum edi`,
-              balance: new_balance,
-            };
+            // const data = {
+            //   title: "To'lov uchun so'rov bekor qilindi ❌",
+            //   message: `Siz *${the_payment.card_owner}ning* *${the_payment.card_number}* karta raqamiga *${the_payment.payment}* so'm miqdorda to'lov uchun yuborgan so'rovingiz bekor qilindi!`,
+            //   balance: new_balance,
+            // };
             await SendMessage(the_user.telegram_id, data);
             if (!the_payment) {
               return res.status(400).send("Payment not found of server error");
