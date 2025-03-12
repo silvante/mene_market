@@ -70,8 +70,7 @@ const addUser = async (req, res) => {
 
     const username = await generateUniqueUsername(name);
     if (existingEmail.length >= 1) {
-      return res.status(404).send("email is already used");
-      return;
+      return res.status(404).send("email has been used by other user");
     } else {
       const newUser = await new User({
         name,
