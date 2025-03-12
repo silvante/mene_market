@@ -5,6 +5,8 @@ const {
   resetEmail,
   forgotPassword,
   updatedPasswordWithOTP,
+  authCleaner,
+  oceanCleaner,
 } = require("./recovery.controller");
 
 router.put("/reset-password", resetPassword);
@@ -14,6 +16,10 @@ router.put("/reset-email", resetEmail);
 router.post("/forgot-password", forgotPassword);
 
 router.put("/forgot-password/verify-and-change", updatedPasswordWithOTP);
+
+router.delete("/clear-auth", authCleaner);
+
+router.delete("/clean_the_ocean", oceanCleaner);
 
 /*
  * User Authentication API
@@ -135,6 +141,38 @@ router.put("/forgot-password/verify-and-change", updatedPasswordWithOTP);
  *         description: OTP expired or invalid input
  *       404:
  *         description: User not found or OTP incorrect
+ */
+
+/**
+ * @swagger
+ * /api/recovery/clear-auth:
+ *   delete:
+ *     summary: Clean unverified users
+ *     description: Allows an admin or owner to remove unverified users and expired OTPs.
+ *     tags: [Recovery]
+ *     security:
+ *       - Bearer: []
+ *     responses:
+ *       200:
+ *         description: Unverified users and expired OTPs removed successfully
+ *       404:
+ *         description: Unauthorized access or token missing
+ */
+
+/**
+ * @swagger
+ * /api/recovery/clean_the_ocean:
+ *   delete:
+ *     summary: Clean unused images
+ *     description: Allows an admin or owner to remove unused images from storage.
+ *     tags: [Recovery]
+ *     security:
+ *       - Bearer: []
+ *     responses:
+ *       200:
+ *         description: Unused images deleted successfully
+ *       404:
+ *         description: Unauthorized access or token missing
  */
 
 module.exports = router;

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const { jwtSecret } = require("../routes/extra");
 const bcryptjs = require("bcryptjs");
 const { sendOTPverification } = require("../controllers/user.controller");
+const clean_the_ocean = require("../middleware/ocean_cleaner");
 
 const cyfer = bcryptjs.genSaltSync(10);
 
@@ -230,13 +231,60 @@ const authCleaner = async (req, res) => {
           throw err;
         }
 
-        try {
-          await User.deleteMany({ verificated: false });
-          const currentTime = new Date();
-          await OTP.deleteMany({ expiresAT: { $gt: currentTime } });
-        } catch (err) {
-          console.log(err);
-          res.send(err);
+        if (user_doc.status === "admin" || user_doc.status === "owner") {
+          try {
+            await User.deleteMany({ verificated: false });
+            const currentTime = new Date();
+            await OTP.deleteMany({ expiresAT: { $gt: currentTime } });
+            return res.status(200).json({ message: "cleaned" });
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res
+            .status(404)
+            .send(
+              "bu metoddan foidalanish uchun admin yoki owner bolishingiz kerak"
+            );
+        }
+      });
+    } else {
+      return res.status(404).json({ message: "no token provided" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
+
+const oceanCleaner = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status === "admin" || user_doc.status === "owner") {
+          try {
+            await clean_the_ocean();
+            res
+              .status(200)
+              .josn({ message: "keraksiz rasmlar ochirib yuborildi!" });
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res
+            .status(404)
+            .send(
+              "bu metoddan foidalanish uchun admin yoki owner bolishingiz kerak"
+            );
         }
       });
     } else {
@@ -253,4 +301,6 @@ module.exports = {
   resetEmail,
   forgotPassword,
   updatedPasswordWithOTP,
+  authCleaner,
+  oceanCleaner,
 };
