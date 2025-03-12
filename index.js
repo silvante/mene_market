@@ -42,6 +42,7 @@ const swaggerOptions = {
     "index.js",
     "./messenger/keeper/*.js",
     "./messenger/*.js",
+    "./recovery/*.js",
   ], // Path to API docs
 };
 
@@ -115,6 +116,7 @@ const comment = require("./routes/comment.js");
 const upload = require("./routes/upload");
 const keeper = require("./messenger/keeper/keeper.js");
 const messenger = require("./messenger/messenger.js");
+const recovery = require("./recovery/recovery.js");
 
 // using routes
 
@@ -134,6 +136,7 @@ app.use("/api/comments", comment);
 app.use("/files", upload);
 app.use("/api/keeper", keeper);
 app.use("/api/messenger", messenger);
+app.use("/api/recovery", recovery);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, console.log(`Listening on port ${PORT}...`));
