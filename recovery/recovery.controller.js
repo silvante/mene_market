@@ -136,7 +136,7 @@ const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     const the_user = await User.findOne({ email: email });
-    if (the_user) {
+    if (!the_user) {
       return res.status(404).json({ message: "user not fount" });
     }
     await sendOTPverification(the_user, res);
