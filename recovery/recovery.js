@@ -30,7 +30,7 @@ router.delete("/clean_the_ocean", oceanCleaner);
 /**
  * @swagger
  * /api/recovery/reset-password:
- *   post:
+ *   put:
  *     summary: Reset user password
  *     description: Allows an authenticated user to reset their password.
  *     tags: [Recovery]
@@ -61,7 +61,7 @@ router.delete("/clean_the_ocean", oceanCleaner);
 /**
  * @swagger
  * /api/recovery/reset-email:
- *   post:
+ *   put:
  *     summary: Reset user email
  *     description: Allows an authenticated user to update their email address.
  *     tags: [Recovery]
@@ -114,8 +114,8 @@ router.delete("/clean_the_ocean", oceanCleaner);
 
 /**
  * @swagger
- * /api/recovery/update-password-with-otp:
- *   post:
+ * /api/recovery/forgot-password/verify-and-change:
+ *   put:
  *     summary: Update password using OTP
  *     description: Allows a user to reset their password using an OTP.
  *     tags: [Recovery]
