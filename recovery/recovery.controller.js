@@ -135,11 +135,11 @@ const resetEmail = async (req, res) => {
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-    const the_user = await User.findOne({ email: email });
-    if (!the_user) {
+    const user = await User.findOne({ email });
+    if (!user) {
       return res.status(404).json({ message: "user not fount" });
     }
-    await sendOTPverification(the_user, res);
+    await sendOTPverification(user, res);
   } catch (err) {
     console.log(err);
     res.send(err);
@@ -184,7 +184,7 @@ const updatedPasswordWithOTP = async (req, res) => {
             }
             const hashedPassword = bcryptjs.hashSync(new_password, cyfer);
 
-            const user = await User.updateOne(
+            const user = await User.findByIdAndUpdate(
               { _id: userid },
               { password: hashedPassword, verificated: true },
               { new: true }
@@ -206,7 +206,6 @@ const updatedPasswordWithOTP = async (req, res) => {
               message:
                 "Sizning paro'lingiz muvaffaqiyatli o'zgartirildi va email tekshirildi",
               token: token,
-              updated_user: user,
             });
           }
         }

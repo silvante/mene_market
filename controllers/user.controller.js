@@ -70,12 +70,11 @@ const addUser = async (req, res) => {
 
     const username = await generateUniqueUsername(name);
     if (existingEmail.length >= 1) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "ushbu email ga hisob ochilgan, hisobni - Qayta tiklash - tugmasini bosib qayta tiklash mumkin",
-        });
+      return res.status(404).json({
+        isVerificated: existingEmail.verificated,
+        message:
+          "ushbu email ga hisob ochilgan, hisobni - Qayta tiklash - tugmasini bosib qayta tiklash mumkin",
+      });
     } else {
       const newUser = await new User({
         name,
@@ -306,7 +305,7 @@ const verifyOTP = async (req, res) => {
           if (!validOTP) {
             throw new Error("Noto'g'ri kod, pochta qutingizni tekshiring");
           } else {
-            const user = await User.updateOne(
+            const user = await User.findByIdAndUpdate(
               { _id: userid },
               { verificated: true }
             );
