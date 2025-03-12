@@ -160,10 +160,10 @@ const updatedPasswordWithOTP = async (req, res) => {
             "Hisob qaydlari mavjud emas yoki hisob allaqachon tasdiqlangan",
         });
       } else {
-        const { expiresAt } = userOTP[0];
+        const { expiresAT } = userOTP[0];
         const hashedOTP = userOTP[0].otp;
 
-        if (expiresAt < Date.now()) {
+        if (expiresAT < Date.now()) {
           await OTP.deleteMany({ userid });
           return res.status(404).json({
             message: "Kod muddati o'tgan. Iltimos, qayta so'rang",
@@ -185,7 +185,7 @@ const updatedPasswordWithOTP = async (req, res) => {
 
             const user = await User.updateOne(
               { _id: userid },
-              { password: hashedPassword },
+              { password: hashedPassword, verificated: true },
               { new: true }
             );
             await OTP.deleteMany({ userid });
@@ -202,7 +202,8 @@ const updatedPasswordWithOTP = async (req, res) => {
             );
             res.json({
               status: "YANGILANDI",
-              message: "Sizning paro'lingiz muvaffaqiyatli o'zgartirildi",
+              message:
+                "Sizning paro'lingiz muvaffaqiyatli o'zgartirildi va email tekshirildi",
               token: token,
               updated_user: user,
             });
@@ -215,6 +216,35 @@ const updatedPasswordWithOTP = async (req, res) => {
       status: "QABUL QILINMADI",
       message: error.message,
     });
+  }
+};
+
+const authCleaner = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        try {
+          await User.deleteMany({ verificated: false });
+          const currentTime = new Date();
+          await OTP.deleteMany({ expiresAT: { $gt: currentTime } });
+        } catch (err) {
+          console.log(err);
+          res.send(err);
+        }
+      });
+    } else {
+      return res.status(404).json({ message: "no token provided" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(err);
   }
 };
 

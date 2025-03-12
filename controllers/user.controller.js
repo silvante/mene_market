@@ -70,7 +70,12 @@ const addUser = async (req, res) => {
 
     const username = await generateUniqueUsername(name);
     if (existingEmail.length >= 1) {
-      return res.status(404).send("email has been used by other user");
+      return res
+        .status(404)
+        .json({
+          message:
+            "ushbu email ga hisob ochilgan, hisobni - Qayta tiklash - tugmasini bosib qayta tiklash mumkin",
+        });
     } else {
       const newUser = await new User({
         name,
@@ -258,7 +263,7 @@ const sendOTPverification = async ({ _id, email }, res) => {
       userid: _id,
       otp: hashedOTP,
       createdAt: Date.now(),
-      expiresAt: Date.now() + 3600000,
+      expiresAT: Date.now() + 3600000,
     });
     await newOTP.save();
 
@@ -289,10 +294,10 @@ const verifyOTP = async (req, res) => {
           "Hisob qaydlari mavjud emas yoki hisob allaqachon tasdiqlangan"
         );
       } else {
-        const { expiresAt } = userOTP[0];
+        const { expiresAT } = userOTP[0];
         const hashedOTP = userOTP[0].otp;
 
-        if (expiresAt < Date.now()) {
+        if (expiresAT < Date.now()) {
           await OTP.deleteMany({ userid });
           throw new Error("Kod muddati o'tgan. Iltimos, qayta so'rang");
         } else {
