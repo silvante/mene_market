@@ -35,7 +35,7 @@ router.delete("/clean_the_ocean", oceanCleaner);
  *     description: Allows an authenticated user to reset their password.
  *     tags: [Recovery]
  *     security:
- *       - Bearer: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: body
  *         name: body
@@ -66,7 +66,7 @@ router.delete("/clean_the_ocean", oceanCleaner);
  *     description: Allows an authenticated user to update their email address.
  *     tags: [Recovery]
  *     security:
- *       - Bearer: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: body
  *         name: body
@@ -150,7 +150,7 @@ router.delete("/clean_the_ocean", oceanCleaner);
  *     description: Allows an admin or owner to remove unverified users and expired OTPs.
  *     tags: [Recovery]
  *     security:
- *       - Bearer: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Unverified users and expired OTPs removed successfully
@@ -166,7 +166,7 @@ router.delete("/clean_the_ocean", oceanCleaner);
  *     description: Allows an admin or owner to remove unused images from storage.
  *     tags: [Recovery]
  *     security:
- *       - Bearer: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Unused images deleted successfully

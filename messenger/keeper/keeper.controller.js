@@ -84,7 +84,7 @@ const getKeeper = async (req, res) => {
                 .status(404)
                 .json({ message: "Keeper hali active emas" });
             }
-            return res.status(404).send(keeper);
+            return res.status(200).send(keeper);
           } catch (err) {
             console.log(err);
             res.send(err);
