@@ -170,7 +170,7 @@ const updatedPasswordWithOTP = async (req, res) => {
             message: "Kod muddati o'tgan. Iltimos, qayta so'rang",
           });
         } else {
-          const validOTP = await bcryptjs.compare(otp, hashedOTP); // `await` qo'shildi
+          const validOTP = await bcryptjs.compare(otp, hashedOTP);
 
           if (!validOTP) {
             return res.status(404).json({
