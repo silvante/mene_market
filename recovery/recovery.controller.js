@@ -202,7 +202,7 @@ const updatedPasswordWithOTP = async (req, res) => {
       }
     }
   } catch (error) {
-    res.json({
+    res.status(404).json({
       status: "QABUL QILINMADI",
       message: error.message,
     });
