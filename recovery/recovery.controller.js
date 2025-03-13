@@ -170,7 +170,7 @@ const updatedPasswordWithOTP = async (req, res) => {
           if (!validOTP) {
             throw new Error("Noto'g'ri kod, pochta qutingizni tekshiring");
           } else {
-            if (!new_password === !confirm_new_password) {
+            if (!new_password !== !confirm_new_password) {
               return res
                 .status(404)
                 .json({ message: "1 va 2-parollar birhil bolishi kerak" });
