@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { LoadToken } = require("./token_loader");
+// const { LoadToken } = require("./token_loader");
 
 const escapeMarkdown = (text) => {
   return text; // Escape only necessary characters
@@ -7,11 +7,11 @@ const escapeMarkdown = (text) => {
 
 const SendMessage = async (chat_id, data) => {
   try {
-    const bot_token = await LoadToken();
-    if (!bot_token) {
-      console.log("❌ token loading error");
-      return;
-    }
+    // const bot_token = await LoadToken();
+    // if (!bot_token) {
+    //   console.log("❌ token loading error");
+    //   return;
+    // }
     const {
       title = "",
       message = "",
@@ -37,7 +37,7 @@ const SendMessage = async (chat_id, data) => {
       )} so'm`;
 
     const response = await axios.post(
-      `https://api.telegram.org/bot${bot_token}/sendMessage`,
+      `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
       { chat_id: chat_id, text: rendered_message, parse_mode: "Markdown" }
     );
 
