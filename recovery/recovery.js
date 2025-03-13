@@ -104,7 +104,6 @@ router.delete("/clean_the_ocean", oceanCleaner);
  *           properties:
  *             email:
  *               type: string
- *               format: email
  *     responses:
  *       200:
  *         description: OTP sent successfully
