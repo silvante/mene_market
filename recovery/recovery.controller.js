@@ -186,7 +186,7 @@ const updatedPasswordWithOTP = async (req, res) => {
                 id: user._id,
                 email: user.email,
                 status: user.status,
-                telegram_id: user.telegram_id,
+                t_id: user.telegram_id,
                 name: user.name,
               },
               jwtSecret,

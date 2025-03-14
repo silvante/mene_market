@@ -38,9 +38,9 @@ const createPayment = async (req, res) => {
             const data = {
               title: "To'lov uchun so'rov yuborish 🆕",
               message: `Siz *${card_owner}ning* *${card_number}* karta raqamiga *${payment}* so'm miqdorda to'lov uchun so'rov yubordingiz.`,
-              balance: the_payment.sending.balance,
+              balance: new_balance,
             };
-            await SendMessage(the_payment.sending.telegram_id, data);
+            await SendMessage(the_user.telegram_id, data);
             res.status(200).json({
               message: "tolov uchun sorov jonatildi",
               payment_data: new_paymment.populate("sending", "-password"),
