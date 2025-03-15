@@ -55,7 +55,7 @@ app.set("trust proxy", 1);
 
 const limitter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 1250,
   message: "Too many requests. why to not take a brake for 15 minutes ?",
 });
 
