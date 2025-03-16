@@ -24,11 +24,12 @@ const SendOrderMessage = async (data) => {
 
     let rendered_message = `*${escapeMarkdown(
       title
-    )}*\n\n*👤 Foydalanuvchi:*${escapeMarkdown(name)}`;
+    )}*\n\n*👤 Foydalanuvchi: *${escapeMarkdown(name)}`;
 
-    if (address) rendered_message += `\n*📍 Manzil:*${escapeMarkdown(address)}`;
+    if (address)
+      rendered_message += `\n*📍 Manzil: *${escapeMarkdown(address)}`;
     if (phone_number)
-      rendered_message += `\n*📞 Tel raqam:*\n${escapeMarkdown(phone_number)}`;
+      rendered_message += `\n*📞 Tel raqam: *${escapeMarkdown(phone_number)}`;
     if (order_id) rendered_message += `\n*🆔 ID:* ${escapeMarkdown(order_id)}`;
     if (order_code)
       rendered_message += `\n*📎 Raqam:* ${escapeMarkdown(order_code)}`;
