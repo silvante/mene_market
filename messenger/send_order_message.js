@@ -33,7 +33,7 @@ const SendOrderMessage = async (data) => {
     if (order_code)
       rendered_message += `\n*📎 Raqam:* ${escapeMarkdown(order_code)}`;
     if (balance)
-      rendered_message += `\n\n*⏰ Vaqt:* ${escapeMarkdown(time)} so'm`;
+      rendered_message += `\n\n*⏰ Vaqt:* ${escapeMarkdown(time)}`;
 
     const response = await axios.post(
       `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
