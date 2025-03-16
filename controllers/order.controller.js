@@ -1,4 +1,7 @@
+const read_address = require("../messenger/address_reader");
 const SendMessage = require("../messenger/send_message");
+const SendOrderMessage = require("../messenger/send_order_message");
+const readable_time = require("../messenger/time_reader");
 // const mongoose = require("mongoose");
 const Order = require("../models/order.model");
 const Product = require("../models/product.model");
@@ -56,6 +59,16 @@ const createOrder = async (req, res) => {
     if (!new_order) {
       return res.status(404).send("try again!");
     }
+    data = {
+      title: "📦 Yangi buyurtma",
+      name: client_name,
+      address: read_address(client_address),
+      phone_number: client_mobile,
+      order_id: new_order._id,
+      order_code: new_order.order_code,
+      time: readable_time(new_order.created_at),
+    };
+    await SendOrderMessage(data);
     res.status(200).send(new_order);
   } catch (err) {
     console.log(err);

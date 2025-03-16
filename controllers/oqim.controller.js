@@ -4,6 +4,9 @@ const { jwtSecret } = require("../routes/extra");
 const jwt = require("jsonwebtoken");
 const Order = require("../models/order.model");
 const SendMessage = require("../messenger/send_message");
+const read_address = require("../messenger/address_reader");
+const readable_time = require("../messenger/time_reader");
+const SendOrderMessage = require("../messenger/send_order_message");
 
 const getAllstreams = async (req, res) => {
   try {
@@ -215,6 +218,16 @@ const createOrder = async (req, res) => {
         };
         await SendMessage(oqim.user.telegram_id, data);
       }
+      data = {
+        title: "📦 Yangi buyurtma",
+        name: client_name,
+        address: read_address(client_address),
+        phone_number: client_mobile,
+        order_id: new_order._id,
+        order_code: new_order.order_code,
+        time: readable_time(new_order.created_at),
+      };
+      await SendOrderMessage(data);
       res.status(201).send(new_order);
     }
   } catch (err) {
@@ -247,5 +260,5 @@ module.exports = {
   deleteOqim,
   createOrder,
   getAllstreams,
-  getRelatedOrders
+  getRelatedOrders,
 };
