@@ -26,13 +26,13 @@ const SendOrderMessage = async (data) => {
       title
     )}*\n\n*👤 Foydalanuvchi:*${escapeMarkdown(name)}`;
 
-    if (warning) rendered_message += `\n*📍 Manzil:*${escapeMarkdown(address)}`;
-    if (desc)
+    if (address) rendered_message += `\n*📍 Manzil:*${escapeMarkdown(address)}`;
+    if (phone_number)
       rendered_message += `\n*📞 Tel raqam:*\n${escapeMarkdown(phone_number)}`;
     if (order_id) rendered_message += `\n*🆔 ID:* ${escapeMarkdown(order_id)}`;
     if (order_code)
       rendered_message += `\n*📎 Raqam:* ${escapeMarkdown(order_code)}`;
-    if (balance) rendered_message += `\n\n*⏰ Vaqt:* ${escapeMarkdown(time)}`;
+    if (time) rendered_message += `\n\n*⏰ Vaqt:* ${escapeMarkdown(time)}`;
 
     const response = await axios.post(
       `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
