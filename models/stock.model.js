@@ -6,6 +6,10 @@ const stockSchema = mongoose.Schema({
     ref: "product",
     required: true,
   },
+  title: {
+    type: String,
+    Required: true,
+  },
   quantity: {
     type: Number,
     required: true,

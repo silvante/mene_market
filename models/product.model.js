@@ -18,6 +18,12 @@ const productSchema = mongoose.Schema({
       small: { required: true, type: String },
     },
   ],
+  types: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "stock",
+    },
+  ],
   tags: [String],
   price: {
     required: true,
