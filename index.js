@@ -117,6 +117,7 @@ const upload = require("./routes/upload");
 const keeper = require("./messenger/keeper/keeper.js");
 const messenger = require("./messenger/messenger.js");
 const recovery = require("./recovery/recovery.js");
+const stock = require("./routes/stock.js");
 
 // using routes
 
@@ -137,6 +138,7 @@ app.use("/files", upload);
 app.use("/api/keeper", keeper);
 app.use("/api/messenger", messenger);
 app.use("/api/recovery", recovery);
+app.use("/api/stocks", stock);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, console.log(`Listening on port ${PORT}...`));

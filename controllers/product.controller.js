@@ -60,6 +60,7 @@ const addProduct = async (req, res) => {
               type,
               discount_price,
               ads_post,
+              type_ids,
             } = req.body;
             const new_product = await Product.create({
               title,
@@ -72,6 +73,7 @@ const addProduct = async (req, res) => {
               type,
               discount_price,
               ads_post,
+              types: type_ids,
             });
             if (!new_product) {
               return res.status(404).json({ message: "something went wrong!" });
