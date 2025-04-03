@@ -4,6 +4,6 @@ const { createStock, deleteStock } = require("../controllers/stock.controller");
 
 router.post("/", createStock);
 
-router.delete("/:id", deleteStock);s
+router.delete("/:id", deleteStock);
 
 module.exports = router;
