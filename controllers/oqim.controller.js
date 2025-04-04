@@ -198,14 +198,16 @@ const createOrder = async (req, res) => {
         sold: oqim.product.sold + 1,
       });
       const stock = await Stock.findById(type_id);
-      if (stock.quantity <= 0) {
-        return res.status(404).json({
-          message: "there is no product in this type",
+      if (stock) {
+        if (stock.quantity <= 0) {
+          return res.status(404).json({
+            message: "there is no product in this type",
+          });
+        }
+        await Stock.findByIdAndUpdate(stock._id, {
+          quantity: stock.quantity - 1,
         });
       }
-      await Stock.findByIdAndUpdate(stock._id, {
-        quantity: stock.quantity - 1,
-      });
       const new_order = await Order.create({
         client_mobile,
         client_name,

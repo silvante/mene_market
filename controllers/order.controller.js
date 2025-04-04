@@ -5,6 +5,7 @@ const readable_time = require("../messenger/time_reader");
 // const mongoose = require("mongoose");
 const Order = require("../models/order.model");
 const Product = require("../models/product.model");
+const Stock = require("../models/stock.model");
 const User = require("../models/user.model");
 const { jwtSecret } = require("../routes/extra");
 const jwt = require("jsonwebtoken");
@@ -46,7 +47,18 @@ const createOrder = async (req, res) => {
     await Product.findByIdAndUpdate(product._id, {
       sold: product.sold + 1,
     });
-    const { client_name, client_mobile, client_address } = req.body;
+    const { client_name, client_mobile, client_address, type_id } = req.body;
+    const stock = await Stock.findById(type_id);
+    if (stock) {
+      if (stock.quantity <= 0) {
+        return res.status(404).json({
+          message: "there is no product in this type",
+        });
+      }
+      await Stock.findByIdAndUpdate(stock._id, {
+        quantity: stock.quantity - 1,
+      });
+    }
     const new_order = await Order.create({
       total_price,
       product_id: product._id,
@@ -55,6 +67,7 @@ const createOrder = async (req, res) => {
       client_address,
       order_code: generateOTP(),
       status: "pending",
+      type: type_id,
     });
     if (!new_order) {
       return res.status(404).send("try again!");
