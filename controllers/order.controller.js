@@ -219,13 +219,13 @@ const cancelOrder = async (req, res) => {
               .populate("oqim_id")
               .populate("type");
 
-            if (updated.type) {
-              await Stock.findByIdAndUpdate(updated.type._id, {
-                quantity: updated.type.quantity - 1,
-              });
-            }
             if (!updated) {
               return res.status(404).send("something went wrong, try again");
+            }
+            if (updated.type) {
+              await Stock.findByIdAndUpdate(updated.type._id, {
+                quantity: updated.type.quantity + 1,
+              });
             }
             if (updated.user_id) {
               const user = await User.findById(updated.user_id);
@@ -431,9 +431,15 @@ const returnOrder = async (req, res) => {
               { new: true }
             )
               .populate("product_id")
-              .populate("oqim_id");
+              .populate("oqim_id")
+              .populate("type");
             if (!updated) {
               return res.status(404).send("something went wrong, try again");
+            }
+            if (updated.type) {
+              await Stock.findByIdAndUpdate(updated.type._id, {
+                quantity: updated.type.quantity + 1,
+              });
             }
             if (updated.user_id) {
               const user = await User.findById(updated.user_id);
