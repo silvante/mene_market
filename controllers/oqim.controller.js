@@ -7,6 +7,7 @@ const SendMessage = require("../messenger/send_message");
 const read_address = require("../messenger/address_reader");
 const readable_time = require("../messenger/time_reader");
 const SendOrderMessage = require("../messenger/send_order_message");
+const Stock = require("../models/stock.model");
 
 const getAllstreams = async (req, res) => {
   try {
@@ -183,7 +184,7 @@ function generateOTP() {
 const createOrder = async (req, res) => {
   try {
     const id = req.params.id;
-    const { client_mobile, client_name, client_address } = req.body;
+    const { client_mobile, client_name, client_address, type_id } = req.body;
     const oqim = await Oqim.findById(id)
       .populate("product")
       .populate("user", "-password");
@@ -196,6 +197,15 @@ const createOrder = async (req, res) => {
       await Product.findByIdAndUpdate(oqim.product._id, {
         sold: oqim.product.sold + 1,
       });
+      const stock = await Stock.findById(type_id);
+      if (stock.quantity <= 0) {
+        return res.status(404).json({
+          message: "there is no product in this type",
+        });
+      }
+      await Stock.findByIdAndUpdate(stock._id, {
+        quantity: stock.quantity - 1,
+      });
       const new_order = await Order.create({
         client_mobile,
         client_name,
@@ -206,6 +216,7 @@ const createOrder = async (req, res) => {
         status: "pending",
         order_code: generateOTP(),
         total_price,
+        type: type_id,
       });
       if (!new_order) {
         return res.status(404).json({ message: "server error!" });

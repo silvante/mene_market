@@ -69,6 +69,10 @@ const orderSchema = mongoose.Schema({
     type: String,
     maxlength: 1040,
   },
+  type: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "stock",
+  },
 });
 
 const Order = mongoose.model("order", orderSchema);
