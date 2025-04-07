@@ -10,7 +10,7 @@ const createStock = async (req, res) => {
     }
 
     const many_stocks = await Stock.insertMany(stocks);
-    const ids = many_stocks((stock) => stock._id);
+    const ids = many_stocks.map((stock) => stock._id);
 
     return res.status(200).json({
       ids: ids,
