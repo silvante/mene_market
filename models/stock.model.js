@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const stockSchema = mongoose.Schema({
   title: {
     type: String,
-    Required: true,
+    required: true,
   },
   quantity: {
     type: Number,
