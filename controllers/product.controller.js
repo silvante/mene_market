@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().populate("types");
     if (!products) {
       return res.status(404).send("we have no products yet...");
     }
@@ -19,7 +19,7 @@ const getProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
-    const related_products = await Product.find({ type: product.type })
+    const related_products = await Product.find({ type: product.type }).populate("types")
       .limit(40)
       .sort({ cteated_at: -1 });
 
