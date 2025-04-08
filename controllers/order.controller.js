@@ -24,7 +24,8 @@ const getOrderById = async (req, res) => {
     const order = await Order.findById(id)
       .populate("user_id", "-password")
       .populate("product_id")
-      .populate("oqim_id");
+      .populate("oqim_id")
+      .populate("type");
     if (!order) {
       return res.status(404).json({ message: "order does not exsist" });
     }
@@ -342,9 +343,9 @@ const getOrders = async (req, res) => {
 
         if (user_doc.status == "operator") {
           try {
-            const orders = await Order.find({ status: "pending" }).populate(
-              "product_id"
-            );
+            const orders = await Order.find({ status: "pending" })
+              .populate("product_id")
+              .populate("type");
             if (!orders) {
               return res.status(404).send("server error");
             }
@@ -355,9 +356,9 @@ const getOrders = async (req, res) => {
           }
         } else if (user_doc.status == "admin") {
           try {
-            const orders = await Order.find({ status: "checked" }).populate(
-              "product_id"
-            );
+            const orders = await Order.find({ status: "checked" })
+              .populate("product_id")
+              .populate("type");
             if (!orders) {
               return res.status(404).send("server error");
             }
@@ -371,7 +372,9 @@ const getOrders = async (req, res) => {
             const orders = await Order.find({
               status: "sent",
               courier_id: user_doc.id,
-            }).populate("product_id");
+            })
+              .populate("product_id")
+              .populate("type");
             if (!orders) {
               return res.status(404).send("server error");
             }
@@ -382,7 +385,9 @@ const getOrders = async (req, res) => {
           }
         } else if (user_doc.status == "owner") {
           try {
-            const orders = await Order.find().populate("product_id");
+            const orders = await Order.find()
+              .populate("product_id")
+              .populate("type");
             if (!orders) {
               return res.status(404).send("server error");
             }
@@ -527,7 +532,8 @@ const signOrderToOperator = async (req, res) => {
         )
           .populate("product_id")
           .populate("oqim_id")
-          .populate("user_id", "-password -balance");
+          .populate("user_id", "-password -balance")
+          .populate("type");
 
         if (!signed_order) {
           return res.status(500).json({
@@ -569,7 +575,8 @@ const getOrdersOfOperator = async (req, res) => {
             })
               .populate("product_id")
               .populate("oqim_id")
-              .populate("user_id", "-password -balance");
+              .populate("user_id", "-password -balance")
+              .populate("type");
 
             if (!orders) {
               return res
@@ -615,7 +622,8 @@ const getAllOrdersOfOperator = async (req, res) => {
             })
               .populate("product_id")
               .populate("oqim_id")
-              .populate("user_id", "-password -balance");
+              .populate("user_id", "-password -balance")
+              .populate("type");
 
             if (!orders) {
               return res
@@ -659,7 +667,8 @@ const getAllOrdersOfSeller = async (req, res) => {
             const orders = await Order.find({ user_id: user_doc.id })
               .populate("product_id")
               .populate("oqim_id")
-              .populate("user_id", "-password");
+              .populate("user_id", "-password")
+              .populate("type");
 
             if (!orders) {
               return res
