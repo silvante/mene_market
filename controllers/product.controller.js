@@ -17,7 +17,7 @@ const getProducts = async (req, res) => {
 
 const getProduct = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate("types");
 
     const related_products = await Product.find({ type: product.type }).populate("types")
       .limit(40)
