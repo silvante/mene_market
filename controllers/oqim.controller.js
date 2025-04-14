@@ -15,8 +15,8 @@ const getAllstreams = async (req, res) => {
       .populate("product")
       .populate("user", "-password")
       .populate({
-        path: "product.types",
-        model: "stock",
+        path: "product",
+        populate: { path: "types", model: "stock" },
       });
     if (!all_streams) {
       return res.status(404).json({ message: "server error" });
