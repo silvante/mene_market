@@ -19,7 +19,8 @@ const getProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate("types");
 
-    const related_products = await Product.find({ type: product.type }).populate("types")
+    const related_products = await Product.find({ type: product.type })
+      .populate("types")
       .limit(40)
       .sort({ cteated_at: -1 });
 
@@ -123,6 +124,7 @@ const editProduct = async (req, res) => {
               type,
               discount_price,
               ads_post,
+              type_ids,
             } = req.body;
             await Product.findByIdAndUpdate(id, {
               title,
@@ -135,6 +137,7 @@ const editProduct = async (req, res) => {
               type,
               discount_price,
               ads_post,
+              types: type_ids,
             }).then((up_pr) => {
               if (!up_pr) {
                 return res
