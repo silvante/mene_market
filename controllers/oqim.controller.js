@@ -11,7 +11,13 @@ const Stock = require("../models/stock.model");
 
 const getAllstreams = async (req, res) => {
   try {
-    const all_streams = await Oqim.find();
+    const all_streams = await Oqim.find()
+      .populate("product")
+      .populate("user", "-password")
+      .populate({
+        path: "product.types",
+        model: "stock",
+      });
     if (!all_streams) {
       return res.status(404).json({ message: "server error" });
     }
