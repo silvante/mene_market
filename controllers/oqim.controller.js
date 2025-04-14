@@ -46,8 +46,8 @@ const getOqims = async (req, res) => {
             .populate("product")
             .populate("user", "-password")
             .populate({
-              path: "product.types",
-              model: "stock",
+              path: "product",
+              populate: { path: "types", model: "stock" },
             });
           if (!oqims) {
             return res.status(404).json({ message: "server error" });
@@ -74,8 +74,8 @@ const getOqim = async (req, res) => {
       .populate("product")
       .populate("user", "-password -balance")
       .populate({
-        path: "product.types",
-        model: "stock",
+        path: "product",
+        populate: { path: "types", model: "stock" },
       });
     if (!oqim) {
       return res.status(404).json({ message: "steam not found" });
