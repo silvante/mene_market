@@ -222,9 +222,10 @@ const deleteUser = async (req, res) => {
 // transporter
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.zoho.com",
-  port: 465,
-  secure: true,
+  service: "zoho",
+  host: "mx3.zoho.eu",
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.AUTH_EMAIL,
     pass: process.env.AUTH_PASSWORD,
@@ -247,7 +248,7 @@ const sendOTPverification = async ({ _id, email }, res) => {
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
 
     const mailOptions = {
-      from: '"Mene Market" <info@menemarket.uz>',
+      from: '"Mene Market" <noreply@menemarket.uz>',
       to: email,
       subject: "Emailni tekshirib oling - Mene market",
       html: `<p>Sizning kodingiz -- <b>${otp}</b> -- uni saytga kirgizing va emailni verificatsiya qilib oling va uni hech kimga aytmang </p>`,
