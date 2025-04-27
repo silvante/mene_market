@@ -237,14 +237,14 @@ const createOrder = async (req, res) => {
       if (!new_order) {
         return res.status(404).json({ message: "server error!" });
       }
-      if (oqim.user.telegram_id) {
-        const data = {
-          title: "Yangi buyurtma 🆕",
-          message: `Sizning *${oqim.name}* nomli oqimingiz orqali *${client_name}* ismli shaxs tomonidan buyurtma qabul qilindi. ✅`,
-          order_code: new_order.order_code,
-        };
-        await SendMessage(oqim.user.telegram_id, data);
-      }
+      // if (oqim.user.telegram_id) {
+      //   const data = {
+      //     title: "Yangi buyurtma 🆕",
+      //     message: `Sizning *${oqim.name}* nomli oqimingiz orqali *${client_name}* ismli shaxs tomonidan buyurtma qabul qilindi. ✅`,
+      //     order_code: new_order.order_code,
+      //   };
+      //   await SendMessage(oqim.user.telegram_id, data);
+      // }
       data = {
         title: "📦 Yangi buyurtma",
         name: client_name,
