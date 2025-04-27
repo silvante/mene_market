@@ -242,22 +242,22 @@ const cancelOrder = async (req, res) => {
                 quantity: updated.type.quantity + 1,
               });
             }
-            if (updated.user_id) {
-              const user = await User.findById(updated.user_id);
-              // const new_balance = user.balance - updated.product_id.for_seller;
-              // await User.findByIdAndUpdate(updated.user_id, {
-              // balance: new_balance,
-              // });
-              if (user.telegram_id) {
-                const data = {
-                  title: "Buyurtma holati haqida xabar ✍️",
-                  message: `Sizning *${updated.oqim_id.name}* nomli oqimingiz orqali *${updated.client_name}* ismli shaxs tomonidan qabul qilingan buyurtma bekor qilindi. ❌`,
-                  desc: desc,
-                  order_code: updated.order_code,
-                };
-                await SendMessage(user.telegram_id, data);
-              }
-            }
+            // if (updated.user_id) {
+            //   const user = await User.findById(updated.user_id);
+            //   // const new_balance = user.balance - updated.product_id.for_seller;
+            //   // await User.findByIdAndUpdate(updated.user_id, {
+            //   // balance: new_balance,
+            //   // });
+            //   if (user.telegram_id) {
+            //     const data = {
+            //       title: "Buyurtma holati haqida xabar ✍️",
+            //       message: `Sizning *${updated.oqim_id.name}* nomli oqimingiz orqali *${updated.client_name}* ismli shaxs tomonidan qabul qilingan buyurtma bekor qilindi. ❌`,
+            //       desc: desc,
+            //       order_code: updated.order_code,
+            //     };
+            //     await SendMessage(user.telegram_id, data);
+            //   }
+            // }
             res.status(200).json({
               message: "status changed to canceled",
             });
