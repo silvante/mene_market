@@ -215,7 +215,7 @@ const createOrder = async (req, res) => {
       if (stock) {
         if (stock.quantity <= 0) {
           return res.status(404).json({
-            message: "there is no product in this type",
+            message: `Mahsulot "${stock.title}" turida qolmagan!`,
           });
         }
         await Stock.findByIdAndUpdate(stock._id, {
