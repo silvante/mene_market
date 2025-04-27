@@ -118,9 +118,23 @@ const checkOrder = async (req, res) => {
             const updated = await Order.findByIdAndUpdate(id, {
               status: "checked",
               full_address,
-            });
+            })
+              .populate("product_id")
+              .populate("oqim_id")
+              .populate("type");
             if (!updated) {
               return res.status(404).send("something went wrong, try again");
+            }
+            if (updated.user_id) {
+              const user = await User.findById(updated.user_id);
+              if (user.telegram_id) {
+                const data = {
+                  title: "Buyurtma tekshiruvi haqida xabar ✍️",
+                  message: `Sizning ${updated.oqim_id.name} oqimingiz orqali ${updated.client_name} ismli shaxs tomonidan berilgan buyurtma operator tomonidan tekshirildi va tasdiqlandi. ✅`,
+                  order_code: updated.order_code,
+                };
+                await SendMessage(user.telegram_id, data);
+              }
             }
             res.status(200).json({ message: "status changed to checked" });
           } catch (err) {
