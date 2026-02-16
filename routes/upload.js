@@ -42,26 +42,23 @@ router.post("/upload/product", upload.array("files", 10), async (req, res) => {
       }`;
 
       const parameters_720 = {
-        Bucket: process.env.DO_SPACES_BUCKET,
+        Bucket: process.env.R2_BUCKET_NAME,
         Key: fileKey1,
         Body: buffer1,
-        ACL: "public-read",
         ContentType: file.mimetype,
       };
 
       const parameters_480 = {
-        Bucket: process.env.DO_SPACES_BUCKET,
+        Bucket: process.env.R2_BUCKET_NAME,
         Key: fileKey2,
         Body: buffer2,
-        ACL: "public-read",
         ContentType: file.mimetype,
       };
 
       const parameters_120 = {
-        Bucket: process.env.DO_SPACES_BUCKET,
+        Bucket: process.env.R2_BUCKET_NAME,
         Key: fileKey3,
         Body: buffer3,
-        ACL: "public-read",
         ContentType: file.mimetype,
       };
 
@@ -73,9 +70,9 @@ router.post("/upload/product", upload.array("files", 10), async (req, res) => {
       await s3.send(command2);
       return s3.send(command3).then(() => ({
         urls: {
-          large: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey1}`,
-          medium: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey2}`,
-          small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey3}`,
+          large: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey1}`,
+          medium: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey2}`,
+          small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey3}`,
         },
       }));
     });
@@ -117,18 +114,16 @@ router.post("/upload/profile", upload.single("file"), async (req, res) => {
     }`;
 
     const parameters_480 = {
-      Bucket: process.env.DO_SPACES_BUCKET,
+      Bucket: process.env.R2_BUCKET_NAME,
       Key: fileKey1,
       Body: buffer1,
-      ACL: "public-read",
       ContentType: req.file.mimetype,
     };
 
     const parameters_120 = {
-      Bucket: process.env.DO_SPACES_BUCKET,
+      Bucket: process.env.R2_BUCKET_NAME,
       Key: fileKey2,
       Body: buffer2,
-      ACL: "public-read",
       ContentType: req.file.mimetype,
     };
 
@@ -141,8 +136,8 @@ router.post("/upload/profile", upload.single("file"), async (req, res) => {
     return res.status(200).json({
       message: "uploaded",
       urls: {
-        original: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey1}`,
-        small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey2}`,
+        original: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey1}`,
+        small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey2}`,
       },
     });
   } catch (error) {
@@ -186,26 +181,23 @@ router.post("/upload/media", upload.array("files", 10), async (req, res) => {
       }`;
 
       const parameters_720 = {
-        Bucket: process.env.DO_SPACES_BUCKET,
+        Bucket: process.env.R2_BUCKET_NAME,
         Key: fileKey1,
         Body: buffer1,
-        ACL: "public-read",
         ContentType: file.mimetype,
       };
 
       const parameters_480 = {
-        Bucket: process.env.DO_SPACES_BUCKET,
+        Bucket: process.env.R2_BUCKET_NAME,
         Key: fileKey2,
         Body: buffer2,
-        ACL: "public-read",
         ContentType: file.mimetype,
       };
 
       const parameters_120 = {
-        Bucket: process.env.DO_SPACES_BUCKET,
+        Bucket: process.env.R2_BUCKET_NAME,
         Key: fileKey3,
         Body: buffer3,
-        ACL: "public-read",
         ContentType: file.mimetype,
       };
 
@@ -217,9 +209,9 @@ router.post("/upload/media", upload.array("files", 10), async (req, res) => {
       await s3.send(command2);
       return s3.send(command3).then(() => ({
         urls: {
-          large: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey1}`,
-          medium: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey2}`,
-          small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${fileKey3}`,
+          large: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey1}`,
+          medium: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey2}`,
+          small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey3}`,
         },
       }));
     });
@@ -239,7 +231,7 @@ router.post("/upload/media", upload.array("files", 10), async (req, res) => {
 
 router.get("/all", async (req, res) => {
   const command = new ListObjectsV2Command({
-    Bucket: process.env.DO_SPACES_BUCKET,
+    Bucket: process.env.R2_BUCKET_NAME,
   });
 
   try {
@@ -252,7 +244,7 @@ router.get("/all", async (req, res) => {
 
     const files = data.Contents.map((file) => ({
       key: file.Key,
-      url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${file.Key}`,
+      url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${file.Key}`,
     }));
 
     res.status(200).json(files);
@@ -274,7 +266,7 @@ router.delete("/delete", async (req, res) => {
     }
     const delete_promices = keys.map((key) => {
       const command = new DeleteObjectCommand({
-        Bucket: process.env.DO_SPACES_BUCKET,
+        Bucket: process.env.R2_BUCKET_NAME,
         Key: `${key}`,
       });
       s3.send(command);
