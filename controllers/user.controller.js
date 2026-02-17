@@ -1,8 +1,8 @@
 const User = require("../models/user.model");
-import { Resend } from 'resend';
+const { Resend } = require('resend');
 const crypto = require("crypto");
 const bcryptjs = require("bcryptjs");
-const nodemailer = require("nodemailer");
+// const nodemailer = require("nodemailer");
 const OTP = require("../models/otp.model");
 const jwt = require("jsonwebtoken");
 
@@ -274,7 +274,12 @@ const sendOTPverification = async ({ _id, email }, res) => {
     });
     await newOTP.save();
 
-    resend.emails.send(mailOptions);
+    try {
+      const response = await resend.emails.send(mailOptions);
+      console.log("Email sent:", response);
+    } catch (error) {
+      console.error("Email error:", error);
+    }
 
     res.json({
       status: "KUTILMOQDA",
