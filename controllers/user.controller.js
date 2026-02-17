@@ -223,7 +223,7 @@ const deleteUser = async (req, res) => {
 
 const transporter = nodemailer.createTransport({
   // service: "zoho",
-  host: "smtp.zoho.eu",
+  host: "smtp.zoho.com",
   port: 587,
   secure: false,
   auth: {
