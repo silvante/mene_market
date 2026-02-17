@@ -70,9 +70,9 @@ router.post("/upload/product", upload.array("files", 10), async (req, res) => {
       await s3.send(command2);
       return s3.send(command3).then(() => ({
         urls: {
-          large: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey1}`,
-          medium: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey2}`,
-          small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey3}`,
+          large: `${process.env.R2_RECORDS_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey1}`,
+          medium: `${process.env.R2_RECORDS_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey2}`,
+          small: `${process.env.R2_RECORDS_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey3}`,
         },
       }));
     });
@@ -136,8 +136,8 @@ router.post("/upload/profile", upload.single("file"), async (req, res) => {
     return res.status(200).json({
       message: "uploaded",
       urls: {
-        original: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey1}`,
-        small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey2}`,
+        original: `${process.env.R2_RECORDS_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey1}`,
+        small: `${process.env.R2_RECORDS_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey2}`,
       },
     });
   } catch (error) {
@@ -209,9 +209,9 @@ router.post("/upload/media", upload.array("files", 10), async (req, res) => {
       await s3.send(command2);
       return s3.send(command3).then(() => ({
         urls: {
-          large: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey1}`,
-          medium: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey2}`,
-          small: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey3}`,
+          large: `${process.env.R2_RECORDS_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey1}`,
+          medium: `${process.env.R2_RECORDS_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey2}`,
+          small: `${process.env.R2_RECORDS_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${fileKey3}`,
         },
       }));
     });
@@ -244,7 +244,7 @@ router.get("/all", async (req, res) => {
 
     const files = data.Contents.map((file) => ({
       key: file.Key,
-      url: `${process.env.DO_SPACES_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${file.Key}`,
+      url: `${process.env.R2_RECORDS_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${file.Key}`,
     }));
 
     res.status(200).json(files);
