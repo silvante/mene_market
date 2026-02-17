@@ -229,25 +229,25 @@ const deleteUser = async (req, res) => {
 
 
 
-const transporter = nodemailer.createTransport({
-  // service: "zoho",
-  host: "smtp.zoho.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.AUTH_EMAIL,
-    pass: process.env.AUTH_PASSWORD,
-  },
-});
+// const transporter = nodemailer.createTransport({
+//   // service: "zoho",
+//   host: "smtp.zoho.com",
+//   port: 587,
+//   secure: false,
+//   auth: {
+//     user: process.env.AUTH_EMAIL,
+//     pass: process.env.AUTH_PASSWORD,
+//   },
+// });
 
-transporter.verify((error, success) => {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log("ready for OTP verifications");
-    console.log(success);
-  }
-});
+// transporter.verify((error, success) => {
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log("ready for OTP verifications");
+//     console.log(success);
+//   }
+// });
 
 // One Time Password
 
