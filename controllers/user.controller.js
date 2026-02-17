@@ -1,9 +1,13 @@
 const User = require("../models/user.model");
+import { Resend } from 'resend';
 const crypto = require("crypto");
 const bcryptjs = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const OTP = require("../models/otp.model");
 const jwt = require("jsonwebtoken");
+
+// resend service
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const { jwtSecret } = require("../routes/extra");
 
@@ -221,6 +225,10 @@ const deleteUser = async (req, res) => {
 
 // transporter
 
+// Email resend
+
+
+
 const transporter = nodemailer.createTransport({
   // service: "zoho",
   host: "smtp.zoho.com",
@@ -266,7 +274,7 @@ const sendOTPverification = async ({ _id, email }, res) => {
     });
     await newOTP.save();
 
-    transporter.sendMail(mailOptions);
+    resend.emails.send(mailOptions);
 
     res.json({
       status: "KUTILMOQDA",
