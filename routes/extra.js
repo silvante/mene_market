@@ -16,17 +16,17 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).send("User not found");
+      return res.status(400).send("Email yoki parol noto‘g‘ri.");
     }
 
     if (user.verificated !== true) {
-      return res.status(400).send("Your account is not verified");
+      return res.status(400).send("Hisob tasdiqlanmagan. Iltimos, emailingizni tasdiqlang.");
     }
 
     const isMatch = await bcryptjs.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).send("Invalid credentials");
+      return res.status(400).send("Email yoki parol noto‘g‘ri.");
     }
 
     const token = jwt.sign(
