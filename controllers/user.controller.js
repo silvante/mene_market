@@ -76,8 +76,7 @@ const addUser = async (req, res) => {
     if (existingEmail.length >= 1) {
       return res.status(404).json({
         isVerificated: existingEmail.verificated,
-        message:
-          "ushbu email ga hisob ochilgan, hisobni - Qayta tiklash - tugmasini bosib qayta tiklash mumkin",
+        message: "Bu email bilan hisob allaqachon mavjud. Iltimos, tizimga kiring",
       });
     } else {
       const newUser = await new User({
@@ -88,6 +87,7 @@ const addUser = async (req, res) => {
         avatar,
         username,
       });
+
       newUser.save().then((result) => {
         sendOTPverification(result, res);
       });

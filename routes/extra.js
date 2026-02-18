@@ -17,14 +17,14 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: "Email yoki parol noto‘g‘ri.",
+        message: "Email yoki parol noto‘g‘ri",
       });
     }
 
     if (user.verificated !== true) {
       return res.status(403).json({
         success: false,
-        message: "Hisob tasdiqlanmagan. Iltimos, emailingizni tasdiqlang.",
+        message: "Hisob tasdiqlanmagan. Iltimos, emailingizni tasdiqlang",
       });
     }
 
@@ -33,7 +33,7 @@ router.post("/login", async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({
         success: false,
-        message: "Email yoki parol noto‘g‘ri.",
+        message: "Email yoki parol noto‘g‘ri",
       });
     }
 
@@ -51,14 +51,13 @@ router.post("/login", async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Muvaffaqiyatli kirdingiz.",
       token,
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "Serverda xatolik yuz berdi. Keyinroq qayta urinib ko‘ring.",
+      message: "Serverda xatolik yuz berdi. Keyinroq qayta urinib ko‘ring",
     });
   }
 });
