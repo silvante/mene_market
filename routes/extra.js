@@ -12,21 +12,29 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Use `findOne` to find a single user
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).send("Email yoki parol noto‘g‘ri.");
+      return res.status(400).json({
+        success: false,
+        message: "Email yoki parol noto‘g‘ri.",
+      });
     }
 
     if (user.verificated !== true) {
-      return res.status(400).send("Hisob tasdiqlanmagan. Iltimos, emailingizni tasdiqlang.");
+      return res.status(403).json({
+        success: false,
+        message: "Hisob tasdiqlanmagan. Iltimos, emailingizni tasdiqlang.",
+      });
     }
 
     const isMatch = await bcryptjs.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).send("Email yoki parol noto‘g‘ri.");
+      return res.status(400).json({
+        success: false,
+        message: "Email yoki parol noto‘g‘ri.",
+      });
     }
 
     const token = jwt.sign(
@@ -41,10 +49,17 @@ router.post("/login", async (req, res) => {
       {}
     );
 
-    return res.status(200).json({ success: true, token: token });
+    return res.status(200).json({
+      success: true,
+      message: "Muvaffaqiyatli kirdingiz.",
+      token,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Server error");
+    return res.status(500).json({
+      success: false,
+      message: "Serverda xatolik yuz berdi. Keyinroq qayta urinib ko‘ring.",
+    });
   }
 });
 
