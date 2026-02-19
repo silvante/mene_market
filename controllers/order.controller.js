@@ -114,10 +114,75 @@ const checkOrder = async (req, res) => {
                   "order hali roihatdan orkazilmagan yoki ushbu order sizga tesgishli emas",
               });
             }
+
             const { full_address } = req.body;
             const updated = await Order.findByIdAndUpdate(id, {
-              status: "checked",
-              full_address,
+              status: "recall",
+              full_address
+            })
+              .populate("product_id")
+              .populate("oqim_id")
+              .populate("type");
+            if (!updated) {
+              return res.status(404).send("something went wrong, try again");
+            }
+            if (updated.user_id) {
+              const user = await User.findById(updated.user_id);
+              if (user.telegram_id) {
+                const data = {
+                  title: "Buyurtma tekshiruvi haqida xabar ✍️",
+                  message: `Sizning ${updated.oqim_id.name} oqimingiz orqali ${updated.client_name} ismli shaxs tomonidan berilgan buyurtma operator tomonidan tekshirildi va tasdiqlandi. ✅`,
+                  order_code: updated.order_code,
+                };
+                await SendMessage(user.telegram_id, data);
+              }
+            }
+            res.status(200).json({ message: "status changed to checked" });
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res
+            .status(404)
+            .send("bu metoddan foidalanish uchun operator bolishingiz kerak");
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(err);
+  }
+};
+
+const RecallOrder = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status == "operator" || user_doc.status == "owner") {
+          try {
+            const id = req.params.id;
+            const order = await Order.findById(id);
+            if (
+              order.status !== "checking" ||
+              order.operator_id === user_doc.id
+            ) {
+              return res.status(404).json({
+                message:
+                  "order hali roihatdan orkazilmagan yoki ushbu order sizga tesgishli emas",
+              });
+            }
+            const updated = await Order.findByIdAndUpdate(id, {
+              status: "recall",
             })
               .populate("product_id")
               .populate("oqim_id")
@@ -527,10 +592,10 @@ const signOrderToOperator = async (req, res) => {
         const available_orders = await Order.find({
           status: "pending",
           client_address: address,
-        });
+        }).limit(10);;
 
         if (!available_orders.length) {
-          return res.status(404).json({ message: "No available orders found" });
+          return res.status(404).json({ message: "Hech qanday mavjud buyurtma topilmadi" });
         }
 
         const random_order =
@@ -723,4 +788,5 @@ module.exports = {
   getOrdersOfOperator,
   getAllOrdersOfOperator,
   getAllOrdersOfSeller,
+  RecallOrder
 };

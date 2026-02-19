@@ -13,6 +13,7 @@ const {
   getAllOrdersOfOperator,
   getOrderById,
   getAllOrdersOfSeller,
+  RecallOrder,
 } = require("../controllers/order.controller");
 
 // routes here
@@ -22,6 +23,8 @@ router.post("/:id", createOrder);
 router.get("/:id", getOrderById);
 
 router.put("/:id/check", checkOrder);
+
+router.put("/:id/recall", RecallOrder);
 
 router.put("/:id/send", sendOrder);
 
@@ -114,6 +117,39 @@ module.exports = router;
  *       404:
  *         description: Order not found or unauthorized
  */
+
+/**
+ * @swagger
+ * /api/orders/{id}/recall:
+ *   put:
+ *     summary: Change the status of an order to "checked", statuses [operator]
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The order ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               full_address:
+ *                 type: string
+ *                 description: Full and correct id of client
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Order status updated to "sent"
+ *       404:
+ *         description: Order not found or unauthorized
+ */
+
 
 /**
  * @swagger

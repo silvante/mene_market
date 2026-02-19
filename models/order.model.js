@@ -42,6 +42,7 @@ const orderSchema = mongoose.Schema({
     default: "pending",
     enum: [
       "pending",
+      "recall",
       "checking",
       "checked",
       "sent",
