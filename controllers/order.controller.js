@@ -192,12 +192,6 @@ const RecallOrder = async (req, res) => {
 
     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        message: "Buyurtma ID noto‘g‘ri formatda.",
-      });
-    };
-
     const order = await Order.findById(id);
     if (!order) {
       return res.status(404).json({
