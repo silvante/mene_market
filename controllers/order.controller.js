@@ -759,6 +759,54 @@ const getOrdersOfOperator = async (req, res) => {
   }
 };
 
+const getRecallOrdersOfOperator = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        if (user_doc.status == "operator") {
+          try {
+            const orders = await Order.find({
+              operator_id: user_doc.id,
+              status: "recall",
+            })
+              .populate("product_id")
+              .populate("oqim_id")
+              .populate("user_id", "-password -balance")
+              .populate("type");
+
+            if (!orders) {
+              return res
+                .status(404)
+                .json({ message: "Zakazlar mavjud emas!" });
+            }
+
+            return res.status(200).send(orders);
+          } catch (err) {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res
+            .status(404)
+            .send("bu metoddan foidalanish uchun operator bolishingiz kerak");
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(err);
+  }
+};
+
 const getAllOrdersOfOperator = async (req, res) => {
   try {
     const auth_headers = req.headers.authorization;
@@ -864,5 +912,6 @@ module.exports = {
   getOrdersOfOperator,
   getAllOrdersOfOperator,
   getAllOrdersOfSeller,
-  RecallOrder
+  RecallOrder,
+  getRecallOrdersOfOperator
 };

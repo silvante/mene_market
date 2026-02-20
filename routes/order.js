@@ -14,6 +14,7 @@ const {
   getOrderById,
   getAllOrdersOfSeller,
   RecallOrder,
+  getRecallOrdersOfOperator,
 } = require("../controllers/order.controller");
 
 // routes here
@@ -39,6 +40,8 @@ router.get("/", getOrders);
 router.put("/sign_order_to_operator", signOrderToOperator);
 
 router.get("/operator/uo", getOrdersOfOperator);
+
+router.get("/operator/recall", getRecallOrdersOfOperator)
 
 router.get("/seller/all", getAllOrdersOfSeller);
 
@@ -343,6 +346,21 @@ module.exports = router;
  * /api/orders/operator/uo:
  *   get:
  *     summary: gets operators orders which still not checked
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Order status updated to "success" and user's balance adjusted
+ *       404:
+ *         description: Order not found or unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/orders/operator/recall:
+ *   get:
+ *     summary: gets operators orders which are ment to be recalled
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
