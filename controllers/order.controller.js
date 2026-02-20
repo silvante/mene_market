@@ -191,6 +191,13 @@ const RecallOrder = async (req, res) => {
     }
 
     const { id } = req.params;
+    const { desc } = req.body;
+
+    if (!desc) {
+      return res.status(404).json({
+        message: "Ba'tafsil ma'lumotni toldirish shart",
+      });
+    };
 
     const order = await Order.findById(id);
     if (!order) {
@@ -212,11 +219,13 @@ const RecallOrder = async (req, res) => {
       return res.status(403).json({
         message: "Bu buyurtma sizga biriktirilmagan. Faqat owner o‘zgartira oladi.",
       });
-    }
+    };
 
     const updated = await Order.findByIdAndUpdate(id, {
-      status: "recall"
+      status: "recall",
+      desc
     }).populate("product_id").populate("oqim_id").populate("type");
+
 
     if (!updated) {
       return res.status(500).json({
@@ -228,67 +237,7 @@ const RecallOrder = async (req, res) => {
       message: "Buyurtma holati 'Qayta bog‘lanish'ga o‘zgartirildi.",
     });
 
-    // const auth_headers = req.headers.authorization;
-    // if (auth_headers && auth_headers.startsWith("Bearer ")) {
-    //   const token = auth_headers.split("Bearer ")[1];
-
-    //   jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
-    //     if (err) {
-    //       throw err;
-    //     }
-
-    //     if (user_doc.status == "operator" || user_doc.status == "owner") {
-    //       try {
-    //         const id = req.params.id;
-    //         const { desc } = req.body;
-    //         const order = await Order.findById(id);
-    //         if (
-    //           order.status !== "checking" ||
-    //           order.operator_id === user_doc.id
-    //         ) {
-    //           return res.status(404).json({
-    //             message:
-    //               "order hali royhatdan orkazilmagan yoki ushbu order sizga tesgishli emas",
-    //           });
-    //         }
-    //         const updated = await Order.findByIdAndUpdate(id, {
-    //           status: "recall",
-    //           desc
-    //         })
-    //           .populate("product_id")
-    //           .populate("oqim_id")
-    //           .populate("type");
-    //         if (!updated) {
-    //           return res.status(404).send("something went wrong, try again");
-    //         }
-    //         if (updated.user_id) {
-    //           const user = await User.findById(updated.user_id);
-    //           if (user.telegram_id) {
-    //             const data = {
-    //               title: "Buyurtma tekshiruvi haqida xabar ✍️",
-    //               message: `Sizning ${updated.oqim_id.name} oqimingiz orqali ${updated.client_name} ismli shaxs tomonidan berilgan buyurtma operator tomonidan tekshirildi va tasdiqlandi. ✅`,
-    //               order_code: updated.order_code,
-    //             };
-    //             await SendMessage(user.telegram_id, data);
-    //           }
-    //         }
-    //         res.status(200).json({ message: "status changed to checked" });
-    //       } catch (err) {
-    //         console.log(err);
-    //         res.send(err);
-    //       }
-    //     } else {
-    //       res
-    //         .status(404)
-    //         .send("bu metoddan foidalanish uchun operator bolishingiz kerak");
-    //     }
-    //   });
-    // } else {
-    //   return res.status(404).send("no token provided");
-    // }
   } catch (err) {
-    // console.log(err);
-    // res.status(err);
     console.log(err);
     return res.status(500).json({
       message: "Serverda xatolik yuz berdi.",
@@ -371,7 +320,7 @@ const cancelOrder = async (req, res) => {
               .populate("product_id")
               .populate("oqim_id")
               .populate("type");
-              
+
             if (!updated) {
               return res.status(500).json({
                 message: "Buyurtmani yangilashda xatolik. Iltimos, qayta urinib ko‘ring.",
