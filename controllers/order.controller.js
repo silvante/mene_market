@@ -861,27 +861,27 @@ const SearchOrders = async (req, res) => {
           throw err;
         }
 
-        let { code, name } = req.query;
+        let { q } = req.query;
         let SearchOptions = {};
 
         if (user_doc.status == "operator") {
           SearchOptions.order_code = {
-            $regex: code,
+            $regex: q,
             $options: "i",
           };
-          SearchOptions.client_name = {
-            $regex: name,
+          SearchOptions.client_mobile = {
+            $regex: q,
             $options: "i",
           };
           SearchOptions.status = "checking";
           SearchOptions.operator_id = user_doc.id;
         } else if (user_doc.status == "courier_id") {
           SearchOptions.order_code = {
-            $regex: code,
+            $regex: q,
             $options: "i",
           };
-          SearchOptions.client_name = {
-            $regex: name,
+          SearchOptions.client_mobile = {
+            $regex: q,
             $options: "i",
           };
           SearchOptions.status = "sent";
