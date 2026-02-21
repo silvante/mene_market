@@ -15,6 +15,7 @@ const {
   getAllOrdersOfSeller,
   RecallOrder,
   getRecallOrdersOfOperator,
+  SearchOrders,
 } = require("../controllers/order.controller");
 
 // routes here
@@ -46,6 +47,8 @@ router.get("/operator/recall", getRecallOrdersOfOperator)
 router.get("/seller/all", getAllOrdersOfSeller);
 
 router.get("/operator/all", getAllOrdersOfOperator);
+
+router.get("/search", SearchOrders)
 
 module.exports = router;
 

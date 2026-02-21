@@ -125,7 +125,7 @@ const checkOrder = async (req, res) => {
             const { full_address } = req.body;
             const updated = await Order.findByIdAndUpdate(id, {
               status: "recall",
-              full_address
+              full_address,
             })
               .populate("product_id")
               .populate("oqim_id")
@@ -180,7 +180,7 @@ const RecallOrder = async (req, res) => {
       return res.status(401).json({
         message: "Token yaroqsiz yoki muddati tugagan.",
       });
-    };
+    }
 
     const role = userDoc?.status;
     const isAllowed = role === "operator" || role === "owner";
@@ -204,25 +204,31 @@ const RecallOrder = async (req, res) => {
 
     if (!isChecking) {
       return res.status(409).json({
-        message: "Bu buyurtma 'checking' holatida emas. Qayta bog‘lanishga o‘tkazib bo‘lmaydi.",
+        message:
+          "Bu buyurtma 'checking' holatida emas. Qayta bog‘lanishga o‘tkazib bo‘lmaydi.",
       });
     }
 
     if (!isMine && role !== "owner") {
       return res.status(403).json({
-        message: "Bu buyurtma sizga biriktirilmagan. Faqat owner o‘zgartira oladi.",
+        message:
+          "Bu buyurtma sizga biriktirilmagan. Faqat owner o‘zgartira oladi.",
       });
     }
 
     const updated = await Order.findByIdAndUpdate(id, {
-      status: "recall"
-    }).populate("product_id").populate("oqim_id").populate("type");
+      status: "recall",
+    })
+      .populate("product_id")
+      .populate("oqim_id")
+      .populate("type");
 
     if (!updated) {
       return res.status(500).json({
-        message: "Buyurtmani yangilashda xatolik. Iltimos, qayta urinib ko‘ring.",
+        message:
+          "Buyurtmani yangilashda xatolik. Iltimos, qayta urinib ko‘ring.",
       });
-    };
+    }
 
     return res.status(200).json({
       message: "Buyurtma holati 'Qayta bog‘lanish'ga o‘zgartirildi.",
@@ -366,17 +372,18 @@ const cancelOrder = async (req, res) => {
               {
                 status: "canceled",
               },
-              { new: true }
+              { new: true },
             )
               .populate("product_id")
               .populate("oqim_id")
               .populate("type");
-              
+
             if (!updated) {
               return res.status(500).json({
-                message: "Buyurtmani yangilashda xatolik. Iltimos, qayta urinib ko‘ring.",
+                message:
+                  "Buyurtmani yangilashda xatolik. Iltimos, qayta urinib ko‘ring.",
               });
-            };
+            }
 
             if (updated.type) {
               await Stock.findByIdAndUpdate(updated.type._id, {
@@ -438,7 +445,7 @@ const successOrder = async (req, res) => {
               {
                 status: "success",
               },
-              { new: true }
+              { new: true },
             )
               .populate("product_id")
               .populate("oqim_id");
@@ -588,7 +595,7 @@ const returnOrder = async (req, res) => {
                 status: "returned",
                 desc,
               },
-              { new: true }
+              { new: true },
             )
               .populate("product_id")
               .populate("oqim_id")
@@ -668,10 +675,12 @@ const signOrderToOperator = async (req, res) => {
         const available_orders = await Order.find({
           status: "pending",
           client_address: address,
-        }).limit(10);;
+        }).limit(10);
 
         if (!available_orders.length) {
-          return res.status(404).json({ message: "Hech qanday mavjud buyurtma topilmadi" });
+          return res
+            .status(404)
+            .json({ message: "Hech qanday mavjud buyurtma topilmadi" });
         }
 
         const random_order =
@@ -683,7 +692,7 @@ const signOrderToOperator = async (req, res) => {
             status: "checking",
             operator_id: user_doc.id,
           },
-          { new: true }
+          { new: true },
         )
           .populate("product_id")
           .populate("oqim_id")
@@ -782,9 +791,7 @@ const getRecallOrdersOfOperator = async (req, res) => {
               .populate("type");
 
             if (!orders) {
-              return res
-                .status(404)
-                .json({ message: "Zakazlar mavjud emas!" });
+              return res.status(404).json({ message: "Zakazlar mavjud emas!" });
             }
 
             return res.status(200).send(orders);
@@ -899,6 +906,73 @@ const getAllOrdersOfSeller = async (req, res) => {
   }
 };
 
+const SearchOrders = async (req, res) => {
+  try {
+    const auth_headers = req.headers.authorization;
+    if (auth_headers && auth_headers.startsWith("Bearer ")) {
+      const token = auth_headers.split("Bearer ")[1];
+
+      jwt.verify(token, jwtSecret, {}, async (err, user_doc) => {
+        if (err) {
+          throw err;
+        }
+
+        let { code, name } = req.query;
+        let SearchOptions = {};
+
+        if (user_doc.status == "operator") {
+          SearchOptions.order_code = {
+            $regex: code,
+            $options: "i",
+          };
+          SearchOptions.client_name = {
+            $regex: name,
+            $options: "i",
+          };
+          SearchOptions.status = "checking";
+          SearchOptions.operator_id = user_doc.id;
+        } else if (user_doc.status == "courier_id") {
+          SearchOptions.order_code = {
+            $regex: code,
+            $options: "i",
+          };
+          SearchOptions.client_name = {
+            $regex: name,
+            $options: "i",
+          };
+          SearchOptions.status = "sent";
+          SearchOptions.courier_id = user_doc.id;
+        } else {
+          res
+            .status(404)
+            .send("bu metoddan foidalanish uchun operator yoki kuryer bo'lishingiz kerak");
+        }
+        try {
+          const orders = await Order.find(SearchOptions)
+            .populate("product_id")
+            .populate("oqim_id")
+            .populate("user_id", "-password")
+            .populate("type");
+
+          if (!orders) {
+            return res.status(404).json({ message: "orders are not avaible" });
+          }
+
+          return res.status(200).send(orders);
+        } catch (err) {
+          console.log(err);
+          res.send(err);
+        }
+      });
+    } else {
+      return res.status(404).send("no token provided");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(err);
+  }
+};
+
 module.exports = {
   getOrderById,
   createOrder,
@@ -913,5 +987,6 @@ module.exports = {
   getAllOrdersOfOperator,
   getAllOrdersOfSeller,
   RecallOrder,
-  getRecallOrdersOfOperator
+  getRecallOrdersOfOperator,
+  SearchOrders,
 };
