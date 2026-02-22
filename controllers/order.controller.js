@@ -124,7 +124,7 @@ const checkOrder = async (req, res) => {
 
             const { full_address } = req.body;
             const updated = await Order.findByIdAndUpdate(id, {
-              status: "recall",
+              status: "checked",
               full_address,
             })
               .populate("product_id")
