@@ -114,7 +114,8 @@ const checkOrder = async (req, res) => {
             const order = await Order.findById(id);
             if (
               order.status !== "checking" ||
-              order.operator_id === user_doc.id
+              order.operator_id === user_doc.id ||
+              order.status !== "recall"
             ) {
               return res.status(404).json({
                 message:
