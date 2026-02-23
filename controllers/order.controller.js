@@ -112,14 +112,15 @@ const checkOrder = async (req, res) => {
           try {
             const id = req.params.id;
             const order = await Order.findById(id);
+
+            const allowedStatuses = ["checking", "recall"];
+
             if (
-              order.status !== "checking" ||
-              order.operator_id === user_doc.id ||
-              order.status !== "recall"
+              !allowedStatuses.includes(order.status) ||
+              String(order.operator_id) !== String(user_doc.id)
             ) {
-              return res.status(404).json({
-                message:
-                  "order hali roihatdan orkazilmagan yoki ushbu order sizga tesgishli emas",
+              return res.status(403).json({
+                message: "Order hali ro'yxatdan o'tkazilmagan yoki bu order sizga tegishli emas.",
               });
             }
 
@@ -193,7 +194,7 @@ const RecallOrder = async (req, res) => {
 
     const { id } = req.params;
     const { desc } = req.body;
-
+   
     if (!desc) {
       return res.status(404).json({
         message: "Ba'tafsil ma'lumotni toldirish shart",
@@ -224,9 +225,11 @@ const RecallOrder = async (req, res) => {
       });
     };
 
-    const updated = await Order.findByIdAndUpdate(id, {
-      status: "recall"
-    }).populate("product_id").populate("oqim_id").populate("type");
+    const updated = await Order.findByIdAndUpdate(
+      id,
+      { status: "recall", full_address: desc },
+      { new: true }
+    ).populate("product_id").populate("oqim_id").populate("type");
 
     if (!updated) {
       return res.status(500).json({
